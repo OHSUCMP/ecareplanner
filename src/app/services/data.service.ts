@@ -61,12 +61,12 @@ import { ReferralSummary } from '../generated-data-api/models/ReferralSummary';
 import { ReferralService } from './referrals.service';
 import { ObservationsService } from './observations.service';
 import { Constants } from '../common/constants';
-import { MccCondition, MccConditionList, MccCounselingSummary, MccEducationSummary, MccGoalList, MccGoalSummary, MccPatientContact, MccReferralSummary, MccServiceRequestSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccCondition, MccConditionList, MccCounselingSummary, MccEducationSummary, MccGoalList, MccGoalSummary, MccPatientContact, MccReferralSummary, MccServiceRequestSummary } from '../core/types/mcc-types';
 import { ServiceRequestService } from './service-request.service';
 import { LoggingService, LogRequest } from './logging.service';
 import { MccAssessment } from '../generated-data-api/models/MccQuestionnaireResponse';
 import { environment } from 'src/environments/environment';
-import { getAssessments } from 'e-care-common-data-services';
+import { getAssessments } from '../core';
 
 declare var window: any;
 
@@ -462,6 +462,7 @@ export class DataService {
     try {
       this.obsService.getObservationsByCategory(this.currentPatientId, 'survey').then(
         questionaires => {
+          console.log('Questionnaire count from common data service: ', questionaires.length);
           this.questionaires = questionaires;
         },
         error => {

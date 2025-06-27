@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import {
   getCareplan as EccGetCareplan,
   getBestCareplan as EccGetBestCareplan
-} from 'e-care-common-data-services';
+} from '../core';
 import { environment} from '../../environments/environment';
 import { MessageService } from './message.service';
 

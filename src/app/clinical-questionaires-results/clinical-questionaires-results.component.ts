@@ -15,6 +15,7 @@ export class ClinicalQuestionairesResultsComponent implements OnInit {
   getAssessmentsReady(): boolean {
     if (window[Constants.AssessmentsIsLoaded]) {
       this.assessments = this.dataService.assessments;
+      console.log('AEY Questionnaires: ', this.dataService.questionaires);
     }
     return window[Constants.AssessmentsIsLoaded];
   }

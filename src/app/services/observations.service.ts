@@ -6,7 +6,7 @@ import {
   getQuestionnaireItem as EccGetQuestionnaireItem,
   getQuestionnaireItems as EccGetQuestionnaireItems,
   getObservationsByCategory as EccGetObservationsByCategory,
-} from 'e-care-common-data-services';
+} from '../core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";

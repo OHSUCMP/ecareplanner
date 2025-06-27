@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ConditionHistory, GoalSummary} from '../generated-data-api';
 import {MatTableDataSource} from '@angular/material/table';
-import { MccGoalSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccGoalSummary } from '../core/types/mcc-types';
 
 @Component({
   selector: 'app-medication-dialog',

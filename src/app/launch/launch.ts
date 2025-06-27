@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { authorize } from 'e-care-common-data-services';
+import { authorize } from '../core';
 
 @Component({
   selector: 'launch',

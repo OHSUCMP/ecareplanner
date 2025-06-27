@@ -3,8 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {MessageService} from './message.service';
-import { getSummarySocialConcerns } from 'e-care-common-data-services';
-import { MccSocialConcern } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { getSummarySocialConcerns } from '../core';
+import { MccSocialConcern } from '../core/types/mcc-types';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class SocialConcernService {
   /** GET Demographic by id. Return `undefined` when id not found */
   getSubjectNo404(id: string, subjectId: string): Observable<MccSocialConcern> {
 
-    return from(getSummarySocialConcerns() as Promise<MccSocialConcern[]>)
+    return from(getSummarySocialConcerns(environment.sdsURL, environment.authURL, environment.sdsScope))
       .pipe(
         map(socialConcerns => socialConcerns[0]), // returns a {0|1} element array
         tap(h => {
@@ -39,7 +40,7 @@ export class SocialConcernService {
 
   /** GET Subject by id. Will 404 if id not found */
   getSubject(id: string): Observable<MccSocialConcern[]> {
-    return from(getSummarySocialConcerns() as Promise<MccSocialConcern[]>).pipe(
+    return from(getSummarySocialConcerns(environment.sdsURL, environment.authURL, environment.sdsScope)).pipe(
       tap(_ => this.log(`fetched subject id=${id}`)),
       catchError(this.handleError<MccSocialConcern[]>(`getSubject id=${id}`))
     );

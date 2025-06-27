@@ -11,7 +11,7 @@ import {
 } from '../generated-data-api';
 
 import {MccPatient} from '../generated-data-api/models/MccPatient';
-import { MccConditionList, MccCounselingSummary, MccEducationSummary, MccGoalList, MccPatientContact, MccReferralSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccConditionList, MccCounselingSummary, MccEducationSummary, MccGoalList, MccPatientContact, MccReferralSummary } from '../core/types/mcc-types';
 
 
 export const mockContacts: Contact[] = [

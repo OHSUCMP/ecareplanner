@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { from, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { getSummaryMedicationRequests } from 'e-care-common-data-services';
-import { MccMedicationSummaryList } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { getSummaryMedicationRequests } from '../core';
+import { MccMedicationSummaryList } from '../core/types/mcc-types';
 import { environment } from 'src/environments/environment';
 
 
