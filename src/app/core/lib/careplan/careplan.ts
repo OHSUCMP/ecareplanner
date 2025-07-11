@@ -5,7 +5,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 import { MccCarePlan, MccCondition } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { getConceptDisplayString } from '../goal/goal.util';
-import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse } from '../../utils/fhir';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject } from '../../utils/fhir';
 
 export const getCareplans = async (sort?: string, max?: string): Promise<MccCarePlan[]> => {
   const sortType = sort === 'descending' ? '-date' : 'date';
@@ -14,7 +14,7 @@ export const getCareplans = async (sort?: string, max?: string): Promise<MccCare
 
   const queryPath = `CarePlan?&_sort=${sortType}&_count=${max ?? 100}`;
   const careplanRequest: fhirclient.JsonArray = await client.patient.request(
-    queryPath
+    queryPath, fhirOptions
   );
 
   const filteredCareplans: MccCarePlan[] = resourcesFrom(
@@ -66,7 +66,7 @@ export const getCareplansByStatusAndCategory = async (
 
   const queryPath = `CarePlan?status=${status}&category=${combinedCategory}`;
   const careplanRequest: fhirclient.JsonArray = await client.patient.request(
-    queryPath
+    queryPath, fhirOptions
   );
 
   const filteredCareplans: MccCarePlan[] = resourcesFrom(
@@ -209,7 +209,7 @@ export const getSupportedCarePlans = async (sort?: string, max?: string): Promis
 
   const queryPath = `CarePlan?&_sort=${sortType}&_count=${max ?? 100}`;
   const careplanRequest: fhirclient.JsonArray = await client.patient.request(
-    queryPath
+    queryPath, fhirOptions
   );
 
   const filteredCareplans: MccCarePlan[] = resourcesFrom(
