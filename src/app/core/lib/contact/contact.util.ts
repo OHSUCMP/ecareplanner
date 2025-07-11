@@ -1,5 +1,4 @@
 import { CareTeamParticipant, Practitioner, Reference, Resource } from 'fhir/r4';
-import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccPatientContact } from '../../types/mcc-types';
 import { getConceptDisplayString } from '../goal/goal.util';

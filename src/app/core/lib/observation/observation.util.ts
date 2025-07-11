@@ -1,22 +1,8 @@
 /* eslint-disable functional/immutable-data */
 import { Annotation, CodeableConcept, Observation, TimingRepeat } from 'fhir/r4';
-import { fhirclient } from 'fhirclient/lib/types';
 
 import { legacy_MccCodeableConcept, legacy_MccCoding, legacy_MccDateTime, legacy_MccObservation, legacy_MccObservationCollection, legacy_MccObservationComponent, legacy_MccTime, ReferenceRange, Repeat } from '../../types/mcc-types';
 import { displayDate } from '../service-request/service-request.util';
-
-export const fhirOptions: fhirclient.FhirOptions = {
-  pageLimit: 0,
-};
-
-export const notFoundResponse = (code?: string) => ({
-  code,
-  status: 'notfound',
-  value: {
-    stringValue: 'No Data Available',
-    valueType: 'string',
-  },
-});
 
 export const getValue = (obs: Observation): any => {
   if (obs.valueQuantity) {

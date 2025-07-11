@@ -1,5 +1,4 @@
 import { CodeableConcept, Resource } from 'fhir/r4';
-import { fhirclient } from 'fhirclient/lib/types';
 
 import { getFilenameFromValueSetCode } from '../../query/json';
 import { MccCondition, MccConditionSummary } from '../../types/mcc-types';

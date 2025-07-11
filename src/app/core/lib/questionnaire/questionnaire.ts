@@ -5,12 +5,10 @@ import { MccQuestionnaire, MccQuestionnaireResponse } from '../../types/mcc-type
 import log from '../../utils/loglevel';
 import { getObservation } from '../observation';
 import { getValue } from '../observation/observation.util';
+import { fhirOptions, notFoundResponse, resourcesFrom } from '../../utils/fhir';
 
 import {
-  activeQuestionnaireStatus,
-  fhirOptions,
-  notFoundResponse,
-  resourcesFrom,
+  activeQuestionnaireStatus
 } from './questionnaire.util';
 
 const getQuestionnaireCodes = async (code: string): Promise<string> => {

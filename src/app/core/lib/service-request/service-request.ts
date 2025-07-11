@@ -5,9 +5,10 @@ import { fhirclient } from 'fhirclient/lib/types';
 import { MccServiceRequestSummary } from '../../types/mcc-types';
 import { getCondition } from '../condition';
 import { getSupplementalDataClient } from '../goal/goal.util';
+import { fhirOptions, resourcesFrom } from '../../utils/fhir';
+
 import {
-  displayConcept,
-  resourcesFromObjectArray, transformToServiceRequest,
+  displayConcept, transformToServiceRequest,
 } from './service-request.util';
 
 
@@ -33,8 +34,8 @@ const getSupplementalData = async (launchURL: string, sdsClient: Client): Promis
           };
           fhirHeaderRequestOption.headers = fhirHeaders;
           fhirHeaderRequestOption.url = 'ServiceRequest?status=active&subject=' + item2.resource.reference;
-          const response = await sdsClient.request(fhirHeaderRequestOption);
-          const thirdPartyServiceRequests: ServiceRequest[] = resourcesFromObjectArray(response) as ServiceRequest[];
+          const response = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
+          const thirdPartyServiceRequests: ServiceRequest[] = resourcesFrom(response) as ServiceRequest[];
           thirdPartyServiceRequests.forEach(serviceRequest => {
 
             serviceRequest.locationReference.push({
@@ -78,11 +79,11 @@ export const getSummaryServiceRequest = async (sdsURL: string, authURL: string, 
   const theCurrentClient = await FHIR.oauth2.ready();
   const sdsClient: Client = await getSupplementalDataClient(theCurrentClient, sdsURL, authURL, sdsScope);
   const queryPath = `ServiceRequest?status=active`;
-  const serviceRequest: fhirclient.JsonObject = await theCurrentClient.patient.request(
-    queryPath
+  const serviceRequest: fhirclient.JsonArray = await theCurrentClient.patient.request(
+    queryPath, fhirOptions
   );
   const sdsMedicationRequests: ServiceRequest[] = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
-  const serviceRequestResults: ServiceRequest[] = resourcesFromObjectArray(
+  const serviceRequestResults: ServiceRequest[] = resourcesFrom(
     serviceRequest
   ) as ServiceRequest[];
   const allMedicationRequests: ServiceRequest[] = [...serviceRequestResults, ...sdsMedicationRequests];

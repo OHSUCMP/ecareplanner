@@ -5,11 +5,14 @@
       </app-active-diagnosis-panel>
     </div>
   </section>
+  <!-- Social concerns is commented out in the data service, so this has always been an empty table
   <section>
     <div class="table-container">
-      <app-social-concern-panel  *ngIf="featureToggling.healthAndSocialConcerns.socialConcerns && getActiveIsReady()"></app-social-concern-panel>
+      <app-social-concern-panel  *ngIf="featureToggling.healthAndSocialConcerns.socialConcerns && getSocialConcernIsReady()">        
+      </app-social-concern-panel>
     </div>
   </section>
+  -->
   <section>
     <div class="table-container">
       <app-inactive-diagnosis-panel *ngIf="featureToggling.healthAndSocialConcerns.inactiveDiagnoses && getInActiveIsReady()">
