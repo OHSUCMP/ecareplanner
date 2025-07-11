@@ -1,9 +1,19 @@
 import { Resource } from 'fhir/r4';
 import { fhirclient } from 'fhirclient/lib/types';
 
+// This should be added to any query where multiple records could be returned. It ensures we get all pages instead of just the first.
 export const fhirOptions: fhirclient.FhirOptions = {
   pageLimit: 0,
 };
+
+export const notFoundResponse = (code?: string) => ({
+  code,
+  status: 'notfound',
+  value: {
+    stringValue: 'No Data Available',
+    valueType: 'string',
+  },
+});
 
 /**
  * Transform the FHIR response into an array of resources, removing any OperationOutcome resources.
@@ -19,7 +29,7 @@ export const resourcesFrom = (response: fhirclient.JsonArray): Resource[] => {
         );
 };
 
-// TODO: This method may also need to be refactor since it assumes only one entry, but I will leave it alone until we can do a deep dive
+// TODO: This method may also need to be refactored since it assumes only one entry, but I will leave it alone until we can do a deep dive
 export const resourcesFromObject = (
   response: fhirclient.JsonObject
 ): Resource => {
@@ -33,12 +43,3 @@ export const resourcesFromObject = (
 
   return resource;
 };
-
-export const notFoundResponse = (code?: string) => ({
-  code,
-  status: 'notfound',
-  value: {
-    stringValue: 'No Data Available',
-    valueType: 'string',
-  },
-});

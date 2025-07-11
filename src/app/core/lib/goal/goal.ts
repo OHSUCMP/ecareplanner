@@ -96,7 +96,6 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
 
     if (sdsClient) {
       const sdsQuestionnaireResponse: fhirclient.JsonArray = await sdsClient.patient.request('QuestionnaireResponse', fhirOptions);
-      console.log("AEY sdsQuestionnaireResponse " + JSON.stringify(sdsQuestionnaireResponse));
 
       const sdsQuestionnaireResponseArray: Resource[] = resourcesFrom(
         sdsQuestionnaireResponse
