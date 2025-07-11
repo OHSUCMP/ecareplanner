@@ -638,13 +638,10 @@ export class DataService {
 
   async getPatientGoals(): Promise<boolean> {
     try {
-      console.log('AEY calling getGoals');
       this.goalsdataservice.getGoals(this.currentPatientId).subscribe(
         goals => {
-          console.log('AEY returning from getGoals');
           this.goals = goals;
           this.consolidatedGoalsDataSource.data = this.goals.allGoals;
-          console.log('AEY setting the constant to true');
           window[Constants.GoalsIsLoaded] = true;
         },
         error => {

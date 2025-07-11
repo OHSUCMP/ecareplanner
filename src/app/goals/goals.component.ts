@@ -1,6 +1,6 @@
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 
@@ -25,27 +25,36 @@ import { DataService } from '../services/data.service';
   styleUrls: ['./goals.component.css']
 })
 export class GoalsComponent implements OnInit {
+
   featureToggling: any = Constants.featureToggling;
-
   public breakpoint: number; // Breakpoint observer code
-
   public date: FormControl = new FormControl(new Date()); // Date picker code
   public serializedDate: FormControl = new FormControl(
     new Date().toISOString(),
   ); // Date picker code
-
   public selected: string = 'option2'; // Country code
-
   public addCusForm: FormGroup;
+  private goalsLoadedInterval: any;
 
-
-  constructor(public dataservice: DataService,public dialog: MatDialog) { }
+  constructor(
+    public dataservice: DataService,
+    public dialog: MatDialog,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+    // Poll for GoalsIsLoaded and trigger change detection when it becomes true
+    // Change detection in the app component is not always sufficient.
+    // The Goals page is the point of entry and can appear to freeze if goals are loaded too slowly
+    this.goalsLoadedInterval = setInterval(() => {
+      if (window[Constants.GoalsIsLoaded]) {
+        this.cdr.detectChanges();
+        clearInterval(this.goalsLoadedInterval);
+      }
+    }, 1000);
   }
 
   getGoalsReady(): boolean {
-    console.log("Asking whether goals are ready: ", window[Constants.GoalsIsLoaded]);
     return window[Constants.GoalsIsLoaded];
   }
 
@@ -95,6 +104,12 @@ export class GoalsComponent implements OnInit {
     // tslint:disable-next-line:forin
     for (const i in group.controls) {
       group.controls[i].markAsDirty();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.goalsLoadedInterval) {
+      clearInterval(this.goalsLoadedInterval);
     }
   }
 
