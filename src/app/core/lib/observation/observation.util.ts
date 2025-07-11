@@ -1,5 +1,5 @@
 /* eslint-disable functional/immutable-data */
-import { Annotation, CodeableConcept, Observation, Resource, TimingRepeat } from 'fhir/r4';
+import { Annotation, CodeableConcept, Observation, TimingRepeat } from 'fhir/r4';
 import { fhirclient } from 'fhirclient/lib/types';
 
 import { legacy_MccCodeableConcept, legacy_MccCoding, legacy_MccDateTime, legacy_MccObservation, legacy_MccObservationCollection, legacy_MccObservationComponent, legacy_MccTime, ReferenceRange, Repeat } from '../../types/mcc-types';
@@ -17,19 +17,6 @@ export const notFoundResponse = (code?: string) => ({
     valueType: 'string',
   },
 });
-
-export const resourcesFrom = (response: fhirclient.JsonArray): Resource[] => {
-  const firstEntries = response[0] as fhirclient.JsonObject;
-  const entries: fhirclient.JsonObject[] = firstEntries?.entry
-    ? (firstEntries.entry as [fhirclient.JsonObject])
-    : [];
-
-  return entries
-    .map((entry: fhirclient.JsonObject) => entry?.resource as any)
-    .filter(
-      (resource: Resource) => resource.resourceType !== 'OperationOutcome'
-    );
-};
 
 export const getValue = (obs: Observation): any => {
   if (obs.valueQuantity) {

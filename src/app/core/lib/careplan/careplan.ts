@@ -5,13 +5,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 import { MccCarePlan, MccCondition } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { getConceptDisplayString } from '../goal/goal.util';
-
-import {
-  fhirOptions,
-  notFoundResponse,
-  resourcesFrom,
-  resourcesFromObject,
-} from './careplan.util';
+import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse } from '../../utils/fhir';
 
 export const getCareplans = async (sort?: string, max?: string): Promise<MccCarePlan[]> => {
   const sortType = sort === 'descending' ? '-date' : 'date';

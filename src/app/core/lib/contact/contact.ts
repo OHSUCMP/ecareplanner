@@ -5,8 +5,9 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccPatientContact } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
+import { fhirOptions, resourcesFrom } from '../../utils/fhir';
 
-import { fhirOptions, resourcesFrom, transformToMccContact } from './contact.util';
+import { transformToMccContact } from './contact.util';
 
 
 
@@ -17,7 +18,7 @@ export const getContacts = async (carePlanId?: string): Promise<MccPatientContac
   let careTeamMembers = new Map<string, Practitioner>()
   const _careTeamPath = "CareTeam?_include=CareTeam:participant";
   let careTeams: CareTeam[] | undefined
-  let careTeamData: Resource[] = resourcesFrom(await client.patient.request(_careTeamPath, fhirOptions) as fhirclient.JsonObject)
+  let careTeamData: Resource[] = resourcesFrom(await client.patient.request(_careTeamPath, fhirOptions))
 
   careTeams = careTeamData?.filter((item: any) => item.resourceType === 'CareTeam') as CareTeam[]
   const careTeamPractitioners = careTeamData?.filter((item: any) => item.resourceType === 'Practitioner') as Practitioner[]

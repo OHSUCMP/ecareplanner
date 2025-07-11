@@ -45,6 +45,7 @@ export class GoalsComponent implements OnInit {
   }
 
   getGoalsReady(): boolean {
+    console.log("Asking whether goals are ready: ", window[Constants.GoalsIsLoaded]);
     return window[Constants.GoalsIsLoaded];
   }
 

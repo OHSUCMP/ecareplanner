@@ -5,10 +5,6 @@ import { getFilenameFromValueSetCode } from '../../query/json';
 import { MccCondition, MccConditionSummary } from '../../types/mcc-types';
 import { displayDate } from '../service-request/service-request.util';
 
-export const fhirOptions: fhirclient.FhirOptions = {
-  pageLimit: 0,
-};
-
 export const notFoundResponse = (code?: string) => ({
   code,
   status: 'notfound',
@@ -31,19 +27,6 @@ export const resourcesFromObject = (
 
   return resource;
 };
-
-export const resourcesFrom = (response: fhirclient.JsonObject): Resource[] => {
-  const entries: fhirclient.JsonObject[] = response?.entry
-    ? (response.entry as [fhirclient.JsonObject])
-    : [];
-  return entries
-    .map((entry: fhirclient.JsonObject) => entry?.resource as any)
-    .filter(
-      (resource: Resource) => resource.resourceType !== 'OperationOutcome'
-    );
-};
-
-
 
 export const getConceptCode = (code: CodeableConcept): string => {
 

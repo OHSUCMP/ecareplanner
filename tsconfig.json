@@ -10,9 +10,9 @@
     "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es5",
+    "target": "es2019",
     "lib": [
-      "es2018",
+      "es2019",
       "dom"
     ],
     "resolveJsonModule": true,
