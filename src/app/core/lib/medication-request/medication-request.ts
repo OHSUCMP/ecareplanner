@@ -10,13 +10,7 @@ import { getConditionFromUrl } from '../careplan';
 import { getConceptDisplayString, getSupplementalDataClient } from '../goal/goal.util';
 import { convertNoteToString } from '../observation/observation.util';
 import { displayDate } from '../service-request/service-request.util';
-
-import {
-  notFoundResponse,
-  resourcesFrom,
-  resourcesFromObject,
-  resourcesFromObjectArray,
-} from './medication-request.util';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject} from '../../utils/fhir';
 
 enum ACTIVE_STATUS {
   ACTIVE,
@@ -55,8 +49,8 @@ const getSupplementalData = async (launchURL: string, sdsClient: Client): Promis
           };
           fhirHeaderRequestOption.headers = fhirHeaders;
           fhirHeaderRequestOption.url = 'MedicationRequest?subject=' + item2.resource.reference;
-          const response = await sdsClient.request(fhirHeaderRequestOption);
-          const thirdPartyMccMedication: MccMedication[] = resourcesFromObjectArray(response) as MccMedication[];
+          const response = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
+          const thirdPartyMccMedication: MccMedication[] = resourcesFrom(response) as MccMedication[];
           thirdPartyMccMedication.forEach(mccMedication => {
             mccMedication.recorder = {
               display: item2.resource.extension[0].valueUrl
@@ -84,13 +78,13 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
   const inactiveMedications: MccMedicationSummary[] = [];
 
   const queryPath = `MedicationRequest`;
-  const medicationRequest: fhirclient.JsonObject = await theCurrentClient.patient.request(
-    queryPath
+  const medicationRequest: fhirclient.JsonArray = await theCurrentClient.patient.request(
+    queryPath, fhirOptions
   );
 
   log.debug({ serviceName: 'getSummaryMedicationRequests', result: { medicationRequest } });
 
-  const medicationRequests: MccMedication[] = resourcesFromObjectArray(
+  const medicationRequests: MccMedication[] = resourcesFrom(
     medicationRequest
   ) as MccMedication[];
 
@@ -154,13 +148,12 @@ export const getMedicationRequests = async (): Promise<MccMedication[]> => {
   const client = await FHIR.oauth2.ready();
 
   const queryPath = `MedicationRequest`;
-  const goalRequest: fhirclient.JsonArray = await client.patient.request(
-    queryPath
+  const medicationRequest: fhirclient.JsonArray = await client.patient.request(
+    queryPath, fhirOptions
   );
 
-  // goal from problem list item
   const filteredMedicationRequests: MccMedication[] = resourcesFrom(
-    goalRequest
+    medicationRequest
   ) as MccMedication[];
 
   log.info(

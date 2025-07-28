@@ -4,10 +4,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccCounselingSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-
-import {
-  resourcesFrom,
-} from './counseling.util';
+import { fhirOptions, resourcesFrom } from '../../utils/fhir';
 
 export const getSummaryCounselings = async (careplanId?: string): Promise<MccCounselingSummary[]> => {
   const client = await FHIR.oauth2.ready();
@@ -15,11 +12,11 @@ export const getSummaryCounselings = async (careplanId?: string): Promise<MccCou
   const queryPath1 = `Procedure?category=409063005`;
   const queryPath2 = `ServiceRequest?category=409063005`;
   const counselingRequest1: fhirclient.JsonArray = await client.patient.request(
-    queryPath1
+    queryPath1, fhirOptions
   );
 
   const counselingRequest2: fhirclient.JsonArray = await client.patient.request(
-    queryPath2
+    queryPath2, fhirOptions
   );
 
   // counseling from problem list item

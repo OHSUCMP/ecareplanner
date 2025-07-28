@@ -4,9 +4,10 @@ import { fhirclient } from 'fhirclient/lib/types';
 import { MccCondition, MccSocialConcern } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { getSupplementalDataClient } from '../goal/goal.util';
+import { fhirOptions, resourcesFrom } from '../../utils/fhir';
 
 import {
-  resourcesFromObjectArray, transformToSocialConcern,
+  transformToSocialConcern,
 } from './social-concern.util';
 
 export const getSummarySocialConcerns = async (sdsURL: string, authURL: string, sdsScope: string): Promise<MccSocialConcern[]> => {
@@ -15,21 +16,21 @@ export const getSummarySocialConcerns = async (sdsURL: string, authURL: string, 
   let sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope)
 
   const queryPath = `Condition?category=http%3A%2F%2Fhl7.org%2Ffhir%2Fus%2Fcore%2FCodeSystem%2Fcondition-category%7Chealth-concern`;
-  const socialConcernRequest1: fhirclient.JsonObject = await client.patient.request(
-    queryPath
+  const socialConcernRequest1: fhirclient.JsonArray = await client.patient.request(
+    queryPath, fhirOptions
   );
 
-  const sdssocialConcernRequest: fhirclient.JsonObject = await sdsClient.patient.request(
-    queryPath
+  const sdssocialConcernRequest: fhirclient.JsonArray = await sdsClient.patient.request(
+    queryPath, fhirOptions
   );
   log.debug({ serviceName: 'getSummarySocialConcern', result: { socialConcernRequest1 } });
 
   // socialConcern from service request
-  const filteredSocialConcern1: MccCondition[] = resourcesFromObjectArray(
+  const filteredSocialConcern1: MccCondition[] = resourcesFrom(
     socialConcernRequest1
   ) as MccCondition[];
 
-  const sdsfilteredSocialConcern1: MccCondition[] = resourcesFromObjectArray(
+  const sdsfilteredSocialConcern1: MccCondition[] = resourcesFrom(
     sdssocialConcernRequest
   ) as MccCondition[];
 

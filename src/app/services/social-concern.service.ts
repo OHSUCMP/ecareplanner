@@ -46,15 +46,6 @@ export class SocialConcernService {
     );
   }
 
-
-  getPateintsSortedByNamne()
-  {
-    /*
-    https://api.logicahealth.org/MCCeCarePlanTest/open/Patient?_sort=family,given
-     */
-
-  }
-
   /**
    * Handle Http operation that failed.
    * Let the app continue.

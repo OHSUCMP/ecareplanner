@@ -8,15 +8,10 @@ import { fhirclient } from 'fhirclient/lib/types';
 import { MccAssessment, MCCAssessmentResponseItem, MccGoal, MccGoalList, MccGoalSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { displayDate } from '../service-request/service-request.util';
+import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse} from '../../utils/fhir';
 
 import {
   getSupplementalDataClient,
-  notFoundResponse,
-  // resourcesFrom,
-  resourcesFromObject,
-  resourcesFromObjectArray,
-  resourcesFromObjectArray2,
-  // saveFHIRAccessData,
   transformToMccGoalSummary,
 } from './goal.util';
 
@@ -66,10 +61,10 @@ export const getSupplementalData = async (launchURL: string, sdsClient: Client):
           fhirHeaderRequestOption.url = 'Goal?subject=' + item2.resource.reference;
 
           // Fetch third-party goals
-          const response = await sdsClient.request(fhirHeaderRequestOption);
+          const response = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
 
           // Process third-party goals
-          const thirdPartyGoals: MccGoal[] = resourcesFromObjectArray(response) as MccGoal[];
+          const thirdPartyGoals: MccGoal[] = resourcesFrom(response) as MccGoal[];
           const thirdPartyMappedGoals: MccGoalSummary[] = thirdPartyGoals.map(transformToMccGoalSummary);
 
           thirdPartyMappedGoals.forEach(goal => {
@@ -100,11 +95,11 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
     let sdsClient = await getSupplementalDataClient(theCurrentClient, sdsURL, authURL, sdsScope);
 
     if (sdsClient) {
-      const sdsQuestionnaireResponse: fhirclient.JsonObject = await sdsClient.patient.request('QuestionnaireResponse');
+      const sdsQuestionnaireResponse: fhirclient.JsonArray = await sdsClient.patient.request('QuestionnaireResponse', fhirOptions);
 
-      const sdsQuestionnaireResponseArray: Resource[] = resourcesFromObjectArray2(
+      const sdsQuestionnaireResponseArray: Resource[] = resourcesFrom(
         sdsQuestionnaireResponse
-      ) as Resource[];
+      );
 
       assessments = sdsQuestionnaireResponseArray.map(transformToAssessment);
 
@@ -137,39 +132,30 @@ export const getSummaryGoals = async (sdsURL: string, authURL: string, sdsScope:
 
   let sdsMappedGoals: MccGoalSummary[] = []
   if (sdsClient) {
-    const sdsGoalRequest: fhirclient.JsonObject = await sdsClient.patient.request(
-      queryPath
+    const sdsGoalRequest: fhirclient.JsonArray = await sdsClient.patient.request(
+      queryPath, fhirOptions
     );
-    const sdsFilterGoals: MccGoal[] = resourcesFromObjectArray(
+    const sdsFilterGoals: MccGoal[] = resourcesFrom(
       sdsGoalRequest
     ) as MccGoal[];
     sdsMappedGoals.push(...sdsFilterGoals.map(transformToMccGoalSummary));
   }
 
-
-  const goalRequest: fhirclient.JsonObject = await theCurrentClient.patient.request(
-    queryPath
+  const goalRequest: fhirclient.JsonArray = await theCurrentClient.patient.request(
+    queryPath, fhirOptions
   );
 
-
-
-  const filteredGoals: MccGoal[] = resourcesFromObjectArray(
+  const filteredGoals: MccGoal[] = resourcesFrom(
     goalRequest
   ) as MccGoal[];
 
-
-
   const mappedGoals: MccGoalSummary[] = filteredGoals.map(transformToMccGoalSummary);
-
 
   sdsMappedGoals.forEach(goal => {
     mappedGoals.push(goal)
   })
 
-
-
   const thirdPartyStuff = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
-
 
   if (thirdPartyStuff) {
     thirdPartyStuff.forEach(goal => {
@@ -228,36 +214,6 @@ export const getSummaryGoals = async (sdsURL: string, authURL: string, sdsScope:
 
   return mccGoalList;
 };
-
-
-/*
-* TODO: enhance this to verify current access token for SDS.
-*/
-
-
-// export const getGoalsWtF = async (): Promise<MccGoal[]> => {
-//   const client = await FHIR.oauth2.ready();
-//   await saveFHIRAccessData(fcCurrentStateKey, client.state, false).then(() => {
-//     console.log('fhirClientState saved/promise returned')
-//   }).catch((e) => console.log(e))
-//   const queryPath = `Goal`;
-//   const goalRequest: fhirclient.JsonArray = await client.patient.request(
-//     queryPath
-//   );
-
-//   // goal from problem list item
-//   const filteredGoals: MccGoal[] = resourcesFrom(
-//     goalRequest
-//   ) as MccGoal[];
-
-//   log.info(
-//     `getGoals - successful`
-//   );
-
-//   log.debug({ serviceName: 'getGoals', result: filteredGoals });
-
-//   return filteredGoals;
-// };
 
 export const getGoal = async (id: string): Promise<MccGoal> => {
   if (!id) {

@@ -4,11 +4,9 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccPatient, MccPatientSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject } from '../../utils/fhir';
 
 import {
-  notFoundResponse,
-  resourcesFrom,
-  resourcesFromObject,
   transformToPatientSummary,
 } from './patient.util';
 
@@ -17,7 +15,7 @@ export const getPatientsByName = async (name: string): Promise<MccPatientSummary
 
   const queryPath = `Patient?name=${name}`;
   const patientRequest: fhirclient.JsonArray = await client.patient.request(
-    queryPath
+    queryPath, fhirOptions
   );
 
   const filteredPatients: MccPatient[] = resourcesFrom(
@@ -57,13 +55,7 @@ export const getPatient = async (id: string): Promise<MccPatientSummary> => {
   return transformToPatientSummary(filteredPatient);
 };
 
-import {
-  fhirOptions,
-} from './patient.util';
-
-
 export const getReference = async (theReference: string): Promise<DomainResource> => {
-  // return client.request(theReference, fhirOptions)
   const client = await FHIR.oauth2.ready();
   return client.request(theReference, fhirOptions);
 };

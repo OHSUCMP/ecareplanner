@@ -1,11 +1,10 @@
-import { CodeableConcept, Resource } from 'fhir/r4';
+import { CodeableConcept } from 'fhir/r4';
 import { fhirclient } from 'fhirclient/lib/types';
 import FHIR from 'fhirclient'
 import Client from 'fhirclient/lib/Client'
 import { MccGoal, MccGoalSummary } from '../../types/mcc-types';
 import localForage from 'localforage'
 import { displayDate } from '../service-request/service-request.util';
-// import { fhirclient } from 'fhirclient/lib/types'
 
 const LF_ID = '-MCP'
 // const fcCurrentStateKey = 'fhir-client-state' + LF_ID
@@ -185,62 +184,6 @@ export const getSupplementalDataClient = async (currentClient: Client, sdsURL: s
   // This includes that knowledge in ProviderLogin w/o the additional logic it has now to determine that.
   return sdsClient
 }
-
-export const fhirOptions: fhirclient.FhirOptions = {
-  pageLimit: 0,
-};
-
-export const notFoundResponse = (code?: string) => ({
-  code,
-  status: 'notfound',
-  value: {
-    stringValue: 'No Data Available',
-    valueType: 'string',
-  },
-});
-
-export const resourcesFromObject = (
-  response: fhirclient.JsonObject
-): Resource => {
-  const entry: fhirclient.JsonObject = response?.entry[0];
-
-  const resource: any = entry?.resource;
-
-  if (resource.resourceType === 'OperationOutcome') {
-    return {} as any;
-  }
-
-  return resource;
-};
-
-export const resourcesFromObjectArray = (response: fhirclient.JsonObject): Resource[] => {
-  if (response?.entry) {
-    const entries: fhirclient.JsonArray = response?.entry as fhirclient.JsonArray;
-    return entries.map((entry: fhirclient.JsonObject) => entry?.resource as any).filter((resource: any) => resource.resourceType !== 'OperationOutcome')
-  }
-  return new Array<MccGoal>();
-};
-
-export const resourcesFromObjectArray2 = (response: fhirclient.JsonObject): Resource[] => {
-  if (response?.entry) {
-    const entries: fhirclient.JsonArray = response?.entry as fhirclient.JsonArray;
-    return entries.map((entry: fhirclient.JsonObject) => entry?.resource as any).filter((resource: any) => resource.resourceType !== 'OperationOutcome')
-  }
-  return new Array<Resource>();
-};
-
-
-export const resourcesFrom = (response: fhirclient.JsonArray): Resource[] => {
-  const firstEntries = response[0] as fhirclient.JsonObject;
-  const entries: fhirclient.JsonObject[] = firstEntries?.entry
-    ? (firstEntries.entry as [fhirclient.JsonObject])
-    : [];
-  return entries
-    .map((entry: fhirclient.JsonObject) => entry?.resource as any)
-    .filter(
-      (resource: Resource) => resource.resourceType !== 'OperationOutcome'
-    );
-};
 
 export const getConceptDisplayString = (code: CodeableConcept): string => {
 

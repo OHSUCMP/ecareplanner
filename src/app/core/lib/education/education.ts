@@ -4,10 +4,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccEducationSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-
-import {
-  resourcesFrom,
-} from './education.util';
+import { fhirOptions, resourcesFrom} from '../../utils/fhir';
 
 export const getSummaryEducations = async (careplanId?: string): Promise<MccEducationSummary[]> => {
   const client = await FHIR.oauth2.ready();
@@ -15,11 +12,11 @@ export const getSummaryEducations = async (careplanId?: string): Promise<MccEduc
   const queryPath1 = `Procedure?category=409073007,311401005`;
   const queryPath2 = `ServiceRequest?category=409073007`;
   const educationRequest1: fhirclient.JsonArray = await client.patient.request(
-    queryPath1
+    queryPath1, fhirOptions
   );
 
   const educationRequest2: fhirclient.JsonArray = await client.patient.request(
-    queryPath2
+    queryPath2, fhirOptions
   );
 
   // education from problem list item
