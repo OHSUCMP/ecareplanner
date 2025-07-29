@@ -80,7 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   errorMessage: any;
   postId: any;
 
-  basefhirserver = 'https://api.logicahealth.org/MCCeCarePlanTest/open/';
+  basefhirserver = 'https://gw.interop.community/MCCOMPARE/data/';
   secondaryfhirserver = 'NONE';
   title = 'providersmartapp';
   events: string[] = [];
