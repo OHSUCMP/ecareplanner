@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment';
 import { catchError, tap } from 'rxjs/operators';
 import { EducationSummary } from '../generated-data-api/models/EducationSummary';
 import { ServiceRequestSummary } from '../generated-data-api';
-import { getSummaryServiceRequest } from 'e-care-common-data-services';
-import { MccServiceRequestSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { getSummaryServiceRequest } from '../core';
+import { MccServiceRequestSummary } from '../core/types/mcc-types';
 
 @Injectable({
   providedIn: 'root'

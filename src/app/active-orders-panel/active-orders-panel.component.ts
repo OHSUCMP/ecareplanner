@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MccServiceRequestSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
 import moment from 'moment';
 import { Constants } from '../common/constants';
 import {  SocialConcern } from '../generated-data-api';
 
 import { DataService } from '../services/data.service';
+import { MccServiceRequestSummary } from '../core/types/mcc-types';
 
 declare var window: any;
 

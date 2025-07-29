@@ -4,10 +4,10 @@ import { from, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
-import { getPatient, getPatientsByName, getSummaryConditions, getSummarySocialConcerns } from 'e-care-common-data-services';
-import { MccCondition, MccConditionList, MccPatient, MccPatientSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccCondition, MccConditionList, MccPatient, MccPatientSummary } from '../core/types/mcc-types';
 import { SocialConcern } from '../generated-data-api';
 import { environment } from '../../environments/environment';
+import { getPatient, getPatientsByName, getSummaryConditions } from '../core';
 
 
 @Injectable({ providedIn: 'root' })

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MccReferralSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccReferralSummary } from '../core/types/mcc-types';
 import { DataService } from '../services/data.service';
 
 @Component({

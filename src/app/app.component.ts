@@ -7,7 +7,6 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { checkAuthorize } from 'e-care-common-data-services';
 import { DOCUMENT } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SubjectDataService } from './services/subject-data-service.service';
@@ -25,6 +24,7 @@ import vitalMappings from "../assets/json/data/vital-mappings.json";
 import categoryMappings from "../assets/json/data/category-mappings.json";
 
 import { HttpClient } from '@angular/common/http';
+import { checkAuthorize } from './core';
 
 @Component({
   selector: 'app-root',

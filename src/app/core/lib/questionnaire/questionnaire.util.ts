@@ -1,0 +1,1 @@
+export const activeQuestionnaireStatus = ['active', 'draft', 'retired'];

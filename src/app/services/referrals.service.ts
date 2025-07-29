@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { from, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { MccReferralSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
-import { getSummaryReferrals } from 'e-care-common-data-services';
+import { MccReferralSummary } from '../core/types/mcc-types';
+import { getSummaryReferrals } from '../core';
 
 @Injectable({
   providedIn: 'root'

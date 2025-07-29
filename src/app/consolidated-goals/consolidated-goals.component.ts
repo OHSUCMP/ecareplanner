@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { GoalDialogComponent } from '../goals-dialog/goal-dialog.component';
-import { MccGoalSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccGoalSummary } from '../core/types/mcc-types';
 
 @Component({
   selector: 'app-consolidated-goals',
