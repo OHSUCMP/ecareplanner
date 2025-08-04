@@ -7,10 +7,10 @@ import { fhirclient } from 'fhirclient/lib/types';
 import { MccMedication, MccMedicationSummary, MccMedicationSummaryList } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { getConditionFromUrl } from '../careplan';
-import { getConceptDisplayString, getSupplementalDataClient } from '../goal/goal.util';
+import { getConceptDisplayString } from '../goal/goal.util';
 import { convertNoteToString } from '../observation/observation.util';
 import { displayDate } from '../service-request/service-request.util';
-import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject} from '../../utils/fhir';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject, getSupplementalDataClient} from '../../utils/fhir';
 
 enum ACTIVE_STATUS {
   ACTIVE,

@@ -4,8 +4,7 @@ import Client from 'fhirclient/lib/Client';
 import { fhirclient } from 'fhirclient/lib/types';
 import { MccServiceRequestSummary } from '../../types/mcc-types';
 import { getCondition } from '../condition';
-import { getSupplementalDataClient } from '../goal/goal.util';
-import { fhirOptions, resourcesFrom } from '../../utils/fhir';
+import { fhirOptions, resourcesFrom, getSupplementalDataClient } from '../../utils/fhir';
 
 import {
   displayConcept, transformToServiceRequest,

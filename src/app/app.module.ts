@@ -38,7 +38,7 @@ import { ClinicalExamResultsComponent } from './clinical-exam-results/clinical-e
 import { ClinicalProcedureResultsComponent } from './clinical-procedure-results/clinical-procedure-results.component';
 import { ClinicalImagingResultsComponent } from './clinical-imaging-results/clinical-imaging-results.component';
 import { ClinicalActivitiesResultsComponent } from './clinical-activities-results/clinical-activities-results.component';
-import { ClinicalQuestionairesResultsComponent } from './clinical-questionaires-results/clinical-questionaires-results.component';
+import { ClinicalQuestionnairesResultsComponent } from './clinical-questionnaires-results/clinical-questionnaires-results.component';
 import { ClinicalHistoryResultsComponent } from './clinical-history-results/clinical-history-results.component';
 import { ClinicalTherapyResultsComponent } from './clinical-therapy-results/clinical-therapy-results.component';
 import { LabTestResultComponent } from './lab-test-result/lab-test-result.component';
@@ -94,7 +94,7 @@ const routes: Routes = []; // sets up routes constant where you define your rout
     ClinicalExamResultsComponent,
     ClinicalProcedureResultsComponent,
     ClinicalActivitiesResultsComponent,
-    ClinicalQuestionairesResultsComponent,
+    ClinicalQuestionnairesResultsComponent,
     ClinicalTherapyResultsComponent,
     ClinicalHistoryResultsComponent,
     LabTestResultComponent,
