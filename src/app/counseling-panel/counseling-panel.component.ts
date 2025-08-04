@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MccCounselingSummary } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccCounselingSummary } from '../core/types/mcc-types';
 import moment from 'moment';
 import {DataService} from '../services/data.service';
 

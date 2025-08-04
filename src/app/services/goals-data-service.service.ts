@@ -18,10 +18,10 @@ import {
   getLatestObservation as EccGetLatestObservation,
   getObservationsSegmented,
   getSummaryGoals
-} from 'e-care-common-data-services';
+} from '../core';
 import { MccCoding } from "../generated-data-api/models/MccCoding";
 import { Constants } from '../common/constants';
-import { MccGoalList } from 'e-care-common-data-services/build/main/types/mcc-types';
+import { MccGoalList } from '../core/types/mcc-types';
 import { doLog } from '../log';
 import { environment } from 'src/environments/environment';
 

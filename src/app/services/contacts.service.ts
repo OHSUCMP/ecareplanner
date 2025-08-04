@@ -5,8 +5,8 @@ import { Observable, of, from } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import {
   getContacts
-} from 'e-care-common-data-services';
-import { MccPatientContact } from 'e-care-common-data-services/build/main/types/mcc-types';
+} from '../core';
+import { MccPatientContact } from '../core/types/mcc-types';
 
 @Injectable({
   providedIn: 'root'
