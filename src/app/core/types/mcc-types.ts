@@ -383,21 +383,28 @@ export type MccServiceRequestSummary = {
   source?: string
 }
 
-
 export type PatientContactRole = PatientContact & { role: string }
-
 
 export type MCCAssessmentResponseItem = {
   question?: string;
   answer?: string;
-
 }
-
 
 export type MccAssessment = {
   title?: string;
-  date?: string,
-  questions?: Array<MCCAssessmentResponseItem>,
-  subsections?: Array<MccAssessment>
+  date?: string;
+  questions?: Array<MCCAssessmentResponseItem>;
+}
+
+export type EcpAssessment = {
+  date: string;
+  isScored: boolean;
+  score?: number;
+  questions?: Array<MCCAssessmentResponseItem>;
+}
+
+export type EcpAssessmentSummary = {
+  title: string;
+  responses: Array<EcpAssessment>
 }
 

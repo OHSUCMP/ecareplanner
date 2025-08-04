@@ -139,7 +139,7 @@ export class DataService {
   // new results based on category
   activities: Observation[];
   exam: Observation[];
-  questionaires: Observation[];
+  questionnaires: Observation[];
   procedure: Observation[];
   history: Observation[];
   imaging: Observation[];
@@ -318,7 +318,7 @@ export class DataService {
             this.updateVitalSignResults(this.currentPatientId, this.currentCareplanId);
             this.updateActivities();
             this.updateExam();
-            this.updateQuestionaires();
+            this.updateQuestionnaires();
             console.log('getCarePlan updateAssessments');
             // this.updateAssessments();
             this.updateProcedure();
@@ -458,22 +458,22 @@ export class DataService {
     return true;
   }
 
-  async updateQuestionaires(): Promise<boolean> {
+  async updateQuestionnaires(): Promise<boolean> {
     try {
       this.obsService.getObservationsByCategory(this.currentPatientId, 'survey').then(
-        questionaires => {
-          console.log('Questionnaire count from common data service: ', questionaires.length);
-          this.questionaires = questionaires;
+        questionnaires => {
+          console.log('Questionnaire count from common data service: ', questionnaires.length);
+          this.questionnaires = questionnaires;
         },
         error => {
-          this.logServiceError('updateQuestionaires', error);
+          this.logServiceError('updateQuestionnaires', error);
         }
       );
 
 
 
     } catch (error) {
-      this.logServiceError('updateQuestionaires', error);
+      this.logServiceError('updateQuestionnaires', error);
     }
     return true;
   }

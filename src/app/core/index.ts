@@ -10,6 +10,7 @@ export * from './lib/goal/goal';
 export * from './lib/medication-request/medication-request';
 export * from './lib/patient/patient';
 export * from './lib/referral/referral';
+export * from './lib/questionnaire-response/questionnaire-response';
 export * from './lib/social-concern/social-concern';
 export * from './lib/service-request/service-request';
 export * from './query/json';

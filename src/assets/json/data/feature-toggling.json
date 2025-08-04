@@ -20,7 +20,7 @@
         "labResults": true,
         "activities": true,
         "exam": true,
-        "questionaires": true,
+        "questionnaires": true,
         "procedure": true,
         "history": true,
         "imaging": true,
