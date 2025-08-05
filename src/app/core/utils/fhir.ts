@@ -80,7 +80,7 @@ const getFHIRAccessData = async (key: string): Promise<any> => {
   }
 }
 
-export const extractFhirAccessDataObjectIfGivenEndpointMatchesAnyPriorEndpoint =
+const extractFhirAccessDataObjectIfGivenEndpointMatchesAnyPriorEndpoint =
   async (givenEndpoint: string): Promise<fhirclient.ClientState | undefined> => {
     // TODO: Create getter function for fcCurrentStateKey serverUrl and use that here
     console.log('enter extractFhirAccessDataObjectIfGivenEndpointMatchesAnyPriorEndpoint()')
