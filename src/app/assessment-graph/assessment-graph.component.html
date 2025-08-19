@@ -1,0 +1,13 @@
+  <div class="content">
+  <b>Change in Score over Time</b>
+  <div class="chart-wrapper">
+        <canvas baseChart
+        [datasets]="lineChartData"
+        [options]="lineChartOptions"
+        [colors]="lineChartColors"
+        [legend]="lineChartLegend"
+        [chartType]="lineChartType"
+        [plugins]="lineChartPlugins" height="200">
+        </canvas>
+  </div>
+  </div>

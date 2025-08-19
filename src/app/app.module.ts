@@ -32,6 +32,7 @@ import { EducationPanelComponent } from './education-panel/education-panel.compo
 import { CounselingPanelComponent } from './counseling-panel/counseling-panel.component';
 import { ReferralPanelComponent } from './referral-panel/referral-panel.component';
 import { HealthStatusComponent } from './health-status/health-status.component';
+import { LabsAndVitalsComponent } from './labs-and-vitals/labs-and-vitals.component';
 import { CareTeamComponent } from './care-team/care-team.component';
 import { ClinicalTestResultsComponent } from './clinical-test-results/clinical-test-results.component';
 import { ClinicalExamResultsComponent } from './clinical-exam-results/clinical-exam-results.component';
@@ -60,6 +61,7 @@ import { MedicationDialogComponent } from './medication-dialog/medication-dialog
 import { GoalDialogComponent } from './goals-dialog/goal-dialog.component';
 import { ActiveOrdersPanelComponent } from './active-orders-panel/active-orders-panel.component';
 import { WarningPopupComponent } from './warning-popup/warning-popup.component';
+import { AssessmentGraphComponent } from './assessment-graph/assessment-graph.component';
 import { AssessmentSectionComponent } from './assessment-section/assessment-section.component';
 
 const routes: Routes = []; // sets up routes constant where you define your routes
@@ -88,6 +90,7 @@ const routes: Routes = []; // sets up routes constant where you define your rout
     CounselingPanelComponent,
     ReferralPanelComponent,
     HealthStatusComponent,
+    LabsAndVitalsComponent,
     CareTeamComponent,
     ClinicalTestResultsComponent,
     ClinicalImagingResultsComponent,
@@ -107,6 +110,7 @@ const routes: Routes = []; // sets up routes constant where you define your rout
     Testgraph1Component,
     NullCheckPipe,
     WarningPopupComponent,
+    AssessmentGraphComponent,
     AssessmentSectionComponent
   ],
   imports: [
