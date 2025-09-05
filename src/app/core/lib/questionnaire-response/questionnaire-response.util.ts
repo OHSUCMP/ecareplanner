@@ -1,6 +1,6 @@
 import { Observation, Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import { EcpAssessment, EcpAssessmentSummary, EcpScore, MCCAssessmentResponseItem } from '../../types/mcc-types';
-import { QuestionnaireMetadata, scoredQuestionnaireMetadata } from './questionnaire-metadata';
+import { QuestionnaireMetadata, questionnaireMetadata } from './questionnaire-metadata';
 import { displayDate } from '../service-request/service-request.util';
 
 function isScoreQuestion(item: QuestionnaireItem) {
@@ -192,11 +192,25 @@ function convertObservations(questionnaireDef: Questionnaire, surveyObservations
     return questionnaireResponses;
 }
 
-export function getQuestionnaireResponsesFromObservations(surveyObservations: Observation[]): QuestionnaireResponse[] {
+export function filterQuestionnaireResponsesByConfigured(questionnaireResponses: QuestionnaireResponse[], configuredQuestionnaires: string[]): QuestionnaireResponse[] {
+    return questionnaireResponses.filter(qr => {
+        const metadata = questionnaireMetadata.find(metadata => metadata.url === qr.questionnaire);
+        return metadata && configuredQuestionnaires.includes(metadata.id);
+    });
+}
+
+export function getQuestionnaireResponsesFromObservations(surveyObservations: Observation[], configuredQuestionnaires: string[]): QuestionnaireResponse[] {
     const questionnaireResponses: QuestionnaireResponse[] = [];
     
+    // Filter to only configured questionnaires
+    const filteredQuestionnaireMetadata = configuredQuestionnaires.map(id => 
+        questionnaireMetadata.find(metadata => metadata.id === id)
+    ).filter((metadata): metadata is QuestionnaireMetadata => metadata !== undefined);
+
+    console.log(`Processing ${filteredQuestionnaireMetadata.length} configured questionnaires from observations.`);
+
     // Iterate through each questionnaire definition
-    for (const metadata of scoredQuestionnaireMetadata) {
+    for (const metadata of filteredQuestionnaireMetadata) {
         const responses = convertObservations(metadata.definition, surveyObservations);
         questionnaireResponses.push(...responses);
     }
@@ -205,11 +219,11 @@ export function getQuestionnaireResponsesFromObservations(surveyObservations: Ob
 }
 
 export function transformToAssessmentSummary(resourcesToTransform: QuestionnaireResponse[]): EcpAssessmentSummary {
-    // Check if there is a metadata entry for the questionnaire
-    const metadata = scoredQuestionnaireMetadata.find(metadata => metadata.url === resourcesToTransform[0].questionnaire);
+    // Get the metadata entry for the questionnaire
+    const metadata = questionnaireMetadata.find(metadata => metadata.url === resourcesToTransform[0].questionnaire);
     let assessmentSummary: EcpAssessmentSummary = {
-        title: metadata ? metadata.display : (resourcesToTransform[0]?._questionnaire?.extension[0]?.valueString || resourcesToTransform[0].questionnaire),
-        isScored: !!metadata,
+        title: metadata.display,
+        isScored: metadata.isScored,
         responses: []
     }
 
@@ -217,7 +231,7 @@ export function transformToAssessmentSummary(resourcesToTransform: Questionnaire
         
         const assessment: EcpAssessment = {
             date: displayDate(response.authored),
-            score: metadata ? getScore(response, metadata) : undefined,
+            score: metadata.isScored ? getScore(response, metadata) : undefined,
             questions: []
         };
 

@@ -7,12 +7,15 @@ import { EcpAssessmentSummary } from '../../types/mcc-types';
 import {getObservationsByCategory} from '../observation/observation';
 import { fhirOptions, resourcesFrom, getSupplementalDataClient} from '../../utils/fhir';
 import {
-    getQuestionnaireResponsesFromObservations, transformToAssessmentSummary
+    filterQuestionnaireResponsesByConfigured, getQuestionnaireResponsesFromObservations, transformToAssessmentSummary
 } from './questionnaire-response.util';
 
-export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: string): Promise<EcpAssessmentSummary[]> => {
+export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: string, configuredQuestionnairesString: string): Promise<EcpAssessmentSummary[]> => {
 
   let assessments: EcpAssessmentSummary[] = []
+
+  // Parse the configured questionnaires from a comma-separated string to an array
+  const configuredQuestionnaires = configuredQuestionnairesString.split(',').map(q => q.trim());
 
   try {
 
@@ -26,9 +29,10 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
             sdsQuestionnaireResponse
         );
 
+        // TODO: AEY Filter to only configured questionnaires
         const surveyObservations = await getObservationsByCategory('survey');
-        let allResponses = sdsQuestionnaireResponseArray;
-        allResponses.push(...getQuestionnaireResponsesFromObservations(surveyObservations));
+        let allResponses = filterQuestionnaireResponsesByConfigured(sdsQuestionnaireResponseArray as QuestionnaireResponse[], configuredQuestionnaires);
+        allResponses.push(...getQuestionnaireResponsesFromObservations(surveyObservations, configuredQuestionnaires));
 
         const groupedByUrl = allResponses.reduce((acc, curr) => {
             const key = (curr as QuestionnaireResponse).questionnaire;
