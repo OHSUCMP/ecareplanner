@@ -1,5 +1,8 @@
 <div class="assessment-section">
   <h3>{{ assessmentData.title }}</h3>
+  <div *ngIf="assessmentData.isScored">
+    <app-assessment-graph [assessmentData]="assessmentData"></app-assessment-graph>
+  </div>
   <mat-accordion>
     <mat-expansion-panel [expanded]="false" *ngFor="let assessment of assessmentData.responses">
       <mat-expansion-panel-header>

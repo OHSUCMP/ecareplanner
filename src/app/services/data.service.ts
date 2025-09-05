@@ -481,7 +481,7 @@ export class DataService {
   async updateAssessments(): Promise<boolean> {
     try {
       // window[Constants.AssessmentsIsLoaded] = false;
-      getAssessments(environment.sdsURL, environment.authURL, environment.sdsScope).then(
+      getAssessments(environment.sdsURL, environment.authURL, environment.sdsScope, environment.questionnaires).then(
         assessments => {
           this.assessments = assessments;
           window[Constants.AssessmentsIsLoaded] = true;
