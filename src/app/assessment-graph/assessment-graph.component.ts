@@ -60,7 +60,7 @@ export class AssessmentGraphComponent implements OnInit {
               hour: 'D MMM, h:mm a',
               day: 'D MMM',
               week: 'll',
-              month: 'MMM YY',
+              month: 'M/D/YY',
               quarter: 'll',
               year: 'll'
             },
