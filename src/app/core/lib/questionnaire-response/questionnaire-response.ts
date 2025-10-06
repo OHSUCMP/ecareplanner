@@ -29,7 +29,6 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
             sdsQuestionnaireResponse
         );
 
-        // TODO: AEY Filter to only configured questionnaires
         const surveyObservations = await getObservationsByCategory('survey');
         let allResponses = filterQuestionnaireResponsesByConfigured(sdsQuestionnaireResponseArray as QuestionnaireResponse[], configuredQuestionnaires);
         allResponses.push(...getQuestionnaireResponsesFromObservations(surveyObservations, configuredQuestionnaires));
