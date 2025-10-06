@@ -396,15 +396,20 @@ export type MccAssessment = {
   questions?: Array<MCCAssessmentResponseItem>;
 }
 
+export type EcpScore = {
+  value: number;
+  interpretation: string;
+}
+
 export type EcpAssessment = {
   date: string;
-  isScored: boolean;
-  score?: number;
+  score?: EcpScore;
   questions?: Array<MCCAssessmentResponseItem>;
 }
 
 export type EcpAssessmentSummary = {
   title: string;
-  responses: Array<EcpAssessment>
+  isScored: boolean;
+  responses: Array<EcpAssessment>;
 }
 

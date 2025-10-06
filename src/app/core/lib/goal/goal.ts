@@ -1,13 +1,12 @@
 /* eslint-disable functional/immutable-data */
 // import localForage from 'localforage'
-import { GoalTarget, QuestionnaireResponse, QuestionnaireResponseItem, Resource } from 'fhir/r4';
+import { GoalTarget, Resource } from 'fhir/r4';
 import FHIR from 'fhirclient';
 import Client from 'fhirclient/lib/Client';
 import { fhirclient } from 'fhirclient/lib/types';
 
-import { MccAssessment, MCCAssessmentResponseItem, MccGoal, MccGoalList, MccGoalSummary } from '../../types/mcc-types';
+import { MccGoal, MccGoalList, MccGoalSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import { displayDate } from '../service-request/service-request.util';
 import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse, getSupplementalDataClient} from '../../utils/fhir';
 
 import {

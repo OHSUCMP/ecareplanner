@@ -1,16 +1,21 @@
-import { GoalTarget, QuestionnaireResponse, QuestionnaireResponseItem, Resource } from 'fhir/r4';
+import { QuestionnaireResponse, Resource } from 'fhir/r4';
 import FHIR from 'fhirclient';
 import Client from 'fhirclient/lib/Client';
 import { fhirclient } from 'fhirclient/lib/types';
 
-import { MccAssessment, MCCAssessmentResponseItem, MccGoal, MccGoalList, MccGoalSummary } from '../../types/mcc-types';
-import log from '../../utils/loglevel';
-import { displayDate } from '../service-request/service-request.util';
-import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse, getSupplementalDataClient} from '../../utils/fhir';
+import { EcpAssessmentSummary } from '../../types/mcc-types';
+import {getObservationsByCategory} from '../observation/observation';
+import { fhirOptions, resourcesFrom, getSupplementalDataClient} from '../../utils/fhir';
+import {
+    filterQuestionnaireResponsesByConfigured, getQuestionnaireResponsesFromObservations, transformToAssessmentSummary
+} from './questionnaire-response.util';
 
-export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: string): Promise<MccAssessment[]> => {
+export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: string, configuredQuestionnairesString: string): Promise<EcpAssessmentSummary[]> => {
 
-  let assessments: MccAssessment[] = []
+  let assessments: EcpAssessmentSummary[] = []
+
+  // Parse the configured questionnaires from a comma-separated string to an array
+  const configuredQuestionnaires = configuredQuestionnairesString.split(',').map(q => q.trim());
 
   try {
 
@@ -18,14 +23,29 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
     let sdsClient = await getSupplementalDataClient(theCurrentClient, sdsURL, authURL, sdsScope);
 
     if (sdsClient) {
-      const sdsQuestionnaireResponse: fhirclient.JsonArray = await sdsClient.patient.request('QuestionnaireResponse', fhirOptions);
+        const sdsQuestionnaireResponse: fhirclient.JsonArray = await sdsClient.patient.request('QuestionnaireResponse', fhirOptions);
 
-      const sdsQuestionnaireResponseArray: Resource[] = resourcesFrom(
-        sdsQuestionnaireResponse
-      );
+        const sdsQuestionnaireResponseArray: Resource[] = resourcesFrom(
+            sdsQuestionnaireResponse
+        );
 
-      assessments = sdsQuestionnaireResponseArray.map(transformToAssessment);
+        const surveyObservations = await getObservationsByCategory('survey');
+        let allResponses = filterQuestionnaireResponsesByConfigured(sdsQuestionnaireResponseArray as QuestionnaireResponse[], configuredQuestionnaires);
+        allResponses.push(...getQuestionnaireResponsesFromObservations(surveyObservations, configuredQuestionnaires));
 
+        const groupedByUrl = allResponses.reduce((acc, curr) => {
+            const key = (curr as QuestionnaireResponse).questionnaire;
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(curr);
+            return acc;
+        }, {} as Record<string, Resource[]>);
+
+        // Pass each resource array to the transformToAssessmentSummary function
+        Object.values(groupedByUrl).forEach((resourcesToTransform: Resource[]) => {
+            if (resourcesToTransform.length > 0) {
+                assessments.push(transformToAssessmentSummary(resourcesToTransform as QuestionnaireResponse[]));
+            }
+        });
     }
 
   } catch (error) {
@@ -35,33 +55,4 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
     return assessments;
   }
 }
-
-function transformToAssessment(transformToAssessment: QuestionnaireResponse): MccAssessment {
-
-  const transformedData: MccAssessment = {
-    title: transformToAssessment._questionnaire.extension[0].valueString,
-    date: displayDate(transformToAssessment.authored),
-    questions: []
-  }
-
-  transformToAssessment.item.forEach(item1 => {
-    transformedData.questions.push(getAnswer(item1));
-    if (item1.item) {
-      transformedData.questions.push(...item1.item.map(getAnswer));
-    }
-
-  });
-
-  return transformedData;
-
-}
-
-function getAnswer(getAnswer: QuestionnaireResponseItem): MCCAssessmentResponseItem {
-  const response: MCCAssessmentResponseItem = {
-    question: getAnswer.text,
-    answer: getAnswer.answer ? getAnswer.answer[0].valueCoding ? getAnswer.answer[0].valueCoding.display : getAnswer.answer[0].valueBoolean ? JSON.stringify(getAnswer.answer[0].valueBoolean) : JSON.stringify(getAnswer.answer[0]) : ''
-  }
-  return response;
-}
-
 

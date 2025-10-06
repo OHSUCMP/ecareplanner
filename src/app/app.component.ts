@@ -63,6 +63,10 @@ export class AppComponent implements OnInit, AfterViewInit {
           link: './maint',
           index: 2
         }, {
+          label: 'Vital Signs and Lab Tests',
+          link: './tests',
+          index: 2
+        }, {
           label: 'Health Status Evaluation & Outcomes',
           link: './status',
           index: 2
