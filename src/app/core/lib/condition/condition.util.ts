@@ -2,7 +2,7 @@ import { CodeableConcept, Resource } from 'fhir/r4';
 
 import { getFilenameFromValueSetCode } from '../../query/json';
 import { MccCondition, MccConditionSummary } from '../../types/mcc-types';
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 
 export const getConceptCode = (code: CodeableConcept): string => {
 

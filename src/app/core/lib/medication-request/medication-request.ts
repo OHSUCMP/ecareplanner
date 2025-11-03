@@ -9,7 +9,7 @@ import log from '../../utils/loglevel';
 import { getConditionFromUrl } from '../careplan';
 import { getConceptDisplayString } from '../goal/goal.util';
 import { convertNoteToString } from '../observation/observation.util';
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject, getSupplementalDataClient} from '../../utils/fhir';
 
 enum ACTIVE_STATUS {

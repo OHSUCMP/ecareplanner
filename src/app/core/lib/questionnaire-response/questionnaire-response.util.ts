@@ -1,7 +1,7 @@
 import { Observation, Questionnaire, QuestionnaireItem, QuestionnaireResponse, QuestionnaireResponseItem, QuestionnaireResponseItemAnswer } from 'fhir/r4';
 import { EcpAssessment, EcpAssessmentSummary, EcpScore, MCCAssessmentResponseItem } from '../../types/mcc-types';
 import { QuestionnaireMetadata, questionnaireMetadata } from './questionnaire-metadata';
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 
 function isScoreQuestion(item: QuestionnaireItem) {
     return item?.extension?.some(
