@@ -1,5 +1,5 @@
 import { MccCondition, MccSocialConcern } from '../../types/mcc-types';
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 
 export const transformToSocialConcern = (condition: MccCondition): MccSocialConcern => {
   return {

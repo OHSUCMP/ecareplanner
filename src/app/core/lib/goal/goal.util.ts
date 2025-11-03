@@ -2,7 +2,7 @@ import { CodeableConcept } from 'fhir/r4';
 import { fhirclient } from 'fhirclient/lib/types';
 import { MccGoal, MccGoalSummary } from '../../types/mcc-types';
 import localForage from 'localforage'
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 
 export const saveFHIRAccessData = async (key: string, data: any, isArray: boolean): Promise<any> => {
   if (data) {
