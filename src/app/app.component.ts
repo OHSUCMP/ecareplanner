@@ -65,15 +65,15 @@ export class AppComponent implements OnInit, AfterViewInit {
         }, {
           label: 'Vital Signs and Lab Tests',
           link: './tests',
-          index: 2
+          index: 3
         }, {
           label: 'Health Status Evaluation & Outcomes',
           link: './status',
-          index: 2
+          index: 4
         }, {
           label: 'Care Team',
           link: './care',
-          index: 2
+          index: 5
         }
     ];
   }
