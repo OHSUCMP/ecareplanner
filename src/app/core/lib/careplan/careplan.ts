@@ -179,15 +179,15 @@ export const getBestCareplan = async (
   // filter out addresses by condition reference
   const responseCarePlans: MccCarePlan[] = await Promise.all(
     filteredCareplans.map(async (careplan: MccCarePlan) => {
-      const addresses = await Promise.all(
+      const addresses = careplan.addresses ? await Promise.all(
         careplan.addresses.map(async (address) => {
           const condition: Condition = await getConditionFromUrl(address.reference);
           return {
             ...address,
             reference: getConceptDisplayString(condition.code),
           };
-        })
-      );
+        })) : []
+      ;
 
       const newCareplan = { ...careplan, addresses };
       return newCareplan;
