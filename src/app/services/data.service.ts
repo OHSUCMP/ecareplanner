@@ -56,12 +56,13 @@ import moment from 'moment';
 import { CounselingSummary } from '../generated-data-api/models/CounselingSummary';
 import { CounselingService } from './counseling.service';
 import { EducationService } from './education.service';
+import { EncounterService } from './encounter.service';
 import { EducationSummary } from '../generated-data-api/models/EducationSummary';
 import { ReferralSummary } from '../generated-data-api/models/ReferralSummary';
 import { ReferralService } from './referrals.service';
 import { ObservationsService } from './observations.service';
 import { Constants } from '../common/constants';
-import { MccCondition, MccConditionList, MccCounselingSummary, MccEducationSummary, MccGoalList, MccGoalSummary, MccPatientContact, MccReferralSummary, MccServiceRequestSummary } from '../core/types/mcc-types';
+import { MccCondition, MccConditionList, MccCounselingSummary, MccEducationSummary, MccEncounter, MccGoalList, MccGoalSummary, MccPatientContact, MccReferralSummary, MccServiceRequestSummary } from '../core/types/mcc-types';
 import { ServiceRequestService } from './service-request.service';
 import { LoggingService, LogRequest } from './logging.service';
 import { MccAssessment } from '../generated-data-api/models/MccQuestionnaireResponse';
@@ -84,6 +85,7 @@ export class DataService {
     private medicationdataService: MedicationService,
     private counselingService: CounselingService,
     private educationService: EducationService,
+    private encounterdataservice: EncounterService,
     private referralService: ReferralService,
     private messageService: MessageService,
     private obsService: ObservationsService,
@@ -113,6 +115,7 @@ export class DataService {
   careplans: CarePlan[];
   // socialConcerns: SocialConcern[];
   conditions: MccConditionList;
+  encounters: MccEncounter[] = [];
   targetValues: TargetValue[] = [];
   activeMedications: MedicationSummary[] = [];
   inactiveMedications: MedicationSummary[];
@@ -131,6 +134,7 @@ export class DataService {
   wotDataSource = new MatTableDataSource(this.wot.tableData);
   activeMedicationsDataSource = new MatTableDataSource(this.activeMedications);
   consolidatedGoalsDataSource = new MatTableDataSource(this.allGoals);
+  encountersListDataSource = new MatTableDataSource(this.encounters);
 
   education: MccEducationSummary[];
   counseling: MccCounselingSummary[];
@@ -239,6 +243,7 @@ export class DataService {
     } else {
       this.updateDemographics();
       this.updateConditions();
+      this.updateEncounters();
       this.getCarePlansForSubject();
       this.getPatientGoals();
       this.updateContacts();
@@ -632,6 +637,17 @@ export class DataService {
         this.conditions = condition;
         window[Constants.ActiveDiagnosisIsLoaded] = true;
         window[Constants.InActiveDiagnosisIsLoaded] = true;
+      });
+    return true;
+  }
+
+    async updateEncounters(): Promise<boolean> {
+    this.encounterdataservice
+      .getEncounters(this.currentPatientId)
+      .subscribe(encounter => {
+        this.encounters = encounter;
+        this.encountersListDataSource.data = this.encounters;
+        window[Constants.EncountersIsLoaded] = true;
       });
     return true;
   }

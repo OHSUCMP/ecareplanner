@@ -360,6 +360,16 @@ export type MccConditionList = {
   inactiveConcerns: Array<MccConditionSummary>;
 }
 
+export type MccEncounter = {
+  apptType?: string;
+  serviceType?: string;
+  startDateText?: string;
+  endDateText?: string;
+  status: string;
+  reason?: string;
+  participant?: string;
+}
+
 export type MccSocialConcern = {
   name: string;
   data: string;

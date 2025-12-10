@@ -15,6 +15,7 @@ export class Constants {
     static TargetsIsLoaded: string = "Targets-is-loaded-provider-app-1";
     static ChoicesIsLoaded: string = "Choices-is-loaded-provider-app-1";
     static AssessmentsIsLoaded: string = "Assessments-is-loaded-provider-app-1";
+    static EncountersIsLoaded: string = "Encounters-is-loaded-provider-app-1";
     static featureToggling: any;
     static labMappings: any;
     static vitalMappings: any;

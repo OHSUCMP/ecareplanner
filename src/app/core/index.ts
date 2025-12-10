@@ -6,6 +6,7 @@ export * from './lib/condition/condition';
 export * from './lib/contact/contact';
 export * from './lib/counseling/counseling';
 export * from './lib/education/education';
+export * from './lib/encounter/encounter';
 export * from './lib/goal/goal';
 export * from './lib/medication-request/medication-request';
 export * from './lib/patient/patient';
