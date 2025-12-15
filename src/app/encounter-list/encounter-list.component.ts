@@ -19,7 +19,7 @@ export class EncounterListComponent implements OnInit, AfterViewInit {
   }
 
   //displayedColumns = ['reason'];
-  displayedColumns = ['apptType', 'serviceType', 'status', 'startDateText', 'endDate', 'participant'];
+  displayedColumns = ['apptType', 'serviceType', 'startDateText', 'endDate', 'participant'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 

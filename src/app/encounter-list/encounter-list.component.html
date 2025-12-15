@@ -11,11 +11,6 @@
     <td mat-cell *matCellDef="let encounter"> {{encounter.serviceType}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
-    <td mat-cell *matCellDef="let encounter"> {{encounter.status}} </td>
-  </ng-container>
-
   <ng-container matColumnDef="startDateText">
     <th mat-header-cell *matHeaderCellDef mat-sort-header="startDateText">Start Date</th>
     <td mat-cell *matCellDef="let encounter"> {{encounter.startDateText}} </td>
