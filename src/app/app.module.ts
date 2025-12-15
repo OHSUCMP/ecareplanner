@@ -63,6 +63,8 @@ import { ActiveOrdersPanelComponent } from './active-orders-panel/active-orders-
 import { WarningPopupComponent } from './warning-popup/warning-popup.component';
 import { AssessmentGraphComponent } from './assessment-graph/assessment-graph.component';
 import { AssessmentSectionComponent } from './assessment-section/assessment-section.component';
+import { EncountersComponent } from './encounters/encounters.component';
+import { EncounterListComponent } from './encounter-list/encounter-list.component';
 
 const routes: Routes = []; // sets up routes constant where you define your routes
 
@@ -111,7 +113,9 @@ const routes: Routes = []; // sets up routes constant where you define your rout
     NullCheckPipe,
     WarningPopupComponent,
     AssessmentGraphComponent,
-    AssessmentSectionComponent
+    AssessmentSectionComponent,
+    EncountersComponent,
+    EncounterListComponent
   ],
   imports: [
     MatSortModule,

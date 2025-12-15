@@ -1,4 +1,6 @@
 
+import { Timing, TimingRepeat, Period } from 'fhir/r4';
+
 export function displayDate(dateString?: string): string | undefined {
   if (dateString === undefined || dateString === null) {
     return undefined
@@ -18,3 +20,17 @@ export function displayDate(dateString?: string): string | undefined {
     })
   }
 }
+
+export function displayTiming(timing: Timing | undefined): string | undefined {
+  const boundsPeriod = (timing?.repeat as TimingRepeat)?.boundsPeriod
+  const startDate = displayDate(boundsPeriod?.start)
+  const endDate = displayDate(boundsPeriod?.end)
+  return (startDate ?? '') + ((endDate !== undefined) ? ` until ${endDate}` : '')
+}
+
+export function displayPeriod(period: Period | undefined): string | undefined {
+  const startDate = displayDate(period?.start)
+  const endDate = displayDate(period?.end)
+  return (startDate ?? '') + ((endDate !== undefined) ? ` until ${endDate}` : '')
+}
+

@@ -1,6 +1,6 @@
 import Client from 'fhirclient/lib/Client';
 import FHIR from 'fhirclient';
-import { Resource } from 'fhir/r4';
+import { Resource, CodeableConcept } from 'fhir/r4';
 import { fhirclient } from 'fhirclient/lib/types';
 import localForage from 'localforage'
 
@@ -191,4 +191,19 @@ export const getSupplementalDataClient = async (currentClient: Client, sdsURL: s
   // The program will always know at the most root level that this SDS is not useful, which may be better.
   // This includes that knowledge in ProviderLogin w/o the additional logic it has now to determine that.
   return sdsClient
+}
+
+/**
+ * Return a string representing the CodeableConcept
+ * @param codeable 
+ * @returns 
+ */
+export function displayConcept(codeable: CodeableConcept | undefined): string | undefined {
+  if (codeable?.text !== undefined) {
+    return codeable?.text
+  }
+  else {
+    // use the first coding.display that has a value
+    return codeable?.coding?.filter((c) => c.display !== undefined)?.[0]?.display
+  }
 }

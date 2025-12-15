@@ -6,6 +6,7 @@ import { GoalsComponent } from './goals/goals.component';
 import { MaintenanceAndInterventionsComponent } from './maintenance-and-interventions/maintenance-and-interventions.component';
 import { HealthStatusComponent } from './health-status/health-status.component';
 import { CareTeamComponent } from './care-team/care-team.component';
+import { EncountersComponent } from './encounters/encounters.component';
 import {HealthGuard} from './health.guard';
 import { Launch } from './launch/launch';
 import { LabsAndVitalsComponent } from './labs-and-vitals/labs-and-vitals.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'maint', component: MaintenanceAndInterventionsComponent},
   { path: 'tests', component: LabsAndVitalsComponent},
   { path: 'status', component: HealthStatusComponent},
+  { path: 'encounters', component: EncountersComponent},
   { path: 'care', component: CareTeamComponent},
   { path: 'launch', component: Launch},
   { path: 'launch.html', component: Launch},

@@ -74,6 +74,10 @@ export class AppComponent implements OnInit, AfterViewInit {
           label: 'Care Team',
           link: './care',
           index: 5
+        }, {
+          label: 'Encounters',
+          link: './encounters',
+          index: 6
         }
     ];
   }
