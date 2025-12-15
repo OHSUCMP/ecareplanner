@@ -29,34 +29,6 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     request
   ) as Encounter[];
 
-  // TODO: Fake data for now because MELD doesn't support Encounter.participant
-  for (const encounter of encounterResource) {
-    if (!encounter.participant) {
-      encounter.participant = [];
-    }
-
-    let rand = Math.random();
-    encounter.participant.push({
-      type: [
-        {
-          coding: [
-            {
-              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
-              "code": "PART",
-              "display": "Participation"
-            }
-          ],
-          text: "Participation"
-        }
-      ],
-      individual: {
-        reference: "Practitioner/evR52Pjpj6wqy0xPS8e.hyA3",
-        display: rand > 0.5 ? "Steven Kassakian" : "Emily Bronte"
-      },
-    });
-
-  }
-
   const sdsEncounterResource: Encounter[] = resourcesFrom(
     sdsRequest
   ) as Encounter[];
