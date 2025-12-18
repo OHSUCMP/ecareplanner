@@ -413,6 +413,7 @@ export type EcpScore = {
 
 export type EcpAssessment = {
   date: string;
+  source: string;
   score?: EcpScore;
   questions?: Array<MCCAssessmentResponseItem>;
 }
