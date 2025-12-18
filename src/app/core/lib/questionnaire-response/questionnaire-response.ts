@@ -32,7 +32,7 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
         // #28 - Replace the meta tag on resources from the SDS
         sdsQuestionnaireResponseArray.forEach(resource => {
             resource.meta = {
-                source: "My Care Planner"
+                source: "MyCarePlanner"
             };
         });
         const surveyObservations = await getObservationsByCategory('survey');
