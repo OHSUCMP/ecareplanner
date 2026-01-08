@@ -231,6 +231,7 @@ export function transformToAssessmentSummary(resourcesToTransform: Questionnaire
         
         const assessment: EcpAssessment = {
             date: displayDate(response.authored),
+            source: response.meta?.source || undefined,
             score: metadata.isScored ? getScore(response, metadata) : undefined,
             questions: []
         };

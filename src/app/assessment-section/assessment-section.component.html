@@ -8,7 +8,7 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span style="display: flex; justify-content: space-between; width: 100%;">
-            <span>{{ assessment.date }}</span>
+            <span>{{ assessment.date }}<span *ngIf="assessment.source"> ({{ assessment.source }})</span></span>
             <span *ngIf="assessment.score">Score = {{ assessment.score.value}} ({{ assessment.score?.interpretation }})</span>
           </span>
       </mat-panel-title>
