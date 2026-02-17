@@ -131,13 +131,9 @@ function collectMatchingItems(questionnaireItems: QuestionnaireItem[], members: 
                         }});
                 });
             } else if (observation.valueQuantity) {
-                responseItem.answer?.push({
-                    valueQuantity: {
-                        value: observation.valueQuantity.value
-                    }
-                });
+                responseItem.answer?.push({valueString: observation.valueQuantity.value?.toString()});
             } else if (observation.valueInteger) {
-                responseItem.answer?.push({valueInteger: observation.valueInteger})
+                responseItem.answer?.push({valueString: observation.valueInteger?.toString()});
             } else if (observation.valueString) {
                 responseItem.answer?.push({valueString: observation.valueString})
             }
@@ -261,9 +257,10 @@ export function transformToAssessmentSummary(resourcesToTransform: Questionnaire
 }
 
 function getAnswer(getAnswer: QuestionnaireResponseItem): MCCAssessmentResponseItem {
+  const answer = getAnswer.answer ? getAnswer.answer[0].valueCoding ? getAnswer.answer[0].valueCoding.display : getAnswer.answer[0].valueBoolean ? JSON.stringify(getAnswer.answer[0].valueBoolean) : getAnswer.answer[0].valueString ? getAnswer.answer[0].valueString : JSON.stringify(getAnswer.answer[0]) : '';
   const response: MCCAssessmentResponseItem = {
     question: getAnswer.text,
-    answer: getAnswer.answer ? getAnswer.answer[0].valueCoding ? getAnswer.answer[0].valueCoding.display : getAnswer.answer[0].valueBoolean ? JSON.stringify(getAnswer.answer[0].valueBoolean) : JSON.stringify(getAnswer.answer[0]) : ''
+    answer: answer
   }
   return response;
 }
