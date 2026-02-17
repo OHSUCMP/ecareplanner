@@ -38,7 +38,7 @@ function findScoreItem(items: QuestionnaireItem[]): QuestionnaireItem | undefine
  * @param targetLinkId 
  * @returns 
  */
-function findScoreValueByLinkId(items: QuestionnaireResponseItem[], targetLinkId: string): number | undefined {
+function findScoreValueByLinkId(items: QuestionnaireResponseItem[], targetLinkId: string): string | undefined {
   for (const item of items) {
     if (item.linkId === targetLinkId && item.answer && item.answer.length > 0) {
       // Return the actual value (valueInteger, valueDecimal, etc.)
@@ -58,10 +58,11 @@ function findScoreValueByLinkId(items: QuestionnaireResponseItem[], targetLinkId
   return undefined;
 }
 
-function extractAnswerValue(answer: QuestionnaireResponseItemAnswer): number | undefined {
-  if ('valueInteger' in answer) return answer.valueInteger;
-  if ('valueDecimal' in answer) return answer.valueDecimal;
-  if ('valueQuantity' in answer) return answer.valueQuantity?.value;
+function extractAnswerValue(answer: QuestionnaireResponseItemAnswer): string | undefined {
+  if ('valueInteger' in answer) return answer.valueInteger?.toString();
+  if ('valueDecimal' in answer) return answer.valueDecimal?.toString();
+  if ('valueQuantity' in answer) return answer.valueQuantity?.value?.toString();
+  if ('valueString' in answer) return answer.valueString;
   return undefined;
 }
 
@@ -91,14 +92,14 @@ export function getScore(response: QuestionnaireResponse, metadata: Questionnair
 
         return {
             value: scoreValue,
-            interpretation: interpretScore(metadata.definition, scoreValue) || 'No interpretation available'
+            interpretation: !isNaN(parseFloat(scoreValue)) ? interpretScore(metadata.definition, parseFloat(scoreValue)) || null : null
         };
     }
     return undefined;
 }
 
 /**
- *  Flatten matching items into responseItems array. Only certain answer types are supported.
+ * Flatten matching items into responseItems array. Only certain answer types are supported.
  * @param questionnaireItems
  * @param members 
  * @param responseItems 
@@ -137,6 +138,11 @@ function collectMatchingItems(questionnaireItems: QuestionnaireItem[], members: 
                 });
             } else if (observation.valueInteger) {
                 responseItem.answer?.push({valueInteger: observation.valueInteger})
+            } else if (observation.valueString) {
+                responseItem.answer?.push({valueString: observation.valueString})
+            }
+            else {
+                console.warn(`Unsupported observation value type for observation with code ${code}: `, observation);
             }
 
             responseItems.push(responseItem); // ** push flat into the top-level array **
@@ -224,6 +230,7 @@ export function transformToAssessmentSummary(resourcesToTransform: Questionnaire
     let assessmentSummary: EcpAssessmentSummary = {
         title: metadata.display,
         isScored: metadata.isScored,
+        canBeCharted: metadata.canBeCharted,
         responses: []
     }
 

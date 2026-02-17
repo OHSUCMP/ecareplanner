@@ -4,8 +4,9 @@ export interface QuestionnaireMetadata {
     id: string; // An internal identifier for the questionnaire. Edit environment.ts to configure which ids display.
     display: string, // The label of the questionnaire to display to users.
     url: string, // The url of the questionnaire. This is what the QuestionnaireResponse will reference in the questionnaire field.
-    isScored: boolean, // Whether this questionnaire has a score
-    definition: Questionnaire // The code associated with the questionnaire. This will be the top-level code for questionnaire responses represented as observations.
+    isScored: boolean, // Whether this questionnaire has a score question that should be pulled out and displayed in the UI.
+    canBeCharted: boolean, // Whether this questionnaire has numeric scores that can be charted
+    definition: Questionnaire // The full FHIR Questionnaire resource that defines the questionnaire structure, questions, and scoring (if applicable).
 }
 
 export const questionnaireMetadata: QuestionnaireMetadata[] = [
@@ -14,6 +15,7 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
         "display": "PHQ-9",
         "url": "http://ohsu.edu/fhir/Questionnaire/PHQ-9",
         "isScored": true,
+        "canBeCharted": true,
         "definition":
         {
             "resourceType": "Questionnaire",
@@ -1159,6 +1161,7 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
         "display": "GAD-7",
         "url": "http://ohsu.edu/fhir/Questionnaire/GAD-7",
         "isScored": true,
+        "canBeCharted": true,
         "definition": {
             "resourceType": "Questionnaire",
             "id": "69737-5",
@@ -1884,6 +1887,7 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
         "display": "PROMIS-29",
         "url": "http://loinc.org/q/62337-1",
         "isScored": false,
+        "canBeCharted": false,
         "definition": {
             "resourceType": "Questionnaire",
             "id": "62337-1",
@@ -3518,6 +3522,373 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
                                     }
                                 }
                             ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "id": "C-SSRS",
+        "display": "C-SSRS",
+        "url": "http://ohsu.edu/fhir/Questionnaire/C-SSRS",
+        "isScored": true,
+        "canBeCharted": false,
+        "definition": {
+            "resourceType": "Questionnaire",
+            "id": "93373-9",
+            "url": "http://ohsu.edu/fhir/Questionnaire/C-SSRS",
+            "title": "Columbia - suicide severity rating scale screener - recent [C-SSRS]",
+            "status": "draft",
+            "copyright": "© 2011 Dr. Kelly Posner, first author of the scale.",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "93373-9",
+                    "display": "Columbia - suicide severity rating scale screener - recent [C-SSRS]"
+                }
+            ],
+            "item": [
+                {
+                    "linkId": "cssrs",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "",
+                    "type": "group",
+                    "item": [
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93246-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93246-7",
+                                    "display": "Q1 Wished to be Dead (Past Month)"
+                                }
+                            ],
+                            "text": "Q1 Wished to be Dead (Past Month)",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93247-5",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93247-5",
+                                    "display": "Q2 Suicidal Thoughts (Past Month)"
+                                }
+                            ],
+                            "text": "Q2 Suicidal Thoughts (Past Month)",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93248-3",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93248-3",
+                                    "display": "Q3 Suicidal Thought Method"
+                                }
+                            ],
+                            "text": "Q3 Suicidal Thought Method",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93249-1",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93249-1",
+                                    "display": "Q4 Suicidal Intent without Specific Plan"
+                                }
+                            ],
+                            "text": "Q4 Suicidal Intent without Specific Plan",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93250-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93250-9",
+                                    "display": "Q5 Suicidal Intent with Specific Plan"
+                                }
+                            ],
+                            "text": "Q5 Suicidal Intent with Specific Plan",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93267-3",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93267-3",
+                                    "display": "Q6 Suicidal Behavior (Lifetime)"
+                                }
+                            ],
+                            "text": "Q6 Suicidal Behavior (Lifetime)",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93269-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93269-9",
+                                    "display": "Within the past 3 months?"
+                                }
+                            ],
+                            "text": "Within the past 3 months?",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                                    "valueCoding": {
+                                        "code": "care-plan-score",
+                                        "display": "{score}"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93374-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93374-7",
+                                    "display": "Suicide Risk Level"
+                                }
+                            ],
+                            "text": "Suicide Risk Level",
+                            "type": "string",
+                            "required": false
                         }
                     ]
                 }

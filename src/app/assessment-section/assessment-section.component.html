@@ -1,6 +1,6 @@
 <div class="assessment-section">
   <h3>{{ assessmentData.title }}</h3>
-  <div *ngIf="assessmentData.isScored">
+  <div *ngIf="assessmentData.canBeCharted">
     <app-assessment-graph [assessmentData]="assessmentData"></app-assessment-graph>
   </div>
   <mat-accordion>
@@ -9,7 +9,7 @@
         <mat-panel-title>
           <span style="display: flex; justify-content: space-between; width: 100%;">
             <span>{{ assessment.date }}<span *ngIf="assessment.source"> ({{ assessment.source }})</span></span>
-            <span *ngIf="assessment.score">Score = {{ assessment.score.value}} ({{ assessment.score?.interpretation }})</span>
+            <span *ngIf="assessment.score">Score = {{ assessment.score.value }} {{ assessment.score?.interpretation ? '(' + assessment.score.interpretation + ')' : '' }}</span>
           </span>
       </mat-panel-title>
       </mat-expansion-panel-header>

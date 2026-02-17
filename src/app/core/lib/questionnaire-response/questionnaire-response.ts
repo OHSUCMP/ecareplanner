@@ -47,9 +47,9 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
         }, {} as Record<string, Resource[]>);
 
         // Pass each resource array to the transformToAssessmentSummary function
-        Object.values(groupedByUrl).forEach((resourcesToTransform: Resource[]) => {
+        Object.values(groupedByUrl).forEach((resourcesToTransform: QuestionnaireResponse[]) => {
             if (resourcesToTransform.length > 0) {
-                assessments.push(transformToAssessmentSummary(resourcesToTransform as QuestionnaireResponse[]));
+                assessments.push(transformToAssessmentSummary(resourcesToTransform));
             }
         });
     }
