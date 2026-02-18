@@ -10,6 +10,6 @@ export const environment = {
   sdsURL: window['env']['APP_SHARED_DATA_ENDPOINT'] ? window['env']['APP_SHARED_DATA_ENDPOINT'] : "http://localhost:8080/fhir",
   authURL: window['env']['APP_SHARED_DATA_AUTH_ENDPOINT'] ? window['env']['APP_SHARED_DATA_AUTH_ENDPOINT']: "https://gw.interop.community/MCCOMPARE/data",
   sdsScope: window['env']['APP_SHARED_DATA_SCOPE'] ? window['env']['APP_SHARED_DATA_SCOPE'] : "launch/patient openid fhirUser patient/* user/*.cruds patient/*.cruds",
-  questionnaires: window['env']['questionnaires'] ? window['env']['questionnaires'] : "PHQ-9,GAD-7,PROMIS-29"
+  questionnaires: window['env']['questionnaires'] ? window['env']['questionnaires'] : "PHQ-9,GAD-7,C-SSRS,PROMIS-29"
 };
 

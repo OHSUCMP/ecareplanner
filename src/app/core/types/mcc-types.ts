@@ -407,7 +407,7 @@ export type MccAssessment = {
 }
 
 export type EcpScore = {
-  value: number;
+  value: string;
   interpretation: string;
 }
 
@@ -420,6 +420,7 @@ export type EcpAssessment = {
 
 export type EcpAssessmentSummary = {
   title: string;
+  canBeCharted: boolean;
   isScored: boolean;
   responses: Array<EcpAssessment>;
 }
