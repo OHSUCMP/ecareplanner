@@ -20,18 +20,21 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     queryPath, fhirOptions
   );
 
-  const sdsRequest: fhirclient.JsonArray = await sdsClient.patient.request(
-    queryPath, fhirOptions
-  );
-  log.debug({ serviceName: 'getSummaryEncounter', result: { request } });
-
   const encounterResource: Encounter[] = resourcesFrom(
     request
   ) as Encounter[];
 
-  const sdsEncounterResource: Encounter[] = resourcesFrom(
-    sdsRequest
-  ) as Encounter[];
+  let sdsEncounterResource: Encounter[];
+  if (sdsClient) {
+    const sdsRequest: fhirclient.JsonArray = await sdsClient.patient.request(
+      queryPath, fhirOptions
+    );
+    log.debug({ serviceName: 'getSummaryEncounter', result: { request } });
+
+    sdsEncounterResource = resourcesFrom(
+      sdsRequest
+    ) as Encounter[];
+  }
 
   log.info(
     `getEncounters - successful`
