@@ -131,7 +131,9 @@ export class GoalsDataService {
         }))
         .subscribe(observations => {
           let i: number = 0;
-          observations.map(obs => {
+          observations
+          .filter(obs => obs?.component?.length > 1) // Only process observations with at least 2 components
+          .map(obs => {
             let systolic = 0;
             let diastolic = 0;
             obs.component.map(c => {
