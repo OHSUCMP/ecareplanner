@@ -24,7 +24,7 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     request
   ) as Encounter[];
 
-  let sdsEncounterResource: Encounter[];
+  let sdsEncounterResource: Encounter[] = [];
   if (sdsClient) {
     const sdsRequest: fhirclient.JsonArray = await sdsClient.patient.request(
       queryPath, fhirOptions
