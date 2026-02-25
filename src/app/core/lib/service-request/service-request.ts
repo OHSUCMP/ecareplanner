@@ -81,10 +81,13 @@ export const getSummaryServiceRequest = async (sdsURL: string, authURL: string, 
   const serviceRequest: fhirclient.JsonArray = await theCurrentClient.patient.request(
     queryPath, fhirOptions
   );
-  const sdsMedicationRequests: ServiceRequest[] = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
   const serviceRequestResults: ServiceRequest[] = resourcesFrom(
     serviceRequest
   ) as ServiceRequest[];
+  let sdsMedicationRequests: ServiceRequest[] = [];
+  if (sdsClient) {
+    sdsMedicationRequests = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
+  }
   const allMedicationRequests: ServiceRequest[] = [...serviceRequestResults, ...sdsMedicationRequests];
   const conditionMap = await updateServiceRequestsReferences(allMedicationRequests);
   const mappedServiceRequests = allMedicationRequests.map(

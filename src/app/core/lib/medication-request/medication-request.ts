@@ -88,8 +88,10 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
     medicationRequest
   ) as MccMedication[];
 
-  const sdsMedicationRequests: MccMedication[] = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
-
+  let sdsMedicationRequests: MccMedication[] = [];
+  if (sdsClient) {
+    sdsMedicationRequests = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
+  }
 
   const allMedicationRequests: MccMedication[] = [...medicationRequests, ...sdsMedicationRequests];
 

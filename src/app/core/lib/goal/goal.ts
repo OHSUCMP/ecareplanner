@@ -122,12 +122,14 @@ export const getSummaryGoals = async (sdsURL: string, authURL: string, sdsScope:
     mappedGoals.push(goal)
   })
 
-  const thirdPartyStuff = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
+  if (sdsClient) {
+    const thirdPartyStuff = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
 
-  if (thirdPartyStuff) {
-    thirdPartyStuff.forEach(goal => {
-      mappedGoals.push(goal)
-    })
+    if (thirdPartyStuff) {
+      thirdPartyStuff.forEach(goal => {
+        mappedGoals.push(goal)
+      })
+    }
   }
 
   mappedGoals.forEach(goal => {
