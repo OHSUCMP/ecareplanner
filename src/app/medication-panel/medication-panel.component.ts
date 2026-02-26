@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -14,8 +15,8 @@ import { MedicationDialogComponent } from '../medication-dialog/medication-dialo
 
 export class MedicationPanelComponent implements OnInit, AfterViewInit {
 
-  constructor(public dataService: DataService,private dialog: MatDialog) { }
-  displayedColumns = ['medication', 'effectiveDate','reasons', 'dosages', 'requestedBy', 'issues', 'priority','hasnotes','source','notes'];
+  constructor(public dataService: DataService, private dialog: MatDialog) {}
+  displayedColumns = ['medication', 'flags', 'effectiveDate', 'reasons', 'dosages', 'requestedBy', 'issues', 'priority', 'hasnotes', 'source', 'notes'];
   activeMedicationsDataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

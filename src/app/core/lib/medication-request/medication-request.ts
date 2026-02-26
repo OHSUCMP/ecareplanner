@@ -150,7 +150,7 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
       fhirId: mc.id,
       status: mc.status,
       medication: medicationName ?? 'missing',
-      RxCui: rxcuis,
+      rxCui: rxcuis,
       dosages: mc.dosageInstruction ? mc.dosageInstruction[0].text : '',
       requestedBy: mc.requester ? mc.requester.display : '',
       reasons: condition ? getConceptDisplayString(condition.code) : '',
@@ -272,7 +272,7 @@ export const appendFlagsToMedicationSummary = async (mappedMedicationRequest: Mc
 
         if (summary.rxClass && summary.rxClass.length > 0) {
           console.debug("appendFlagsToMedicationSummaries: got RxClass=" + JSON.stringify(summary.rxClass));
-          let rxClassList: string[] = Array.from(new Set<string>(summary.rxClass.map(r => r.ClassId)));
+          let rxClassList: string[] = Array.from(new Set<string>(summary.rxClass.map(r => r.classId)));
           console.debug("appendFlagsToMedicationSummaries: RxClassList=" + rxClassList);
           let flags: MedicationFlag[] = [];
           medicationFlagArr.forEach((flag: MedicationFlag) => {
@@ -342,9 +342,9 @@ export const getRxClass = async (rxcuiList: string[]): Promise<RxClassSummary[]>
                     ", className=" + rxcmci.className + " for RxCui=" + mc.rxcui);
 
                   let obj: RxClassSummary = {
-                    RxCui: mc.rxcui,
-                    ClassId: rxcmci.classId,
-                    ClassName: rxcmci.className
+                    rxCui: mc.rxcui,
+                    classId: rxcmci.classId,
+                    className: rxcmci.className
                   };
 
                   arr.push(obj);
@@ -386,7 +386,7 @@ export const getRxClass = async (rxcuiList: string[]): Promise<RxClassSummary[]>
   let foundList: string[] = [];
    rawResults.forEach((value) => {
       for (let rxClassSummary of value) {
-        let key: string = rxClassSummary.RxCui + "-" + rxClassSummary.ClassId;
+        let key: string = rxClassSummary.rxCui + "-" + rxClassSummary.classId;
         if (!foundList.includes(key)) {
           results.push(rxClassSummary);
           foundList.push(key);

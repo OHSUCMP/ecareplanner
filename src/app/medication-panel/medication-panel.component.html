@@ -6,13 +6,25 @@
     <td style="cursor: pointer;" (click)="openDialog(med)" mat-cell *matCellDef="let med"> {{med.medication}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="flags">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Flags</th>
+    <td mat-cell *matCellDef="let med">
+      <ng-container *ngIf="med.flags?.length; else noFlags">
+      <div
+        *ngFor="let flag of med.flags; trackBy: trackByFlagLabel"
+        class="medication-flag"
+        [ngStyle]="{ color: flag.textColor, 'background-color': flag.backgroundColor }"
+      >
+        {{ flag.label }}
+      </div>
+      </ng-container>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="effectiveDate">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</th>
     <td mat-cell *matCellDef="let med">{{med.effectiveDate}} </td>
   </ng-container>
-
-
-
 
   <ng-container matColumnDef="reasons">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Reason</th>

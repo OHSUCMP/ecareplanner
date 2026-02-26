@@ -1,7 +1,7 @@
 export interface RxClassSummary {
-    RxCui: string;
-    ClassId: string;
-    ClassName: string;
+    rxCui: string;
+    classId: string;
+    className: string;
 }
 
 export class MedicationFlag {
