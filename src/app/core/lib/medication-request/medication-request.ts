@@ -263,16 +263,16 @@ export const appendFlagsToMedicationSummary = async (mappedMedicationRequest: Mc
 
   for (let summary of mappedMedicationRequest) {
     try {
-      if (summary.RxCui && summary.RxCui.length > 0) {
+      if (summary.rxCui && summary.rxCui.length > 0) {
         // storer: RxCui will be null if the MedicationRequest's medication is represented as a reference to a Medication resource,
         //         because the Medication resource isn't included in the source resource array.  Medication resources appear to not be pulled
         //         in addition to their referencing MedicationRequest resources.
-        console.debug("appendFlagsToMedicationSummaries: got Medication with RxCui: " + summary.RxCui);
-        summary.RxClass = await getRxClass(summary.RxCui);
+        console.debug("appendFlagsToMedicationSummaries: got Medication with RxCui: " + summary.rxCui);
+        summary.rxClass = await getRxClass(summary.rxCui);
 
-        if (summary.RxClass && summary.RxClass.length > 0) {
-          console.debug("appendFlagsToMedicationSummaries: got RxClass=" + JSON.stringify(summary.RxClass));
-          let rxClassList: string[] = Array.from(new Set<string>(summary.RxClass.map(r => r.ClassId)));
+        if (summary.rxClass && summary.rxClass.length > 0) {
+          console.debug("appendFlagsToMedicationSummaries: got RxClass=" + JSON.stringify(summary.rxClass));
+          let rxClassList: string[] = Array.from(new Set<string>(summary.rxClass.map(r => r.ClassId)));
           console.debug("appendFlagsToMedicationSummaries: RxClassList=" + rxClassList);
           let flags: MedicationFlag[] = [];
           medicationFlagArr.forEach((flag: MedicationFlag) => {
@@ -280,14 +280,14 @@ export const appendFlagsToMedicationSummary = async (mappedMedicationRequest: Mc
               flags.push(flag);
             }
           });
-          summary.Flags = flags;
+          summary.flags = flags;
         }
 
       } else {
         console.debug("appendFlagsToMedicationSummaries: Medication Summary had no RxCui");
       }
     } catch (err) {
-      console.error("Error getting RxClass for RxCui=" + summary.RxCui + ": " + err);
+      console.error("Error getting RxClass for RxCui=" + summary.rxCui + ": " + err);
     }
   }
 };

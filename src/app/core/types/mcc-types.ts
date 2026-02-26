@@ -326,9 +326,9 @@ export type MccMedicationSummary = {
   refillsPermitted: string;
   notes: string;
   source: string;
-  RxCui?: string[];
-  RxClass?: RxClassSummary[];
-  Flags?: MedicationFlag[];
+  rxCui?: string[];
+  rxClass?: RxClassSummary[];
+  flags?: MedicationFlag[];
 };
 
 export type MccMedicationSummaryList = {
