@@ -116,7 +116,7 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
         if (coding.system === rxnormSystemURL || coding.system === rxnormSystemOID) {
           rxcuis.push(coding.code);
 
-          if (medicationName === undefined && coding.display) {
+          if ( ! medicationName && coding.display ) {
             medicationName = coding.display;
           }
         }
@@ -130,12 +130,18 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
       if (mc.medicationReference.reference) {
         const medication: Medication | undefined = await getMedicationByReference(mc.medicationReference.reference);
         if (medication && medication.code) {
-          for (const coding of medication.code.coding) {
-            if (coding.system === rxnormSystemURL || coding.system === rxnormSystemOID) {
-              rxcuis.push(coding.code);
+          if ( ! medicationName && medication.code.text ) {
+            medicationName = medication.code.text;
+          }
 
-              if (medicationName === undefined && coding.display) {
-                medicationName = coding.display;
+          if (medication.code.coding) {
+            for (const coding of medication.code.coding) {
+              if (coding.system === rxnormSystemURL || coding.system === rxnormSystemOID) {
+                rxcuis.push(coding.code);
+
+                if ( ! medicationName && coding.display ) {
+                  medicationName = coding.display;
+                }
               }
             }
           }
