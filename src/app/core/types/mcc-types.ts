@@ -378,6 +378,16 @@ export type MccConditionList = {
   inactiveConcerns: Array<MccConditionSummary>;
 };
 
+export type MccEncounter = {
+  apptType?: string;
+  serviceType?: string;
+  startDateText?: string;
+  endDateText?: string;
+  status: string;
+  reason?: string;
+  participant?: string;
+}
+
 export type MccSocialConcern = {
   name: string;
   data: string;
@@ -404,7 +414,6 @@ export type MccServiceRequestSummary = {
 
 export type PatientContactRole = PatientContact & { role: string };
 
-
 export type MCCAssessmentResponseItem = {
   question?: string;
   answer?: string;
@@ -413,8 +422,26 @@ export type MCCAssessmentResponseItem = {
 
 export type MccAssessment = {
   title?: string;
-  date?: string,
-  questions?: Array<MCCAssessmentResponseItem>,
-  subsections?: Array<MccAssessment>
-};
+  date?: string;
+  questions?: Array<MCCAssessmentResponseItem>;
+}
+
+export type EcpScore = {
+  value: string;
+  interpretation: string;
+}
+
+export type EcpAssessment = {
+  date: string;
+  source: string;
+  score?: EcpScore;
+  questions?: Array<MCCAssessmentResponseItem>;
+}
+
+export type EcpAssessmentSummary = {
+  title: string;
+  canBeCharted: boolean;
+  isScored: boolean;
+  responses: Array<EcpAssessment>;
+}
 

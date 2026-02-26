@@ -1,0 +1,14 @@
+<table width="100%" valign="top" >
+
+  <tr *ngIf="getEncountersReady()">
+    <td width="100%" valign="top">
+      <app-encounter-list></app-encounter-list>
+    </td>
+  </tr>
+  <tr *ngIf="!getEncountersReady()">
+    <td colspan="3" style="height: 200px;">
+      <div class="group-header">Encounters</div>
+      <mat-spinner style="margin:0 auto;" mode="indeterminate"></mat-spinner>
+    </td>
+  </tr>
+</table>

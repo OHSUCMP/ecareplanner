@@ -7,11 +7,11 @@ import {fhirclient} from 'fhirclient/lib/types';
 
 import {MccMedication, MccMedicationSummary, MccMedicationSummaryList} from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import {getConditionFromUrl} from '../careplan';
-import {getConceptDisplayString, getSupplementalDataClient} from '../goal/goal.util';
-import {convertNoteToString} from '../observation/observation.util';
-import {displayDate} from '../service-request/service-request.util';
-import {fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject} from '../../utils/fhir';
+import { getConditionFromUrl } from '../careplan';
+import { getConceptDisplayString } from '../goal/goal.util';
+import { convertNoteToString } from '../observation/observation.util';
+import { displayDate } from '../../utils/date.utils';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject, getSupplementalDataClient} from '../../utils/fhir';
 import {MedicationFlag, RxClassSummary} from "../../../rxnorm/rxnormService";
 import MedicationFlagConfig from "../../../rxnorm/medicationFlagConfig.json";
 
@@ -85,14 +85,16 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
     queryPath, fhirOptions
   );
 
-  log.debug({serviceName: 'getSummaryMedicationRequests', result: {medicationRequest}});
+  log.debug({ serviceName: 'getSummaryMedicationRequests', result: { medicationRequest } });
 
   const medicationRequests: MccMedication[] = resourcesFrom(
     medicationRequest
   ) as MccMedication[];
 
-  const sdsMedicationRequests: MccMedication[] = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
-
+  let sdsMedicationRequests: MccMedication[] = [];
+  if (sdsClient) {
+    sdsMedicationRequests = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
+  }
 
   const allMedicationRequests: MccMedication[] = [...medicationRequests, ...sdsMedicationRequests];
 

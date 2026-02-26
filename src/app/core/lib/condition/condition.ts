@@ -6,8 +6,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccCondition, MccConditionList, MccConditionSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import { getSupplementalDataClient } from '../goal/goal.util';
-import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject } from '../../utils/fhir';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject, getSupplementalDataClient } from '../../utils/fhir';
 import {
   transformToConditionSummary,
 } from './condition.util';

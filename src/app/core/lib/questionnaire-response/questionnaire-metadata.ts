@@ -1,0 +1,3898 @@
+import { Questionnaire } from 'fhir/r4';
+
+export interface QuestionnaireMetadata {
+    id: string; // An internal identifier for the questionnaire. Edit environment.ts to configure which ids display.
+    display: string, // The label of the questionnaire to display to users.
+    url: string, // The url of the questionnaire. This is what the QuestionnaireResponse will reference in the questionnaire field.
+    isScored: boolean, // Whether this questionnaire has a score question that should be pulled out and displayed in the UI.
+    canBeCharted: boolean, // Whether this questionnaire has numeric scores that can be charted
+    definition: Questionnaire // The full FHIR Questionnaire resource that defines the questionnaire structure, questions, and scoring (if applicable).
+}
+
+export const questionnaireMetadata: QuestionnaireMetadata[] = [
+    {
+        "id": "PHQ-9",
+        "display": "PHQ-9",
+        "url": "http://ohsu.edu/fhir/Questionnaire/PHQ-9",
+        "isScored": true,
+        "canBeCharted": true,
+        "definition":
+        {
+            "resourceType": "Questionnaire",
+            "id": "44249-1",
+            "meta": {
+                "versionId": "1",
+                "lastUpdated": "2025-03-03T02:09:23.000-05:00",
+                "source": "#A9ftYtknikFekkjR",
+                "profile": [
+                    "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+                ],
+                "tag": [
+                    {
+                        "code": "lformsVersion: 36.3.3"
+                    }
+                ]
+            },
+            "url": "http://ohsu.edu/fhir/Questionnaire/PHQ-9",
+            "title": "PHQ-9 quick depression assessment panel [Reported.PHQ]",
+            "status": "draft",
+            "copyright": "Copyright © Pfizer Inc. All rights reserved. Developed by Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke and colleagues, with an educational grant from Pfizer Inc. No permission required to reproduce, translate, display or distribute.",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "44249-1",
+                    "display": "PHQ-9 quick depression assessment panel [Reported.PHQ]"
+                }
+            ],
+            "item": [
+                {
+                    "linkId": "phq9",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Over the last 2 weeks, how often have you been bothered by any of the following problems?",
+                    "type": "group",
+                    "item": [
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44250-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44250-9",
+                                    "display": "Little interest or pleasure in doing things"
+                                }
+                            ],
+                            "text": "Little interest or pleasure in doing things",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44255-8",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44255-8",
+                                    "display": "Feeling down, depressed, or hopeless"
+                                }
+                            ],
+                            "text": "Feeling down, depressed, or hopeless",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44259-0",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44259-0",
+                                    "display": "Trouble falling or staying asleep, or sleeping too much"
+                                }
+                            ],
+                            "text": "Trouble falling or staying asleep, or sleeping too much",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44254-1",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44254-1",
+                                    "display": "Feeling tired or having little energy"
+                                }
+                            ],
+                            "text": "Feeling tired or having little energy",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44251-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44251-7",
+                                    "display": "Poor appetite or overeating"
+                                }
+                            ],
+                            "text": "Poor appetite or overeating",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44258-2",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44258-2",
+                                    "display": "Feeling bad about yourself-or that you are a failure or have let yourself or your family down"
+                                }
+                            ],
+                            "text": "Feeling bad about yourself-or that you are a failure or have let yourself or your family down",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44252-5",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44252-5",
+                                    "display": "Trouble concentrating on things, such as reading the newspaper or watching television"
+                                }
+                            ],
+                            "text": "Trouble concentrating on things, such as reading the newspaper or watching television",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44253-3",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44253-3",
+                                    "display": "Moving or speaking so slowly that other people could have noticed. Or the opposite – being so fidgety or restless that you were moving around a lot more than usual"
+                                }
+                            ],
+                            "text": "Moving or speaking so slowly that other people could have noticed. Or the opposite – being so fidgety or restless that you were moving around a lot more than usual",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/44260-8",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44260-8",
+                                    "display": "Thoughts that you would be better off dead, or of hurting yourself in some way"
+                                }
+                            ],
+                            "text": "Thoughts that you would be better off dead, or of hurting yourself in some way",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "display": "The PHQ-9 is the standard (and most commonly used) depression measure, and it ranges from 0-27 Scoring: Add up all checked boxes on PHQ-9. For every check: Not at all = 0; Several days = 1; More than half the days = 2; Nearly every day = 3 (the scores are the codes that appear in the answer list for each of the PHQ-9 problem panel terms). Interpretation: 1-4 = Minimal depression; 5-9 = Mild depression; 10-14 = Moderate depression; 15-19 = Moderately severe depression; 20-27 = Severed depression."
+                                            }
+                                        ],
+                                        "text": "The PHQ-9 is the standard (and most commonly used) depression measure, and it ranges from 0-27 Scoring: Add up all checked boxes on PHQ-9. For every check: Not at all = 0; Several days = 1; More than half the days = 2; Nearly every day = 3 (the scores are the codes that appear in the answer list for each of the PHQ-9 problem panel terms). Interpretation: 1-4 = Minimal depression; 5-9 = Mild depression; 10-14 = Moderate depression; 15-19 = Moderately severe depression; 20-27 = Severed depression."
+                                    }
+                                },
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                                    "valueCoding": {
+                                        "code": "care-plan-score",
+                                        "display": "{score}"
+                                    }
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 0
+                                                },
+                                                "high": {
+                                                    "value": 4
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Minimal"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 5
+                                                },
+                                                "high": {
+                                                    "value": 9
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Mild"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 10
+                                                },
+                                                "high": {
+                                                    "value": 14
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Moderate"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 15
+                                                },
+                                                "high": {
+                                                    "value": 19
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Moderately Severe"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 20
+                                                },
+                                                "high": {
+                                                    "value": 27
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Severe"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "linkId": "/44261-6",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "44261-6",
+                                    "display": "Patient health questionnaire 9 item total score"
+                                }
+                            ],
+                            "text": "Patient health questionnaire 9 item total score",
+                            "type": "quantity",
+                            "required": false
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/69722-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69722-7",
+                                    "display": "How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?"
+                                }
+                            ],
+                            "text": "How difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6572-7",
+                                        "display": "Not difficult at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6573-5",
+                                        "display": "Somewhat difficult"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6575-0",
+                                        "display": "Very difficult"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6574-3",
+                                        "display": "Extremely difficult"
+                                    }
+                                }
+                            ],
+                            "item": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                            "valueCodeableConcept": {
+                                                "coding": [
+                                                    {
+                                                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                        "code": "help",
+                                                        "display": "Help-Button"
+                                                    }
+                                                ],
+                                                "text": "Help-Button"
+                                            }
+                                        }
+                                    ],
+                                    "linkId": "/69722-7-help",
+                                    "text": "If you checked off any problems on this questionnaire",
+                                    "type": "display"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "id": "GAD-7",
+        "display": "GAD-7",
+        "url": "http://ohsu.edu/fhir/Questionnaire/GAD-7",
+        "isScored": true,
+        "canBeCharted": true,
+        "definition": {
+            "resourceType": "Questionnaire",
+            "id": "69737-5",
+            "url": "http://ohsu.edu/fhir/Questionnaire/GAD-7",
+            "version": "1.0.0",
+            "title": "Generalized Anxiety Disorder (GAD-7)",
+            "status": "draft",
+            "copyright": "This content from LOINC® is copyright © 2025 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at https://loinc.org/license/\r\nCopyright © Pfizer Inc. All rights reserved. Developed by Drs. Robert L. Spitzer, Janet B.W. Williams, Kurt Kroenke and colleagues, with an educational grant from Pfizer Inc. No permission required to reproduce, translate, display or distribute.",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "69737-5",
+                    "display": "Generalized anxiety disorder 7 item (GAD-7)"
+                }
+            ],
+            "item": [
+                {
+                    "linkId": "gad7",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Over the last two weeks, how often have you been bothered by the following problems?",
+                    "type": "group",
+                    "item": [
+                        {
+                            "linkId": "/69725-0",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69725-0"
+                                }
+                            ],
+                            "text": "Feeling nervous, anxious or on edge",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "/68509-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "68509-9"
+                                }
+                            ],
+                            "text": "Over the past 2 weeks have you not been able to stop or control worrying",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "/69733-4",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69733-4"
+                                }
+                            ],
+                            "text": "Worrying too much about different things",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "/69734-2",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69734-2"
+                                }
+                            ],
+                            "text": "Trouble relaxing",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "/69735-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69735-9"
+                                }
+                            ],
+                            "text": "Being so restless that it is hard to sit still",
+                            "type": "choice",
+                            "enableBehavior": "any",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "/69689-8",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69689-8"
+                                }
+                            ],
+                            "text": "Becoming easily annoyed or irritable.",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "/69736-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "69736-7"
+                                }
+                            ],
+                            "text": "Feeling afraid as if something awful might happen",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "0"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 0
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "1"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 1
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6569-3",
+                                        "display": "Several days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "2"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 2
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6570-1",
+                                        "display": "More than half the days"
+                                    }
+                                },
+                                {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-optionPrefix",
+                                            "valueString": "3"
+                                        },
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+                                            "valueDecimal": 3
+                                        }
+                                    ],
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6571-9",
+                                        "display": "Nearly every day"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-displayCategory",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "display": "This is calculated by assigning scores of 0, 1, 2, and 3 to the response categories, respectively, of 'not at all', 'several days', 'more than half the days', and 'nearly every day'. GAD-7 total score for the seven items ranges from 0 to 21."
+                                            }
+                                        ],
+                                        "text": "This is calculated by assigning scores of 0, 1, 2, and 3 to the response categories, respectively, of 'not at all', 'several days', 'more than half the days', and 'nearly every day'. GAD-7 total score for the seven items ranges from 0 to 21."
+                                    }
+                                },
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                                    "valueCoding": {
+                                        "code": "care-plan-score",
+                                        "display": "{score}"
+                                    }
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 0
+                                                },
+                                                "high": {
+                                                    "value": 4
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Minimal Anxiety"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 5
+                                                },
+                                                "high": {
+                                                    "value": 9
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Mild Anxiety"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 10
+                                                },
+                                                "high": {
+                                                    "value": 14
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Moderate Anxiety"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "url": "range-score-interpretation",
+                                    "extension": [
+                                        {
+                                            "url": "range",
+                                            "valueRange": {
+                                                "low": {
+                                                    "value": 15
+                                                },
+                                                "high": {
+                                                    "value": 21
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "url": "interpretation",
+                                            "valueString": "Severe Anxiety"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "linkId": "/70274-6",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "70274-6",
+                                    "display": "Generalized anxiety disorder 7 item (GAD-7) total score [Reported.PHQ]"
+                                }
+                            ],
+                            "text": "Generalized anxiety disorder 7 item (GAD-7) total score [Reported.PHQ]",
+                            "type": "quantity",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "id": "PROMIS-29",
+        "display": "PROMIS-29",
+        "url": "http://loinc.org/q/62337-1",
+        "isScored": false,
+        "canBeCharted": false,
+        "definition": {
+            "resourceType": "Questionnaire",
+            "id": "62337-1",
+            "meta": {
+                "versionId": "4",
+                "lastUpdated": "2022-04-13T19:47:22.495+00:00",
+                "source": "#4Q75pMeTbscwKKwf"
+            },
+            "url": "http://loinc.org/q/62337-1",
+            "name": "PROMIS_item_bank_profile",
+            "title": "PROMIS item bank - 29 profile",
+            "status": "draft",
+            "publisher": "Regenstrief Institute, Inc.",
+            "contact": [
+                {
+                    "name": "Regenstrief Institute, Inc.",
+                    "telecom": [
+                        {
+                            "system": "url",
+                            "value": "http://loinc.org"
+                        }
+                    ]
+                }
+            ],
+            "copyright": "This content from LOINC® is copyright © 1995-2022 Regenstrief Institute, Inc. and the LOINC Committee, and available at no cost under the license at https://loinc.org/license/\r\nCopyright © 2010 PROMIS Health Organization or other individuals/entities that have contributed information and materials to Assessment Center, and are being used with the permission of the copyright holders. Use of PROMIS instruments (e.g., item banks, short forms, profile measures) are subject to the PROMIS Terms and Conditions available at: http://www.assessmentcenter.net/TandC.aspx",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "62337-1",
+                    "display": "PROMIS item bank - 29 profile"
+                }
+            ],
+            "item": [
+                {
+                    "linkId": "physical-function",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Physical Function",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47202",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61597-1",
+                                    "display": "Are you able to do chores such as vacuuming or yard work?"
+                                }
+                            ],
+                            "text": "Are you able to do chores such as vacuuming or yard work?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13921-4",
+                                        "display": "Without any difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13918-0",
+                                        "display": "With a little difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13920-6",
+                                        "display": "With some difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13919-8",
+                                        "display": "With much difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13912-3",
+                                        "display": "Unable to do"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47203",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61607-8",
+                                    "display": "Are you able to go up and down stairs at a normal pace?"
+                                }
+                            ],
+                            "text": "Are you able to go up and down stairs at a normal pace?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13921-4",
+                                        "display": "Without any difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13918-0",
+                                        "display": "With a little difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13920-6",
+                                        "display": "With some difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13919-8",
+                                        "display": "With much difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13912-3",
+                                        "display": "Unable to do"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47204",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61609-4",
+                                    "display": "Are you able to go for a walk of at least 15 minutes?"
+                                }
+                            ],
+                            "text": "Are you able to go for a walk of at least 15 minutes?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13921-4",
+                                        "display": "Without any difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13918-0",
+                                        "display": "With a little difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13920-6",
+                                        "display": "With some difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13919-8",
+                                        "display": "With much difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13912-3",
+                                        "display": "Unable to do"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47205",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61635-9",
+                                    "display": "Are you able to run errands and shop?"
+                                }
+                            ],
+                            "text": "Are you able to run errands and shop?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13921-4",
+                                        "display": "Without any difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13918-0",
+                                        "display": "With a little difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13920-6",
+                                        "display": "With some difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13919-8",
+                                        "display": "With much difficulty"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13912-3",
+                                        "display": "Unable to do"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "anxiety",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Anxiety",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47206",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61923-9",
+                                    "display": "In the past 7 days - I felt fearful"
+                                }
+                            ],
+                            "text": "In the past 7 days - I felt fearful",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47207",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61941-1",
+                                    "display": "In the past 7 days - I found it hard to focus on anything other than my anxiety"
+                                }
+                            ],
+                            "text": "In the past 7 days - I found it hard to focus on anything other than my anxiety",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47208",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61942-9",
+                                    "display": "In the past 7 days - My worries overwhelmed me"
+                                }
+                            ],
+                            "text": "In the past 7 days - My worries overwhelmed me",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47209",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61949-4",
+                                    "display": "In the past 7 days - I felt uneasy"
+                                }
+                            ],
+                            "text": "In the past 7 days - I felt uneasy",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "depression",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Depression",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47210",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61953-6",
+                                    "display": "In the past 7 days - I felt worthless"
+                                }
+                            ],
+                            "text": "In the past 7 days - I felt worthless",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47211",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61955-1",
+                                    "display": "In the past 7 days - I felt helpless"
+                                }
+                            ],
+                            "text": "In the past 7 days - I felt helpless",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47212",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61967-6",
+                                    "display": "In the past 7 days - I felt depressed"
+                                }
+                            ],
+                            "text": "In the past 7 days - I felt depressed",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47213",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61973-4",
+                                    "display": "In the past 7 days - I felt hopeless"
+                                }
+                            ],
+                            "text": "In the past 7 days - I felt hopeless",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6270-8",
+                                        "display": "Never"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10066-1",
+                                        "display": "Rarely"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10082-8",
+                                        "display": "Sometimes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10044-8",
+                                        "display": "Often"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9933-8",
+                                        "display": "Always"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "fatigue",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Fatigue",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47214",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61878-5",
+                                    "display": "During the past 7 days - I feel fatigued"
+                                }
+                            ],
+                            "text": "During the past 7 days - I feel fatigued",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47215",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61882-7",
+                                    "display": "During the past 7 days - I have trouble starting things because I am tired"
+                                }
+                            ],
+                            "text": "During the past 7 days - I have trouble starting things because I am tired",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47216",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61865-2",
+                                    "display": "In the past 7 days - How run-down did you feel on average?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How run-down did you feel on average?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47217",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61864-5",
+                                    "display": "In the past 7 days - How fatigued were you on average?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How fatigued were you on average?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "sleep-disturbance",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Sleep Disturbance",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47218",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61987-4",
+                                    "display": "In the past 7 days - My sleep quality was..."
+                                }
+                            ],
+                            "text": "In the past 7 days - My sleep quality was...",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA9615-1",
+                                        "display": "Very poor"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA8969-3",
+                                        "display": "Poor"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA8968-5",
+                                        "display": "Fair"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA8967-7",
+                                        "display": "Good"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13913-1",
+                                        "display": "Very Good"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47219",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61986-6",
+                                    "display": "In the past 7 days - My sleep was refreshing"
+                                }
+                            ],
+                            "text": "In the past 7 days - My sleep was refreshing",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47220",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61998-1",
+                                    "display": "In the past 7 days - I had a problem with my sleep"
+                                }
+                            ],
+                            "text": "In the past 7 days - I had a problem with my sleep",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47221",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61999-9",
+                                    "display": "In the past 7 days - I had difficulty falling asleep"
+                                }
+                            ],
+                            "text": "In the past 7 days - I had difficulty falling asleep",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "social-participation",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Ability to Participate in Social Roles and Activities",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47222",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "62041-9",
+                                    "display": "In the past 7 days - I am satisfied with how much work I can do (include work at home)"
+                                }
+                            ],
+                            "text": "In the past 7 days - I am satisfied with how much work I can do (include work at home)",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47223",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "62046-8",
+                                    "display": "In the past 7 days - I am satisfied with my ability to work (include work at home)"
+                                }
+                            ],
+                            "text": "In the past 7 days - I am satisfied with my ability to work (include work at home)",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47224",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "62050-0",
+                                    "display": "In the past 7 days - I am satisfied with my ability to do regular personal and household responsibilities"
+                                }
+                            ],
+                            "text": "In the past 7 days - I am satisfied with my ability to do regular personal and household responsibilities",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47225",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "62051-8",
+                                    "display": "In the past 7 days - I am satisfied with my ability to perform my daily routines"
+                                }
+                            ],
+                            "text": "In the past 7 days - I am satisfied with my ability to perform my daily routines",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "pain-interference",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Pain Interference",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47226",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61758-9",
+                                    "display": "In the past 7 days - How much did pain interfere with your day to day activities?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How much did pain interfere with your day to day activities?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47227",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61769-6",
+                                    "display": "In the past 7 days - How much did pain interfere with work around the home?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How much did pain interfere with work around the home?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47228",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61773-8",
+                                    "display": "In the past 7 days - How much did pain interfere with your ability to participate in social activities?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How much did pain interfere with your ability to participate in social activities?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "linkId": "47229",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61775-3",
+                                    "display": "In the past 7 days - How much did pain interfere with your household chores?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How much did pain interfere with your household chores?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6568-5",
+                                        "display": "Not at all"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13863-8",
+                                        "display": "A little bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13909-9",
+                                        "display": "Somewhat"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13902-4",
+                                        "display": "Quite a bit"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA13914-9",
+                                        "display": "Very much"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "linkId": "pain-intensity",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "Pain Intensity",
+                    "type": "group",
+                    "required": true,
+                    "item": [
+                        {
+                            "linkId": "47230",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "61583-1",
+                                    "display": "In the past 7 days - How would you rate your pain on average?"
+                                }
+                            ],
+                            "text": "In the past 7 days - How would you rate your pain on average?",
+                            "type": "choice",
+                            "repeats": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA19102-5",
+                                        "display": "0 - no pain"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6112-2",
+                                        "display": "1"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6113-0",
+                                        "display": "2"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6114-8",
+                                        "display": "3"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA6115-5",
+                                        "display": "4"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10137-0",
+                                        "display": "5"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10138-8",
+                                        "display": "6"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10139-6",
+                                        "display": "7"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10140-4",
+                                        "display": "8"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA10141-2",
+                                        "display": "9"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA21948-7",
+                                        "display": "10 - worst imaginable pain"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "id": "C-SSRS",
+        "display": "C-SSRS",
+        "url": "http://ohsu.edu/fhir/Questionnaire/C-SSRS",
+        "isScored": true,
+        "canBeCharted": false,
+        "definition": {
+            "resourceType": "Questionnaire",
+            "id": "93373-9",
+            "url": "http://ohsu.edu/fhir/Questionnaire/C-SSRS",
+            "title": "Columbia - suicide severity rating scale screener - recent [C-SSRS]",
+            "status": "draft",
+            "copyright": "© 2011 Dr. Kelly Posner, first author of the scale.",
+            "code": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "93373-9",
+                    "display": "Columbia - suicide severity rating scale screener - recent [C-SSRS]"
+                }
+            ],
+            "item": [
+                {
+                    "linkId": "cssrs",
+                    "code": [
+                        {
+                            "code": "no-code",
+                            "display": "No code"
+                        }
+                    ],
+                    "text": "",
+                    "type": "group",
+                    "item": [
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93246-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93246-7",
+                                    "display": "Q1 Wished to be Dead (Past Month)"
+                                }
+                            ],
+                            "text": "Q1 Wished to be Dead (Past Month)",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93247-5",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93247-5",
+                                    "display": "Q2 Suicidal Thoughts (Past Month)"
+                                }
+                            ],
+                            "text": "Q2 Suicidal Thoughts (Past Month)",
+                            "type": "choice",
+                            "required": true,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93248-3",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93248-3",
+                                    "display": "Q3 Suicidal Thought Method"
+                                }
+                            ],
+                            "text": "Q3 Suicidal Thought Method",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93249-1",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93249-1",
+                                    "display": "Q4 Suicidal Intent without Specific Plan"
+                                }
+                            ],
+                            "text": "Q4 Suicidal Intent without Specific Plan",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93250-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93250-9",
+                                    "display": "Q5 Suicidal Intent with Specific Plan"
+                                }
+                            ],
+                            "text": "Q5 Suicidal Intent with Specific Plan",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93267-3",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93267-3",
+                                    "display": "Q6 Suicidal Behavior (Lifetime)"
+                                }
+                            ],
+                            "text": "Q6 Suicidal Behavior (Lifetime)",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                                    "valueCodeableConcept": {
+                                        "coding": [
+                                            {
+                                                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                                "code": "drop-down",
+                                                "display": "Drop down"
+                                            }
+                                        ],
+                                        "text": "Drop down"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93269-9",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93269-9",
+                                    "display": "Within the past 3 months?"
+                                }
+                            ],
+                            "text": "Within the past 3 months?",
+                            "type": "choice",
+                            "required": false,
+                            "answerOption": [
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA33-6",
+                                        "display": "Yes"
+                                    }
+                                },
+                                {
+                                    "valueCoding": {
+                                        "system": "http://loinc.org",
+                                        "code": "LA32-8",
+                                        "display": "No"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "extension": [
+                                {
+                                    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                                    "valueCoding": {
+                                        "code": "care-plan-score",
+                                        "display": "{score}"
+                                    }
+                                }
+                            ],
+                            "linkId": "/93374-7",
+                            "code": [
+                                {
+                                    "system": "http://loinc.org",
+                                    "code": "93374-7",
+                                    "display": "Suicide Risk Level"
+                                }
+                            ],
+                            "text": "Suicide Risk Level",
+                            "type": "string",
+                            "required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+];
