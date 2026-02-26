@@ -9,9 +9,9 @@
   <ng-container matColumnDef="flags">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Flags</th>
     <td mat-cell *matCellDef="let med">
-      <ng-container *ngIf="med.flags?.length; else noFlags">
+      <ng-container *ngIf="med.flags?.length > 0">
       <div
-        *ngFor="let flag of med.flags; trackBy: trackByFlagLabel"
+        *ngFor="let flag of med.flags"
         class="medication-flag"
         [ngStyle]="{ color: flag.textColor, 'background-color': flag.backgroundColor }"
       >
