@@ -379,39 +379,20 @@ export const getRxClass = async (rxcuiList: string[]): Promise<RxClassSummary[]>
     }
   }
 
-  const settled = await allSettled(promiseArr);  // ES2019-compatible version
+  const rawResults: RxClassSummary[][] = await Promise.all(promiseArr);
   console.debug("getRxClass: all promises settled!  iterating -");
 
   let results: RxClassSummary[] = [];
   let foundList: string[] = [];
-  settled.forEach((value) => {
-    if (value.status === 'fulfilled') {
-      for (let rxClassSummary of value.value) {
+   rawResults.forEach((value) => {
+      for (let rxClassSummary of value) {
         let key: string = rxClassSummary.RxCui + "-" + rxClassSummary.ClassId;
         if (!foundList.includes(key)) {
           results.push(rxClassSummary);
           foundList.push(key);
         }
       }
-    } else {
-      console.error("getRxClass: error processing Promise: " + value.reason);
-    }
   });
 
   return results;
-}
-
-type PromiseSettledResult<T> =
-  | { status: 'fulfilled'; value: T }
-  | { status: 'rejected'; reason: unknown };
-
-function allSettled<T>(promises: Array<Promise<T>>): Promise<Array<PromiseSettledResult<T>>> {
-  return Promise.all(
-    promises.map((p) =>
-      p.then(
-        (value) => ({ status: 'fulfilled' as const, value }),
-        (reason) => ({ status: 'rejected' as const, reason })
-      )
-    )
-  );
 }
