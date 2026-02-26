@@ -51,7 +51,7 @@ const getSupplementalData = async (launchURL: string, sdsClient: Client): Promis
             'X-Partition-Name': item2.resource.extension[0].valueUrl
           };
           fhirHeaderRequestOption.headers = fhirHeaders;
-          fhirHeaderRequestOption.url = 'MedicationRequest?subject=' + item2.resource.reference;
+          fhirHeaderRequestOption.url = 'MedicationRequest?status=active&subject=' + item2.resource.reference;
           const response = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
           const thirdPartyMccMedication: MccMedication[] = resourcesFrom(response) as MccMedication[];
           thirdPartyMccMedication.forEach(mccMedication => {
@@ -80,7 +80,7 @@ export const getSummaryMedicationRequests = async (sdsURL: string, authURL: stri
   const activeMedications: MccMedicationSummary[] = [];
   const inactiveMedications: MccMedicationSummary[] = [];
 
-  const queryPath = `MedicationRequest`;
+  const queryPath = 'MedicationRequest?status=active';
   const medicationRequest: fhirclient.JsonArray = await theCurrentClient.patient.request(
     queryPath, fhirOptions
   );
