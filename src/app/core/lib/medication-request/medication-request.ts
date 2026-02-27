@@ -298,6 +298,8 @@ export const appendFlagsToMedicationSummary = async (mappedMedicationRequest: Mc
   }
 };
 
+const rxcuiCache: Map<string, RxClassSummary[]> = new Map([]);
+
 export const getRxClass = async (rxcuiList: string[]): Promise<RxClassSummary[]> => {
   console.debug('getRxClass: executing with RxCUI=' + rxcuiList);  // 197770
 
@@ -316,6 +318,14 @@ export const getRxClass = async (rxcuiList: string[]): Promise<RxClassSummary[]>
     try {
       console.debug("getRxClass: building Promise for RxCUI=" + rxcui);
       let promise: Promise<RxClassSummary[]> = new Promise<RxClassSummary[]>((resolve, reject) => {
+        if (rxcuiCache.has(rxcui)) {
+          console.debug("getRxClass: RxCui=" + rxcui + " already in cache");
+          resolve(rxcuiCache.get(rxcui));
+          return;
+        }
+
+        console.debug("getRxClass: RxCui=" + rxcui + " not in cache");
+
         fetch('https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui=' + rxcui + '&relaSource=ATCPROD')
           .then(response => {
             if (response.ok) {
@@ -370,6 +380,8 @@ export const getRxClass = async (rxcuiList: string[]): Promise<RxClassSummary[]>
               console.error("getRxClass: error logging warning for RxCui=" + rxcui + ": " + err);
             }
           }
+
+          rxcuiCache.set(rxcui, arr);
 
           resolve(arr);
 
