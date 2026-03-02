@@ -20,8 +20,13 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
   try {
 
     const theCurrentClient: Client = await FHIR.oauth2.ready();
+
+    const surveyObservations = await getObservationsByCategory('survey');
+    const observationalSurveyResponses = getQuestionnaireResponsesFromObservations(surveyObservations, configuredQuestionnaires);
+
     let sdsClient = await getSupplementalDataClient(theCurrentClient, sdsURL, authURL, sdsScope);
 
+    let sdsQuestionnaireResponses: QuestionnaireResponse[] = [];
     if (sdsClient) {
         const sdsQuestionnaireResponse: fhirclient.JsonArray = await sdsClient.patient.request('QuestionnaireResponse', fhirOptions);
 
@@ -35,24 +40,25 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
                 source: "MyCarePlanner"
             };
         });
-        const surveyObservations = await getObservationsByCategory('survey');
-        let allResponses = filterQuestionnaireResponsesByConfigured(sdsQuestionnaireResponseArray as QuestionnaireResponse[], configuredQuestionnaires);
-        allResponses.push(...getQuestionnaireResponsesFromObservations(surveyObservations, configuredQuestionnaires));
-
-        const groupedByUrl = allResponses.reduce((acc, curr) => {
-            const key = (curr as QuestionnaireResponse).questionnaire;
-            if (!acc[key]) acc[key] = [];
-            acc[key].push(curr);
-            return acc;
-        }, {} as Record<string, Resource[]>);
-
-        // Pass each resource array to the transformToAssessmentSummary function
-        Object.values(groupedByUrl).forEach((resourcesToTransform: QuestionnaireResponse[]) => {
-            if (resourcesToTransform.length > 0) {
-                assessments.push(transformToAssessmentSummary(resourcesToTransform));
-            }
-        });
+        
+        sdsQuestionnaireResponses = filterQuestionnaireResponsesByConfigured(sdsQuestionnaireResponseArray as QuestionnaireResponse[], configuredQuestionnaires);
     }
+
+    const allResponses = [...observationalSurveyResponses, ...sdsQuestionnaireResponses];
+
+    const groupedByUrl = allResponses.reduce((acc, curr) => {
+        const key = (curr as QuestionnaireResponse).questionnaire;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(curr);
+        return acc;
+    }, {} as Record<string, Resource[]>);
+
+    // Pass each resource array to the transformToAssessmentSummary function
+    Object.values(groupedByUrl).forEach((resourcesToTransform: QuestionnaireResponse[]) => {
+        if (resourcesToTransform.length > 0) {
+            assessments.push(transformToAssessmentSummary(resourcesToTransform));
+        }
+    });
 
   } catch (error) {
     console.error(`getAssessments Error: ${error.message}`);
