@@ -1,4 +1,19 @@
-import { CarePlan, CodeableConcept, Condition, Goal, GoalTarget, MedicationRequest, Observation, Patient, PatientContact, Procedure, Questionnaire, QuestionnaireResponse, ServiceRequest } from "fhir/r4";
+import {
+  CarePlan,
+  CodeableConcept,
+  Condition,
+  Goal,
+  GoalTarget,
+  MedicationRequest,
+  Observation,
+  Patient,
+  PatientContact,
+  Procedure,
+  Questionnaire,
+  QuestionnaireResponse,
+  ServiceRequest
+} from 'fhir/r4';
+import {MedicationFlag, RxClassSummary} from '../../rxnorm/rxnormService';
 
 export type legacy_MccTime = {
   value?: string;
@@ -198,12 +213,12 @@ export type legacy_MccObservation = {
 export type legacy_MccObservationList = {
   primaryCode: string,
   observations: Array<legacy_MccObservation>,
-}
+};
 
 export type legacy_MccObservationCollection = {
   observations?: Array<legacy_MccObservationList>,
   result?: string,
-}
+};
 
 export type legacy_Contact = {
   type: string;
@@ -216,11 +231,11 @@ export type legacy_Contact = {
   relFhirId: string;
   teamId: string;
   teamName;
-}
+};
 
-export type MccObservation = Observation
-export type MccCarePlan = CarePlan
-export type MccCondition = Condition
+export type MccObservation = Observation;
+export type MccCarePlan = CarePlan;
+export type MccCondition = Condition;
 export type MccPatientContact = {
   type: string,
   role: string,
@@ -230,15 +245,15 @@ export type MccPatientContact = {
   email: string,
   address: string,
   relFhirId: string
-}
-export type MccGoal = Goal
-export type MccCounselingSummary = Procedure | ServiceRequest
-export type MccEducationSummary = Procedure | ServiceRequest
-export type MccReferralSummary = ServiceRequest
-export type MccMedication = MedicationRequest
-export type MccPatient = Patient
-export type MccQuestionnaire = Questionnaire
-export type MccQuestionnaireResponse = QuestionnaireResponse
+};
+export type MccGoal = Goal;
+export type MccCounselingSummary = Procedure | ServiceRequest;
+export type MccEducationSummary = Procedure | ServiceRequest;
+export type MccReferralSummary = ServiceRequest;
+export type MccMedication = MedicationRequest;
+export type MccPatient = Patient;
+export type MccQuestionnaire = Questionnaire;
+export type MccQuestionnaireResponse = QuestionnaireResponse;
 export type MccGoalList = {
   allGoals?: Array<MccGoalSummary>;
   activeClinicalGoals?: Array<MccGoalSummary>;
@@ -247,7 +262,7 @@ export type MccGoalList = {
   inactivePatientGoals?: Array<MccGoalSummary>;
   activeTargets?: Array<GoalTarget>;
   sdsPatientGoals?: Array<MccGoalSummary>;
-}
+};
 
 
 export type MccCoding = {
@@ -255,29 +270,29 @@ export type MccCoding = {
   version?: string;
   code: string;
   display?: string;
-}
+};
 
 export type MccCodeableConcept = {
   coding?: Array<MccCoding>;
   text: string;
-}
+};
 
 export type MccReference = {
   reference?: string;
   display?: string;
   type?: string;
-}
+};
 
 export type Acceptance = {
   individual?: MccReference;
   code?: string;
   priority?: MccCodeableConcept;
-}
+};
 
 export type MccGoalRelationship = {
   target: MccReference;
   type: MccCodeableConcept;
-}
+};
 
 export type MccGoalSummary = {
   priority: string;
@@ -297,7 +312,7 @@ export type MccGoalSummary = {
   notes?: Array<string>;
   mostrecentresult?: string;
   source?: string
-}
+};
 
 export type MccMedicationSummary = {
   type: string;
@@ -311,12 +326,15 @@ export type MccMedicationSummary = {
   refillsPermitted: string;
   notes: string;
   source: string;
-}
+  rxCui?: string[];
+  rxClass?: RxClassSummary[];
+  flags?: MedicationFlag[];
+};
 
 export type MccMedicationSummaryList = {
   activeMedications: Array<MccMedicationSummary>;
   inactiveMedications: Array<MccMedicationSummary>;
-}
+};
 
 export type MccPatientSummary = {
   race: string;
@@ -327,12 +345,12 @@ export type MccPatientSummary = {
   dateOfBirth: string;
   ethnicity: string;
   name: string;
-}
+};
 
 export type MccConditionSummary = {
   code: CodeableConcept;
   categories: string;
-  provenance: String;
+  provenance: string;
   history: {
     code: CodeableConcept;
     onset: string;
@@ -351,13 +369,23 @@ export type MccConditionSummary = {
   clinicalStatus: string;
   verificationStatus: string;
   asserter: string;
-}
+};
 
 export type MccConditionList = {
   activeConditions: Array<MccConditionSummary>;
   inactiveConditions: Array<MccConditionSummary>;
   activeConcerns: Array<MccConditionSummary>;
   inactiveConcerns: Array<MccConditionSummary>;
+};
+
+export type MccEncounter = {
+  apptType?: string;
+  serviceType?: string;
+  startDateText?: string;
+  endDateText?: string;
+  status: string;
+  reason?: string;
+  participant?: string;
 }
 
 export type MccSocialConcern = {
@@ -366,7 +394,7 @@ export type MccSocialConcern = {
   description: string | null;
   date: string;
   hovered: boolean;
-}
+};
 
 
 
@@ -381,23 +409,39 @@ export type MccServiceRequestSummary = {
   reasons?: string;
   fhirid?: string;
   source?: string
-}
+};
 
 
-export type PatientContactRole = PatientContact & { role: string }
-
+export type PatientContactRole = PatientContact & { role: string };
 
 export type MCCAssessmentResponseItem = {
   question?: string;
   answer?: string;
-
-}
+};
 
 
 export type MccAssessment = {
   title?: string;
-  date?: string,
-  questions?: Array<MCCAssessmentResponseItem>,
-  subsections?: Array<MccAssessment>
+  date?: string;
+  questions?: Array<MCCAssessmentResponseItem>;
+}
+
+export type EcpScore = {
+  value: string;
+  interpretation: string;
+}
+
+export type EcpAssessment = {
+  date: string;
+  source: string;
+  score?: EcpScore;
+  questions?: Array<MCCAssessmentResponseItem>;
+}
+
+export type EcpAssessmentSummary = {
+  title: string;
+  canBeCharted: boolean;
+  isScored: boolean;
+  responses: Array<EcpAssessment>;
 }
 

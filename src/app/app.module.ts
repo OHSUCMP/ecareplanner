@@ -32,13 +32,14 @@ import { EducationPanelComponent } from './education-panel/education-panel.compo
 import { CounselingPanelComponent } from './counseling-panel/counseling-panel.component';
 import { ReferralPanelComponent } from './referral-panel/referral-panel.component';
 import { HealthStatusComponent } from './health-status/health-status.component';
+import { LabsAndVitalsComponent } from './labs-and-vitals/labs-and-vitals.component';
 import { CareTeamComponent } from './care-team/care-team.component';
 import { ClinicalTestResultsComponent } from './clinical-test-results/clinical-test-results.component';
 import { ClinicalExamResultsComponent } from './clinical-exam-results/clinical-exam-results.component';
 import { ClinicalProcedureResultsComponent } from './clinical-procedure-results/clinical-procedure-results.component';
 import { ClinicalImagingResultsComponent } from './clinical-imaging-results/clinical-imaging-results.component';
 import { ClinicalActivitiesResultsComponent } from './clinical-activities-results/clinical-activities-results.component';
-import { ClinicalQuestionairesResultsComponent } from './clinical-questionaires-results/clinical-questionaires-results.component';
+import { ClinicalQuestionnairesResultsComponent } from './clinical-questionnaires-results/clinical-questionnaires-results.component';
 import { ClinicalHistoryResultsComponent } from './clinical-history-results/clinical-history-results.component';
 import { ClinicalTherapyResultsComponent } from './clinical-therapy-results/clinical-therapy-results.component';
 import { LabTestResultComponent } from './lab-test-result/lab-test-result.component';
@@ -60,7 +61,10 @@ import { MedicationDialogComponent } from './medication-dialog/medication-dialog
 import { GoalDialogComponent } from './goals-dialog/goal-dialog.component';
 import { ActiveOrdersPanelComponent } from './active-orders-panel/active-orders-panel.component';
 import { WarningPopupComponent } from './warning-popup/warning-popup.component';
+import { AssessmentGraphComponent } from './assessment-graph/assessment-graph.component';
 import { AssessmentSectionComponent } from './assessment-section/assessment-section.component';
+import { EncountersComponent } from './encounters/encounters.component';
+import { EncounterListComponent } from './encounter-list/encounter-list.component';
 
 const routes: Routes = []; // sets up routes constant where you define your routes
 
@@ -88,13 +92,14 @@ const routes: Routes = []; // sets up routes constant where you define your rout
     CounselingPanelComponent,
     ReferralPanelComponent,
     HealthStatusComponent,
+    LabsAndVitalsComponent,
     CareTeamComponent,
     ClinicalTestResultsComponent,
     ClinicalImagingResultsComponent,
     ClinicalExamResultsComponent,
     ClinicalProcedureResultsComponent,
     ClinicalActivitiesResultsComponent,
-    ClinicalQuestionairesResultsComponent,
+    ClinicalQuestionnairesResultsComponent,
     ClinicalTherapyResultsComponent,
     ClinicalHistoryResultsComponent,
     LabTestResultComponent,
@@ -107,7 +112,10 @@ const routes: Routes = []; // sets up routes constant where you define your rout
     Testgraph1Component,
     NullCheckPipe,
     WarningPopupComponent,
-    AssessmentSectionComponent
+    AssessmentGraphComponent,
+    AssessmentSectionComponent,
+    EncountersComponent,
+    EncounterListComponent
   ],
   imports: [
     MatSortModule,

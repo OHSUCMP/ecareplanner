@@ -3,8 +3,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccCondition, MccSocialConcern } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import { getSupplementalDataClient } from '../goal/goal.util';
-import { fhirOptions, resourcesFrom } from '../../utils/fhir';
+import { fhirOptions, resourcesFrom, getSupplementalDataClient } from '../../utils/fhir';
 
 import {
   transformToSocialConcern,

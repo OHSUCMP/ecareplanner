@@ -2,7 +2,7 @@
 import { Annotation, CodeableConcept, Observation, TimingRepeat } from 'fhir/r4';
 
 import { legacy_MccCodeableConcept, legacy_MccCoding, legacy_MccDateTime, legacy_MccObservation, legacy_MccObservationCollection, legacy_MccObservationComponent, legacy_MccTime, ReferenceRange, Repeat } from '../../types/mcc-types';
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 
 export const getValue = (obs: Observation): any => {
   if (obs.valueQuantity) {

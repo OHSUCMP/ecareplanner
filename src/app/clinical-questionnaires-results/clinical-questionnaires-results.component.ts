@@ -3,11 +3,11 @@ import { Constants } from '../common/constants';
 import { DataService } from '../services/data.service';
 
 @Component({
-  selector: 'app-clinical-questionaires-results',
-  templateUrl: './clinical-questionaires-results.component.html',
-  styleUrls: ['./clinical-questionaires-results.component.css']
+  selector: 'app-clinical-questionnaires-results',
+  templateUrl: './clinical-questionnaires-results.component.html',
+  styleUrls: ['./clinical-questionnaires-results.component.css']
 })
-export class ClinicalQuestionairesResultsComponent implements OnInit {
+export class ClinicalQuestionnairesResultsComponent implements OnInit {
   assessments: any[] = [];
 
   constructor(public dataService: DataService) { }

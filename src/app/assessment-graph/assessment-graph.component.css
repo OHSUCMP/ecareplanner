@@ -1,0 +1,13 @@
+.chart-wrapper {
+  display: flex;
+  justify-content: center;  /* centers horizontally */
+  align-items: center;      /* centers vertically */
+  width: 100%;
+  min-height: 150px;
+  padding-bottom:16px;
+}
+
+.content {
+  padding-top: 16px;
+  text-align: center;
+}

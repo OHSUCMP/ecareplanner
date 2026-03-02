@@ -1,5 +1,5 @@
 import { MccPatient, MccPatientSummary } from '../../types/mcc-types';
-import { displayDate } from '../service-request/service-request.util';
+import { displayDate } from '../../utils/date.utils';
 
 export const transformToPatientSummary = (patient: MccPatient): MccPatientSummary => {
   const raceExtension = patient.extension ? patient.extension.find(ext => ext.url.includes('StructureDefinition/us-core-race')) : undefined;
