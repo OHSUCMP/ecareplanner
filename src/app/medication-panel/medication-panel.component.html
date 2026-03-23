@@ -26,11 +26,6 @@
     <td mat-cell *matCellDef="let med">{{med.effectiveDate}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="reasons">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reason</th>
-    <td mat-cell *matCellDef="let med"> {{med.reasons}} </td>
-  </ng-container>
-
   <ng-container matColumnDef="dosages">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Dose</th>
     <td mat-cell *matCellDef="let med"> {{med.dosages}} </td>
