@@ -16,7 +16,7 @@ import { MedicationDialogComponent } from '../medication-dialog/medication-dialo
 export class MedicationPanelComponent implements OnInit, AfterViewInit {
 
   constructor(public dataService: DataService, private dialog: MatDialog) {}
-  displayedColumns = ['medication', 'flags', 'effectiveDate', 'reasons', 'dosages', 'requestedBy', 'issues', 'priority', 'hasnotes', 'source', 'notes'];
+  displayedColumns = ['medication', 'flags', 'effectiveDate', 'dosages', 'requestedBy', 'issues', 'priority', 'hasnotes', 'source', 'notes'];
   activeMedicationsDataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -46,10 +46,7 @@ export class MedicationPanelComponent implements OnInit, AfterViewInit {
       dosages: row.dosages,
       frequency: row.frequency,
       method: row.method,
-      notes: row.notes,
-      reasons: row.reasons
-
-
+      notes: row.notes
     };
     this.dialog.open(MedicationDialogComponent, dialogConfig);
   }
