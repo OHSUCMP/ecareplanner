@@ -1,9 +1,14 @@
 <div class="group-header">Encounters</div>
 <table mat-table matSort [dataSource]="encounterListDataSource" width="100%" matSortActive="startDateText"
-  matSortDirection="asc">
+  matSortDirection="desc">
   <ng-container matColumnDef="apptType">
     <th mat-header-cell *matHeaderCellDef mat-sort-header="apptType">Appointment Type</th>
     <td mat-cell *matCellDef="let encounter"> {{encounter.apptType}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="participant">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="paticipant">Participant</th>
+    <td mat-cell *matCellDef="let encounter"> {{encounter.participant}} </td>
   </ng-container>
 
   <ng-container matColumnDef="serviceType">
@@ -19,11 +24,6 @@
   <ng-container matColumnDef="endDate">
     <th mat-header-cell *matHeaderCellDef mat-sort-header="endDateText">End Date</th>
     <td mat-cell *matCellDef="let encounter"> {{encounter.endDateText}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="participant">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header="paticipant">Participant</th>
-    <td mat-cell *matCellDef="let encounter"> {{encounter.participant}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
