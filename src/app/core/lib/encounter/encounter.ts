@@ -1,8 +1,8 @@
 import FHIR from 'fhirclient';
-import { Encounter } from 'fhir/r4';
+import { DocumentReference, Encounter } from 'fhir/r4';
 import { fhirclient } from 'fhirclient/lib/types';
 
-import { MccEncounter } from '../../types/mcc-types';
+import { MccDocumentReference, MccEncounter } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { fhirOptions, resourcesFrom, getSupplementalDataClient } from '../../utils/fhir';
 
@@ -40,8 +40,34 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     `getEncounters - successful`
   );
   const summaryEncounter = [...encounterResource, ...sdsEncounterResource]
-
-  const mappedEncounter = summaryEncounter.map(transformToEncounter)
+  // TODO: Transform these ahead of time and organize them by their encounter ids
+  const exampleDocReference: MccDocumentReference = {
+    encounterId: "eLmoRaZ6HbiPUkDvlzEzUtw3",
+    date: "2024-01-30",
+    type: "Transfer Note",
+    author: "Dr. Jane Smith",
+    contentUrl: "Binary/144302"
+  }
+  const exampleDocReference2: MccDocumentReference = {
+    encounterId: "eaNMp7Loy9mJ0DzjTzbgtNg3",
+    date: "2024-06-03",
+    type: "Discharge Note",
+    author: "Dr. Carl Jung",
+    contentUrl: "Binary/8675309"
+  }
+  const exampleDocReference3: MccDocumentReference = {
+    encounterId: "eaNMp7Loy9mJ0DzjTzbgtNg3",
+    date: "2024-05-19",
+    type: "Progress Note",
+    author: "Nurse Ratched",
+    contentUrl: "Binary/345678"
+  }
+  
+  let docReferences: MccDocumentReference[] = [exampleDocReference, exampleDocReference2, exampleDocReference3];
+  const mappedEncounter = summaryEncounter.map(encounter => {
+  const encounterDocRefs = docReferences.filter(ref => ref.encounterId === encounter.id);
+  return transformToEncounter(encounter, encounterDocRefs);
+})
   log.debug({ serviceName: 'getSummaryEncounter', result: mappedEncounter });
 
   return mappedEncounter;

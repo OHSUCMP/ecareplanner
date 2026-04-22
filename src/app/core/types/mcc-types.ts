@@ -386,6 +386,15 @@ export type MccEncounter = {
   status: string;
   reason?: string;
   participant?: string;
+  docReferences?: MccDocumentReference[];
+}
+
+export type MccDocumentReference = {
+  encounterId: string;
+  date: string;
+  type: string;
+  author: string;
+  contentUrl: string;
 }
 
 export type MccSocialConcern = {

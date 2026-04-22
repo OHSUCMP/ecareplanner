@@ -1,6 +1,17 @@
 <div class="group-header">Encounters</div>
 <table mat-table matSort [dataSource]="encounterListDataSource" width="100%" matSortActive="startDateText"
-  matSortDirection="desc">
+  matSortDirection="desc" multiTemplateDataRows>
+  <!-- Expand Column -->
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef>Clinical Notes</th>
+    <td mat-cell *matCellDef="let encounter">
+      <button mat-icon-button *ngIf="encounter.docReferences && encounter.docReferences.length > 0"
+        (click)="expandedEncounter = expandedEncounter === encounter ? null : encounter; $event.stopPropagation()">
+        <mat-icon>{{expandedEncounter === encounter ? 'expand_less' : 'expand_more'}}</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="apptType">
     <th mat-header-cell *matHeaderCellDef mat-sort-header="apptType">Appointment Type</th>
     <td mat-cell *matCellDef="let encounter"> {{encounter.apptType}} </td>
@@ -26,11 +37,46 @@
     <td mat-cell *matCellDef="let encounter"> {{encounter.endDateText}} </td>
   </ng-container>
 
+  <!-- Expanded Detail Row -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let encounter" [attr.colspan]="displayedColumns.length">
+      <div class="encounter-detail" *ngIf="encounter === expandedEncounter && encounter.docReferences && encounter.docReferences.length > 0" 
+         [@detailExpand]>
+         <div class="doc-references-container">
+          <h4>Document References ({{encounter.docReferences?.length || 0}})</h4>
+          <div *ngIf="encounter.docReferences && encounter.docReferences.length > 0" class="doc-references-list">
+            <div *ngFor="let docRef of encounter.docReferences" class="doc-reference-item">
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Type:</span>
+                <span>{{docRef.type}}</span>
+              </div>
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Author:</span>
+                <span>{{docRef.author}}</span>
+              </div>
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Date:</span>
+                <span>{{docRef.date}}</span>
+              </div>
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Content:</span>
+                <a [href]="docRef.contentUrl" target="_blank">{{docRef.contentUrl}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+  
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"
     [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}" (click)="row.highlighted = !row.highlighted"
     (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></tr>
+
+  <!-- Expanded Detail Row -->
+  <tr mat-row *matRowDef="let row; columns: expandedColumns; when: hasDocReferences" class="detail-row"></tr>
 
 </table>
 <mat-paginator [pageSizeOptions]="[10, 15, 20]" [pageSize]="20" showFirstLastButtons></mat-paginator>
