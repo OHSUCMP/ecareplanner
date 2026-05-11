@@ -60,7 +60,35 @@
               </div>
               <div class="doc-ref-row">
                 <span class="doc-ref-label">Content:</span>
-                <a [href]="docRef.contentUrl" target="_blank">{{docRef.contentUrl}}</a>
+                
+                <!-- HTML content -->
+                <div *ngIf="docRef.contentType === 'html'" 
+                    class="doc-content doc-content-html"
+                    [innerHTML]="sanitizeHtml(docRef.content)">
+                </div>
+              
+                <!-- Plain text content -->
+                <pre *ngIf="docRef.contentType === 'text'" 
+                    class="doc-content doc-content-text">{{docRef.content}}</pre>
+              
+                <!-- Binary content (PDF, images, etc.) - show buttons -->
+                <div *ngIf="docRef.contentType === 'binary'" class="doc-content doc-content-binary">
+                  <div class="binary-actions">
+                    <button mat-raised-button color="primary" (click)="openBinary(docRef)">
+                      <mat-icon>visibility</mat-icon>
+                      View {{getDisplayLabel(docRef)}}
+                    </button>
+                    <button mat-stroked-button (click)="downloadBinary(docRef)">
+                      <mat-icon>download</mat-icon>
+                      Download
+                    </button>
+                    <span class="mime-type">{{docRef.mimeType}}</span>
+                  </div>
+                </div>
+              
+                <!-- Unavailable content -->
+                <p *ngIf="docRef.contentType === 'unavailable'" 
+                  class="doc-content doc-content-unavailable">{{docRef.content}}</p>
               </div>
             </div>
           </div>

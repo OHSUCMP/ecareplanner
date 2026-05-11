@@ -394,7 +394,9 @@ export type MccDocumentReference = {
   date: string;
   type: string;
   author: string;
-  contentUrl: string;
+  content: string;
+  contentType: 'html' | 'text' | 'binary' | 'unavailable';
+  mimeType?: string;
 }
 
 export type MccSocialConcern = {

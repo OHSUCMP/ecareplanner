@@ -100,3 +100,64 @@ th.mat-header-cell, td.mat-cell {
   color: #555;
 }
 
+.doc-content {
+  max-width: 100%;
+  margin-top: 8px;
+}
+
+.doc-content-html {
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #fafafa;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Scope HTML content styles to prevent bleeding */
+.doc-content-html h1 { font-size: 1.5em; margin: 0.5em 0; }
+.doc-content-html h2 { font-size: 1.3em; margin: 0.5em 0; }
+.doc-content-html p { margin: 0.5em 0; }
+.doc-content-html ul, .doc-content-html ol { margin: 0.5em 0; padding-left: 20px; }
+
+.doc-content-text {
+  white-space: pre-wrap;
+  font-family: monospace;
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.doc-content-binary {
+  margin-top: 8px;
+}
+
+.binary-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.binary-actions button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mime-type {
+  color: #666;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.doc-content-unavailable {
+  color: #666;
+  font-style: italic;
+  margin: 0;
+}
+
