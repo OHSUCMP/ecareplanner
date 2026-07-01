@@ -1,4 +1,4 @@
-import { QuestionnaireResponse, Resource } from 'fhir/r4';
+import { Observation, QuestionnaireResponse, Resource } from 'fhir/r4';
 import FHIR from 'fhirclient';
 import Client from 'fhirclient/lib/Client';
 import { fhirclient } from 'fhirclient/lib/types';
@@ -9,6 +9,49 @@ import { fhirOptions, resourcesFrom, getSupplementalDataClient} from '../../util
 import {
     filterQuestionnaireResponsesByConfigured, getQuestionnaireResponsesFromObservations, transformToAssessmentSummary
 } from './questionnaire-response.util';
+
+export const getSupplementalSurveyObservations = async (launchURL: string, sdsClient: Client): Promise<Observation[]> => {
+  let allThirdPartyMappedObservations: Observation[] = [];
+
+  if (sdsClient) {
+    try {
+      const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
+      const urlSet = new Set();
+
+      urlSet.add(launchURL)
+      // Loop through second set of linkages
+      for (const entry2 of linkages.entry) {
+        for (const item2 of entry2.resource.item) {
+          if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
+            urlSet.add(item2.resource.extension[0].valueUrl);
+            // Prepare FHIR request headers
+            const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
+            const fhirHeaders = {
+              'X-Partition-Name': item2.resource.extension[0].valueUrl
+            };
+            fhirHeaderRequestOption.headers = fhirHeaders;
+            fhirHeaderRequestOption.url = 'Observation?category=survey&subject=' + item2.resource.reference;
+
+            // Fetch third-party goals
+            const response: fhirclient.JsonArray = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
+
+            // Process third-party survey observations
+            const thirdPartySurveyObservations: Observation[] = resourcesFrom(response) as Observation[];
+            thirdPartySurveyObservations.forEach(observation => {
+              observation.meta = {
+                source: item2.resource.extension[0].valueUrl
+              };
+              allThirdPartyMappedObservations.push(observation);
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("patientId An error occurred: " + error.message);
+    }
+  }
+  return allThirdPartyMappedObservations;
+};
 
 export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: string, configuredQuestionnairesString: string): Promise<EcpAssessmentSummary[]> => {
 
@@ -28,6 +71,12 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
 
     let sdsQuestionnaireResponses: QuestionnaireResponse[] = [];
     if (sdsClient) {
+
+        // See if there are 3rd party survey observations available from the SDS
+        const thirdPartySurveyObservations = await getSupplementalSurveyObservations(theCurrentClient.state.serverUrl, sdsClient);
+        const sdsSurveyResponses = getQuestionnaireResponsesFromObservations(thirdPartySurveyObservations, configuredQuestionnaires);
+        observationalSurveyResponses.push(...sdsSurveyResponses);
+
         const sdsQuestionnaireResponse: fhirclient.JsonArray = await sdsClient.patient.request('QuestionnaireResponse', fhirOptions);
 
         const sdsQuestionnaireResponseArray: Resource[] = resourcesFrom(

@@ -439,7 +439,7 @@ export type MccAssessment = {
 
 export type EcpScore = {
   value: string;
-  interpretation: string;
+  interpretation: string | null;
 }
 
 export type EcpAssessment = {
