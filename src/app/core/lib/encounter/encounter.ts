@@ -207,9 +207,84 @@ async function fetchBinaryAsBase64(
   }
 }
 
+const getSupplementalEncounters = async (launchURL: string, sdsClient: Client): Promise<Encounter[]> => {
+  let allThirdParty: Encounter[] = [];
+
+  if (sdsClient) {
+    try {
+      const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
+      const urlSet = new Set();
+
+      urlSet.add(launchURL)
+      // Loop through second set of linkages
+      for (const entry2 of linkages.entry) {
+        for (const item2 of entry2.resource.item) {
+          if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
+            urlSet.add(item2.resource.extension[0].valueUrl);
+            // Prepare FHIR request headers
+            const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
+            const fhirHeaders = {
+              'X-Partition-Name': item2.resource.extension[0].valueUrl
+            };
+            fhirHeaderRequestOption.headers = fhirHeaders;
+            fhirHeaderRequestOption.url = 'Encounter?subject=' + item2.resource.reference;
+
+            // Fetch third-party encounters
+            const response: fhirclient.JsonArray = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
+
+            // Process third-party encounters
+            const thirdPartyEncounters: Encounter[] = resourcesFrom(response) as Encounter[];
+            allThirdParty.push(...thirdPartyEncounters);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("patientId An error occurred: " + error.message);
+    }
+  }
+  return allThirdParty;
+};
+
+export const getSupplementalDocumentReferences = async (launchURL: string, sdsClient: Client): Promise<DocumentReference[]> => {
+  let allThirdParty: DocumentReference[] = [];
+
+  if (sdsClient) {
+    try {
+      const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
+      const urlSet = new Set();
+
+      urlSet.add(launchURL)
+      // Loop through second set of linkages
+      for (const entry2 of linkages.entry) {
+        for (const item2 of entry2.resource.item) {
+          if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
+            urlSet.add(item2.resource.extension[0].valueUrl);
+            // Prepare FHIR request headers
+            const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
+            const fhirHeaders = {
+              'X-Partition-Name': item2.resource.extension[0].valueUrl
+            };
+            fhirHeaderRequestOption.headers = fhirHeaders;
+            fhirHeaderRequestOption.url = 'DocumentReference?subject=' + item2.resource.reference;
+
+            // Fetch third-party document references
+            const response: fhirclient.JsonArray = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
+
+            // Process third-party document references
+            const thirdPartyDocuments: DocumentReference[] = resourcesFrom(response) as DocumentReference[];
+            allThirdParty.push(...thirdPartyDocuments);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("patientId An error occurred: " + error.message);
+    }
+  }
+  return allThirdParty;
+};
+
 export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsScope: string): Promise<MccEncounter[]> => {
   const client = await FHIR.oauth2.ready();
-
   let sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope)
 
   const queryPath = 'Encounter';
@@ -221,20 +296,12 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     request
   ) as Encounter[];
 
-  let sdsEncounterResource: Encounter[] = [];
-  if (sdsClient) {
-    const sdsRequest: fhirclient.JsonArray = await sdsClient.patient.request(
-      queryPath, fhirOptions
-    );
-    sdsEncounterResource = resourcesFrom(
-      sdsRequest
-    ) as Encounter[];
-  }
+  const thirdPartyStuff = await getSupplementalEncounters(client.state.serverUrl, sdsClient);
 
   log.info(
     `getEncounters - successful`
   );
-  const summaryEncounter = [...encounterResource, ...sdsEncounterResource]
+  const summaryEncounter = [...encounterResource, ...thirdPartyStuff]
 
   const docQueryPath = 'DocumentReference?category=clinical-note';
   const docRequest: fhirclient.JsonArray = await client.patient.request(
@@ -246,21 +313,12 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     docRequest
   ) as DocumentReference[];
 
-  let sdsDocResource: DocumentReference[] = [];
-  if (sdsClient) {
-    const sdsRequest: fhirclient.JsonArray = await sdsClient.patient.request(
-      docQueryPath,
-      fhirOptions
-    );
-    sdsDocResource = resourcesFrom(
-      sdsRequest
-    ) as DocumentReference[];
-  }
+  const thirdPartyDocumentReferences = await getSupplementalDocumentReferences(client.state.serverUrl, sdsClient);
 
   log.info(
     `getDocs - successful`
   );
-  const summaryDocs = [...docResource, ...sdsDocResource]
+  const summaryDocs = [...docResource, ...thirdPartyDocumentReferences]
 
   const docReferences = await transformDocumentReferences(summaryDocs, client);
   const mappedEncounter = summaryEncounter.map(encounter => {
