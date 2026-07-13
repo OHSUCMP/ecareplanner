@@ -6,6 +6,7 @@ import Client from 'fhirclient/lib/Client';
 import { MccDocumentReference, MccEncounter } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
 import { fhirOptions, resourcesFrom, getSupplementalDataClient } from '../../utils/fhir';
+import { buildRelativeDate } from '../../utils/date.utils';
 
 import {
   transformToEncounter,
@@ -287,7 +288,7 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
   const client = await FHIR.oauth2.ready();
   let sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope)
 
-  const queryPath = 'Encounter';
+  const queryPath = `Encounter?date=ge${buildRelativeDate(2)}`;
   const request: fhirclient.JsonArray = await client.patient.request(
     queryPath, fhirOptions
   );
@@ -296,14 +297,17 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     request
   ) as Encounter[];
 
-  const thirdPartyStuff = await getSupplementalEncounters(client.state.serverUrl, sdsClient);
+  let thirdPartyStuff: Encounter[] = [];
+  if (sdsClient) {
+    thirdPartyStuff = await getSupplementalEncounters(client.state.serverUrl, sdsClient);
+  }
 
   log.info(
     `getEncounters - successful`
   );
   const summaryEncounter = [...encounterResource, ...thirdPartyStuff]
 
-  const docQueryPath = 'DocumentReference?category=clinical-note';
+  const docQueryPath = `DocumentReference?category=clinical-note&date=ge${buildRelativeDate(2)}`;
   const docRequest: fhirclient.JsonArray = await client.patient.request(
     docQueryPath,
     fhirOptions
@@ -313,7 +317,10 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
     docRequest
   ) as DocumentReference[];
 
-  const thirdPartyDocumentReferences = await getSupplementalDocumentReferences(client.state.serverUrl, sdsClient);
+  let thirdPartyDocumentReferences: DocumentReference[] = [];
+  if (sdsClient) {
+    thirdPartyDocumentReferences = await getSupplementalDocumentReferences(client.state.serverUrl, sdsClient);
+  }
 
   log.info(
     `getDocs - successful`
