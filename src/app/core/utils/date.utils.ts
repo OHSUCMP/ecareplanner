@@ -34,3 +34,8 @@ export function displayPeriod(period: Period | undefined): string | undefined {
   return (startDate ?? '') + ((endDate !== undefined) ? ` until ${endDate}` : '')
 }
 
+export function buildRelativeDate(yearsToSubtract: number): string {
+  let now = new Date();
+  let date = new Date(now.getFullYear() - yearsToSubtract, now.getMonth(), now.getDate());
+  return date.toISOString().split("T")[0];
+}
