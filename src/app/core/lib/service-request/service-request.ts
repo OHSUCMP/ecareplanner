@@ -4,7 +4,7 @@ import Client from 'fhirclient/lib/Client';
 import { fhirclient } from 'fhirclient/lib/types';
 import { MccServiceRequestSummary } from '../../types/mcc-types';
 import { getCondition } from '../condition';
-import { fhirOptions, resourcesFrom, getSupplementalDataClient, displayConcept } from '../../utils/fhir';
+import { fhirOptions, resourcesFrom, getSupplementalDataClient, displayConcept, stripTrailingSlash } from '../../utils/fhir';
 
 import {
   transformToServiceRequest,
@@ -19,12 +19,13 @@ const getSupplementalData = async (launchURL: string, sdsClient: Client): Promis
     const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
 
     const urlSet = new Set();
-    urlSet.add(launchURL)
+    urlSet.add(stripTrailingSlash(launchURL))
     // Loop through second set of linkages
     for (const entry2 of linkages.entry) {
       for (const item2 of entry2.resource.item) {
-        if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
-          urlSet.add(item2.resource.extension[0].valueUrl);
+        const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
+        if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          urlSet.add(alternateUrl);
 
           // Prepare FHIR request headers
           const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
