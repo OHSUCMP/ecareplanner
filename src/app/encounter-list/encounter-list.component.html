@@ -1,9 +1,25 @@
 <div class="group-header">Encounters</div>
 <table mat-table matSort [dataSource]="encounterListDataSource" width="100%" matSortActive="startDateText"
-  matSortDirection="asc">
+  matSortDirection="desc" multiTemplateDataRows>
+  <!-- Expand Column -->
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef>Clinical Notes</th>
+    <td mat-cell *matCellDef="let encounter">
+      <button mat-icon-button *ngIf="encounter.docReferences && encounter.docReferences.length > 0"
+        (click)="expandedEncounter = expandedEncounter === encounter ? null : encounter; $event.stopPropagation()">
+        <mat-icon>{{expandedEncounter === encounter ? 'expand_less' : 'expand_more'}}</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="apptType">
     <th mat-header-cell *matHeaderCellDef mat-sort-header="apptType">Appointment Type</th>
     <td mat-cell *matCellDef="let encounter"> {{encounter.apptType}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="participant">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header="paticipant">Participant</th>
+    <td mat-cell *matCellDef="let encounter"> {{encounter.participant}} </td>
   </ng-container>
 
   <ng-container matColumnDef="serviceType">
@@ -21,16 +37,74 @@
     <td mat-cell *matCellDef="let encounter"> {{encounter.endDateText}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="participant">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header="paticipant">Participant</th>
-    <td mat-cell *matCellDef="let encounter"> {{encounter.participant}} </td>
+  <!-- Expanded Detail Row -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let encounter" [attr.colspan]="displayedColumns.length">
+      <div class="encounter-detail" *ngIf="encounter === expandedEncounter && encounter.docReferences && encounter.docReferences.length > 0" 
+         [@detailExpand]>
+         <div class="doc-references-container">
+          <h4>Document References ({{encounter.docReferences?.length || 0}})</h4>
+          <div *ngIf="encounter.docReferences && encounter.docReferences.length > 0" class="doc-references-list">
+            <div *ngFor="let docRef of encounter.docReferences" class="doc-reference-item">
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Type:</span>
+                <span>{{docRef.type}}</span>
+              </div>
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Author:</span>
+                <span>{{docRef.author}}</span>
+              </div>
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Date:</span>
+                <span>{{docRef.date}}</span>
+              </div>
+              <div class="doc-ref-row">
+                <span class="doc-ref-label">Content:</span>
+                
+                <!-- HTML content -->
+                <div *ngIf="docRef.contentType === 'html'" 
+                    class="doc-content doc-content-html"
+                    [innerHTML]="sanitizeHtml(docRef.content)">
+                </div>
+              
+                <!-- Plain text content -->
+                <pre *ngIf="docRef.contentType === 'text'" 
+                    class="doc-content doc-content-text">{{docRef.content}}</pre>
+              
+                <!-- Binary content (PDF, images, etc.) - show buttons -->
+                <div *ngIf="docRef.contentType === 'binary'" class="doc-content doc-content-binary">
+                  <div class="binary-actions">
+                    <button mat-raised-button color="primary" (click)="openBinary(docRef)">
+                      <mat-icon>visibility</mat-icon>
+                      View {{getDisplayLabel(docRef)}}
+                    </button>
+                    <button mat-stroked-button (click)="downloadBinary(docRef)">
+                      <mat-icon>download</mat-icon>
+                      Download
+                    </button>
+                    <span class="mime-type">{{docRef.mimeType}}</span>
+                  </div>
+                </div>
+              
+                <!-- Unavailable content -->
+                <p *ngIf="docRef.contentType === 'unavailable'" 
+                  class="doc-content doc-content-unavailable">{{docRef.content}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
   </ng-container>
-
+  
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"
     [ngClass]="{hovered: row.hovered, highlighted: row.highlighted}" (click)="row.highlighted = !row.highlighted"
     (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></tr>
+
+  <!-- Expanded Detail Row -->
+  <tr mat-row *matRowDef="let row; columns: expandedColumns; when: hasDocReferences" class="detail-row"></tr>
 
 </table>
 <mat-paginator [pageSizeOptions]="[10, 15, 20]" [pageSize]="20" showFirstLastButtons></mat-paginator>

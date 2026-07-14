@@ -386,6 +386,17 @@ export type MccEncounter = {
   status: string;
   reason?: string;
   participant?: string;
+  docReferences?: MccDocumentReference[];
+}
+
+export type MccDocumentReference = {
+  encounterId: string;
+  date: string;
+  type: string;
+  author: string;
+  content: string;
+  contentType: 'html' | 'text' | 'binary' | 'unavailable';
+  mimeType?: string;
 }
 
 export type MccSocialConcern = {
@@ -428,7 +439,7 @@ export type MccAssessment = {
 
 export type EcpScore = {
   value: string;
-  interpretation: string;
+  interpretation: string | null;
 }
 
 export type EcpAssessment = {

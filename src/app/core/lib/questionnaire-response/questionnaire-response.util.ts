@@ -173,6 +173,7 @@ function convertObservations(questionnaireDef: Questionnaire, surveyObservations
             }).filter((o): o is Observation => o !== undefined); // remove undefineds
 
             const questionnaireResponse: QuestionnaireResponse = {
+                meta: obs.meta,
                 resourceType: 'QuestionnaireResponse',
                 status: 'completed',
                 questionnaire: questionnaireDef.url,

@@ -1,9 +1,9 @@
-import { Encounter, CodeableConcept } from 'fhir/r4';
-import { MccEncounter } from '../../types/mcc-types';
+import { Encounter, CodeableConcept, DocumentReference } from 'fhir/r4';
+import { MccDocumentReference, MccEncounter } from '../../types/mcc-types';
 import { displayDate } from '../../utils/date.utils';
 import { displayConcept } from '../../utils/fhir';
 
-export const transformToEncounter = (encounter: Encounter): MccEncounter => {
+export const transformToEncounter = (encounter: Encounter, docReferences: MccDocumentReference[]): MccEncounter => {
   return {
     startDateText: displayDate(encounter?.period?.start),
     endDateText: displayDate(encounter?.period?.end),
@@ -11,7 +11,8 @@ export const transformToEncounter = (encounter: Encounter): MccEncounter => {
     serviceType: displayConcept(encounter.serviceType),
     status: encounter.status,
     reason: (encounter.reasonCode && encounter.reasonCode[0]) ? displayConcept(encounter.reasonCode[0]) : undefined,
-    participant: displayParticipant(encounter)
+    participant: displayParticipant(encounter),
+    docReferences: docReferences
   };
 }
 
