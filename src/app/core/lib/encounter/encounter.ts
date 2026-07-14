@@ -5,7 +5,7 @@ import Client from 'fhirclient/lib/Client';
 
 import { MccDocumentReference, MccEncounter } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import { fhirOptions, resourcesFrom, getSupplementalDataClient } from '../../utils/fhir';
+import { fhirOptions, resourcesFrom, getSupplementalDataClient, stripTrailingSlash } from '../../utils/fhir';
 import { buildRelativeDate } from '../../utils/date.utils';
 
 import {
@@ -216,12 +216,13 @@ const getSupplementalEncounters = async (launchURL: string, sdsClient: Client): 
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(launchURL)
+      urlSet.add(stripTrailingSlash(launchURL))
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
-            urlSet.add(item2.resource.extension[0].valueUrl);
+          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
+          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+            urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
             const fhirHeaders = {
@@ -254,12 +255,13 @@ export const getSupplementalDocumentReferences = async (launchURL: string, sdsCl
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(launchURL)
+      urlSet.add(stripTrailingSlash(launchURL))
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
-            urlSet.add(item2.resource.extension[0].valueUrl);
+          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
+          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+            urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
             const fhirHeaders = {

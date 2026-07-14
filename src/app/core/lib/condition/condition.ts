@@ -6,7 +6,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccCondition, MccConditionList, MccConditionSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject, getSupplementalDataClient } from '../../utils/fhir';
+import { fhirOptions, notFoundResponse, resourcesFrom, resourcesFromObject, getSupplementalDataClient, stripTrailingSlash } from '../../utils/fhir';
 import {
   transformToConditionSummary,
 } from './condition.util';
@@ -77,12 +77,13 @@ export const getSupplementalConditions = async (launchURL: string, sdsClient: Cl
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(launchURL)
+      urlSet.add(stripTrailingSlash(launchURL))
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
-            urlSet.add(item2.resource.extension[0].valueUrl);
+          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
+          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+            urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
             const fhirHeaders = {
@@ -91,12 +92,12 @@ export const getSupplementalConditions = async (launchURL: string, sdsClient: Cl
             fhirHeaderRequestOption.headers = fhirHeaders;
             fhirHeaderRequestOption.url = 'Condition?subject=' + item2.resource.reference;
 
-            // Fetch third-party goals
+            // Fetch third-party conditions
             const response: fhirclient.JsonArray = await sdsClient.request(fhirHeaderRequestOption, fhirOptions);
 
-            // Process third-party goals
-            const thirdPartyGoals: Condition[] = resourcesFrom(response) as Condition[];
-            thirdPartyGoals.forEach(condition => {
+            // Process third-party conditions
+            const thirdPartyConditions: Condition[] = resourcesFrom(response) as Condition[];
+            thirdPartyConditions.forEach(condition => {
               condition.recorder = {
                 display: item2.resource.extension[0].valueUrl
               };

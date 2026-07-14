@@ -15,6 +15,10 @@ export const fhirOptions: fhirclient.FhirOptions = {
   pageLimit: 0,
 };
 
+// EHRs/SDS registrations are inconsistent about a trailing slash on FHIR base URLs;
+// strip it before comparing/deduping server URLs.
+export const stripTrailingSlash = (url: string): string => url?.replace(/\/+$/, '');
+
 export const notFoundResponse = (code?: string) => ({
   code,
   status: 'notfound',
