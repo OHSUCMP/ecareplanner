@@ -167,10 +167,12 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
         allResponses.push(...thirdPartyObservationalSurveyResponses, ...sdsQuestionnaireResponses, ...thirdPartyQuestionnaireResponses);
     }
 
-    // Look for the identifier that indicates this is a Qualifacts survey and set the questionnaire field to the correct URL for the questionnaire.
+    // Look for the identifiers that indicates this is a Qualifacts survey and set the questionnaire field to the correct URL for the questionnaire.
     allResponses.forEach(response => {
       if (response.identifier?.value?.includes('PHQ9')) {
         response.questionnaire = 'http://ohsu.edu/fhir/Questionnaire/PHQ-9-qualifacts';
+      } else if (response.identifier?.value?.includes('GAD7')) {
+        response.questionnaire = 'http://ohsu.edu/fhir/Questionnaire/GAD-7-qualifacts';
       }
     });
     const configuredResponses = filterQuestionnaireResponsesByConfigured(allResponses, configuredQuestionnaires);  
