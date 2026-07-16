@@ -1,6 +1,6 @@
 {
   "name": "ecareplanner",
-  "version": "4.0.3-SNAPSHOT",
+  "version": "4.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
