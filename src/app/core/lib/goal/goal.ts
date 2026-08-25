@@ -7,7 +7,7 @@ import { fhirclient } from 'fhirclient/lib/types';
 
 import { MccGoal, MccGoalList, MccGoalSummary } from '../../types/mcc-types';
 import log from '../../utils/loglevel';
-import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse, getSupplementalDataClient} from '../../utils/fhir';
+import { fhirOptions, resourcesFrom, resourcesFromObject, notFoundResponse, getSupplementalDataClient, stripTrailingSlash} from '../../utils/fhir';
 
 import {
   transformToMccGoalSummary,
@@ -41,14 +41,14 @@ export const getSupplementalData = async (launchURL: string, sdsClient: Client):
   try {
 
     const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
-    console.log("patientId +linkages " + JSON.stringify(linkages));
     const urlSet = new Set();
-    urlSet.add(launchURL)
+    urlSet.add(stripTrailingSlash(launchURL))
     // Loop through second set of linkages
     for (const entry2 of linkages.entry) {
       for (const item2 of entry2.resource.item) {
-        if (item2.type === 'alternate' && !urlSet.has(item2.resource.extension[0].valueUrl)) {
-          urlSet.add(item2.resource.extension[0].valueUrl);
+        const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
+        if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          urlSet.add(alternateUrl);
 
           // Prepare FHIR request headers
           const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;

@@ -3,12 +3,41 @@ import { EcpAssessment, EcpAssessmentSummary, EcpScore, MCCAssessmentResponseIte
 import { QuestionnaireMetadata, questionnaireMetadata } from './questionnaire-metadata';
 import { displayDate } from '../../utils/date.utils';
 
+function getAnswer(item: QuestionnaireResponseItem): MCCAssessmentResponseItem {
+    return {
+        question: item.text ?? '',
+        answer: item.answer && item.answer.length > 0 ? extractAnswerValue(item.answer[0]) : ''
+    };
+}
+
+function extractAnswerValue(answer: QuestionnaireResponseItemAnswer): string {
+
+    return (
+        answer.valueCoding?.display ??
+        answer.valueString ??
+        answer.valueInteger?.toString() ??
+        answer.valueDecimal?.toString() ??
+        (answer.valueBoolean !== undefined ? (answer.valueBoolean ? 'True' : 'False') : undefined) ??
+        answer.valueDate ??
+        answer.valueDateTime ??
+        answer.valueTime ??
+        answer.valueQuantity?.value?.toString() ??
+        JSON.stringify(answer)
+    );
+}
+
+function getMetadataByDefinitionUrl(definitionUrl: string): QuestionnaireMetadata | undefined {
+    return questionnaireMetadata.find(metadata =>
+        metadata.definition.some(def => def.url === definitionUrl)
+    );
+}
+
 function isScoreQuestion(item: QuestionnaireItem) {
     return item?.extension?.some(
-    (ext) =>
-      ext.url === "http://hl7.org/fhir/StructureDefinition/questionnaire-unit" &&
-      ext.valueCoding?.code === "care-plan-score"
-  ) ?? false;
+        (ext) =>
+            ext.url === "http://hl7.org/fhir/StructureDefinition/questionnaire-unit" &&
+            ext.valueCoding?.code === "care-plan-score"
+    ) ?? false;
 }
 
 /**
@@ -17,19 +46,19 @@ function isScoreQuestion(item: QuestionnaireItem) {
  * @returns 
  */
 function findScoreItem(items: QuestionnaireItem[]): QuestionnaireItem | undefined {
-  for (const item of items) {
-    if (isScoreQuestion(item)) {
-      return item;
+    for (const item of items) {
+        if (isScoreQuestion(item)) {
+            return item;
+        }
+
+        // Recurse into nested items
+        if (item.item && item.item.length > 0) {
+            const found = findScoreItem(item.item);
+            if (found) return found;
+        }
     }
 
-    // Recurse into nested items
-    if (item.item && item.item.length > 0) {
-      const found = findScoreItem(item.item);
-      if (found) return found;
-    }
-  }
-
-  return undefined;
+    return undefined;
 }
 
 /**
@@ -39,31 +68,23 @@ function findScoreItem(items: QuestionnaireItem[]): QuestionnaireItem | undefine
  * @returns 
  */
 function findScoreValueByLinkId(items: QuestionnaireResponseItem[], targetLinkId: string): string | undefined {
-  for (const item of items) {
-    if (item.linkId === targetLinkId && item.answer && item.answer.length > 0) {
-      // Return the actual value (valueInteger, valueDecimal, etc.)
-      const answer = item.answer[0];
-      return extractAnswerValue(answer);
+    for (const item of items) {
+        if (item.linkId === targetLinkId && item.answer && item.answer.length > 0) {
+            // Return the actual value (valueInteger, valueDecimal, etc.)
+            const answer = item.answer[0];
+            return extractAnswerValue(answer);
+        }
+
+        // Recurse into nested items
+        if (item.item && item.item.length > 0) {
+            const result = findScoreValueByLinkId(item.item, targetLinkId);
+            if (result !== undefined) {
+                return result;
+            }
+        }
     }
 
-    // Recurse into nested items
-    if (item.item && item.item.length > 0) {
-      const result = findScoreValueByLinkId(item.item, targetLinkId);
-      if (result !== undefined) {
-        return result;
-      }
-    }
-  }
-
-  return undefined;
-}
-
-function extractAnswerValue(answer: QuestionnaireResponseItemAnswer): string | undefined {
-  if ('valueInteger' in answer) return answer.valueInteger?.toString();
-  if ('valueDecimal' in answer) return answer.valueDecimal?.toString();
-  if ('valueQuantity' in answer) return answer.valueQuantity?.value?.toString();
-  if ('valueString' in answer) return answer.valueString;
-  return undefined;
+    return undefined;
 }
 
 function interpretScore(questionnaireDefinition: Questionnaire, score: number): string | undefined {
@@ -83,16 +104,14 @@ function interpretScore(questionnaireDefinition: Questionnaire, score: number): 
     return undefined;
 }
 
-export function getScore(response: QuestionnaireResponse, metadata: QuestionnaireMetadata): EcpScore | undefined {
-    const scoreItem = findScoreItem(metadata.definition.item || []);
+export function getScore(response: QuestionnaireResponse, questionnaireDefinition: Questionnaire): EcpScore | undefined {
+    const scoreItem = findScoreItem(questionnaireDefinition.item || []);
     if (scoreItem) {
         const scoreValue = findScoreValueByLinkId(response.item || [], scoreItem.linkId);
         if (scoreValue === undefined) return undefined;
-    
-
         return {
             value: scoreValue,
-            interpretation: !isNaN(parseFloat(scoreValue)) ? interpretScore(metadata.definition, parseFloat(scoreValue)) || null : null
+            interpretation: !isNaN(parseFloat(scoreValue)) ? interpretScore(questionnaireDefinition, parseFloat(scoreValue)) || null : null
         };
     }
     return undefined;
@@ -128,14 +147,15 @@ function collectMatchingItems(questionnaireItems: QuestionnaireItem[], members: 
                             system: coding.system,
                             code: coding.code,
                             display: coding.display
-                        }});
+                        }
+                    });
                 });
             } else if (observation.valueQuantity) {
-                responseItem.answer?.push({valueString: observation.valueQuantity.value?.toString()});
+                responseItem.answer?.push({ valueString: observation.valueQuantity.value?.toString() });
             } else if (observation.valueInteger) {
-                responseItem.answer?.push({valueString: observation.valueInteger?.toString()});
+                responseItem.answer?.push({ valueString: observation.valueInteger?.toString() });
             } else if (observation.valueString) {
-                responseItem.answer?.push({valueString: observation.valueString})
+                responseItem.answer?.push({ valueString: observation.valueString })
             }
             else {
                 console.warn(`Unsupported observation value type for observation with code ${code}: `, observation);
@@ -162,7 +182,7 @@ function convertObservations(questionnaireDef: Questionnaire, surveyObservations
     const questionnaireResponses: QuestionnaireResponse[] = [];
     const topLevelCode = questionnaireDef.code?.[0]?.code; // Assumes the first code in the questionnaireDef is the one we'll find in observations
     const topLevelObservations = surveyObservations.filter(o =>
-            o.code.coding?.some(e => e.code === topLevelCode)
+        o.code.coding?.some(e => e.code === topLevelCode)
     );
 
     if (topLevelObservations.length > 0) {
@@ -188,7 +208,7 @@ function convertObservations(questionnaireDef: Questionnaire, surveyObservations
 
             questionnaireResponse.item = responseItems;
 
-            questionnaireResponses.push(questionnaireResponse);    
+            questionnaireResponses.push(questionnaireResponse);
         }
     }
 
@@ -197,7 +217,10 @@ function convertObservations(questionnaireDef: Questionnaire, surveyObservations
 
 export function filterQuestionnaireResponsesByConfigured(questionnaireResponses: QuestionnaireResponse[], configuredQuestionnaires: string[]): QuestionnaireResponse[] {
     return questionnaireResponses.filter(qr => {
-        const metadata = questionnaireMetadata.find(metadata => metadata.url === qr.questionnaire);
+        if (!qr.questionnaire) {
+            return false;
+        }
+        const metadata = getMetadataByDefinitionUrl(qr.questionnaire);
         return metadata && configuredQuestionnaires.includes(metadata.id);
     });
 }
@@ -206,7 +229,7 @@ export function getQuestionnaireResponsesFromObservations(surveyObservations: Ob
     const questionnaireResponses: QuestionnaireResponse[] = [];
     
     // Filter to only configured questionnaires
-    const filteredQuestionnaireMetadata = configuredQuestionnaires.map(id => 
+    const filteredQuestionnaireMetadata = configuredQuestionnaires.map(id =>
         questionnaireMetadata.find(metadata => metadata.id === id)
     ).filter((metadata): metadata is QuestionnaireMetadata => metadata !== undefined);
 
@@ -214,16 +237,67 @@ export function getQuestionnaireResponsesFromObservations(surveyObservations: Ob
 
     // Iterate through each questionnaire definition
     for (const metadata of filteredQuestionnaireMetadata) {
-        const responses = convertObservations(metadata.definition, surveyObservations);
+        // The first definition in the array is the one used for survey observations
+        const responses = convertObservations(metadata.definition[0], surveyObservations);
         questionnaireResponses.push(...responses);
     }
 
     return questionnaireResponses;
 }
 
-export function transformToAssessmentSummary(resourcesToTransform: QuestionnaireResponse[]): EcpAssessmentSummary {
+export function groupQuestionnaireResponsesById(questionnaireResponses: QuestionnaireResponse[]): Record<string, QuestionnaireResponse[]> {
+    // First, create a lookup map from definition URL to metadata id
+    const definitionToMetadataId = new Map<string, string>();
+
+    questionnaireMetadata.forEach(metadata => {
+        metadata.definition.forEach(def => {
+            if (def.url) {
+                definitionToMetadataId.set(def.url, metadata.id);
+            }
+        });
+    });
+
+    // Then group responses using the metadata id
+    const groupedById = questionnaireResponses.reduce((acc, curr) => {
+        const response = curr as QuestionnaireResponse;
+        const definitionUrl = response?.questionnaire;
+
+        // Skip if no questionnaire URL
+        if (!definitionUrl) return acc;
+
+        // Look up which metadata this definition belongs to
+        const metadataId = definitionToMetadataId.get(definitionUrl);
+
+        if (!metadataId) {
+            console.warn(`No metadata found for questionnaire definition URL: ${definitionUrl}`);
+            return acc;
+        }
+
+        if (!acc[metadataId]) {
+            acc[metadataId] = [];
+        }
+        acc[metadataId].push(curr);
+        return acc;
+    }, {} as Record<string, QuestionnaireResponse[]>);
+    return groupedById;
+}
+
+export function transformToAssessmentSummary(resourcesToTransform: QuestionnaireResponse[]): EcpAssessmentSummary | null {
+     // Validate input
+    if (!resourcesToTransform || resourcesToTransform.length === 0) {
+        return null;
+    }
+
+    const firstQuestionnaire = resourcesToTransform[0]?.questionnaire;
+    if (!firstQuestionnaire) {
+        return null;
+    }
+
     // Get the metadata entry for the questionnaire
-    const metadata = questionnaireMetadata.find(metadata => metadata.url === resourcesToTransform[0].questionnaire);
+    const metadata = getMetadataByDefinitionUrl(firstQuestionnaire);
+    if (!metadata) {
+        return null;
+    }
     let assessmentSummary: EcpAssessmentSummary = {
         title: metadata.display,
         isScored: metadata.isScored,
@@ -232,11 +306,17 @@ export function transformToAssessmentSummary(resourcesToTransform: Questionnaire
     }
 
     resourcesToTransform.forEach((response: QuestionnaireResponse) => {
-        
+
+        if (!response.questionnaire || !response.item) return;
+
+        const questionnaireDefinition = metadata.definition.find(
+            def => def.url === response?.questionnaire
+        );
+
         const assessment: EcpAssessment = {
-            date: displayDate(response.authored),
-            source: response.meta?.source || undefined,
-            score: metadata.isScored ? getScore(response, metadata) : undefined,
+            date: displayDate(response.authored) || '',
+            source: response.meta?.source || '',
+            score: metadata.isScored && questionnaireDefinition ? getScore(response, questionnaireDefinition) : undefined,
             questions: []
         };
 
@@ -255,15 +335,6 @@ export function transformToAssessmentSummary(resourcesToTransform: Questionnaire
     assessmentSummary.responses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return assessmentSummary;
-}
-
-function getAnswer(getAnswer: QuestionnaireResponseItem): MCCAssessmentResponseItem {
-  const answer = getAnswer.answer ? getAnswer.answer[0].valueCoding ? getAnswer.answer[0].valueCoding.display : getAnswer.answer[0].valueBoolean ? JSON.stringify(getAnswer.answer[0].valueBoolean) : getAnswer.answer[0].valueString ? getAnswer.answer[0].valueString : JSON.stringify(getAnswer.answer[0]) : '';
-  const response: MCCAssessmentResponseItem = {
-    question: getAnswer.text,
-    answer: answer
-  }
-  return response;
 }
 
 
