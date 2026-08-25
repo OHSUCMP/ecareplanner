@@ -8008,10 +8008,10 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
                                         "valueCodeableConcept": {
                                             "coding": [
                                                 {
-                                                    "display": "The PCL-5 is a 20-item self-report measure of the DSM-5 symptoms of PTSD, and the total score ranges from 0-80. Scoring: sum all 20 items (each rated 0-4: Not at all, A little bit, Moderately, Quite a bit, Extremely). Interpretation: the National Center for PTSD recommends a cutoff score of 33 as indicating a provisional diagnosis of PTSD; scores at or above this threshold suggest the person's symptoms are consistent with probable PTSD and warrant a full diagnostic evaluation, while scores below it fall below the diagnostic threshold. This cutoff is a screening flag, not a diagnosis."
+                                                    "display": "The PCL-5 is a 20-item self-report measure of the DSM-5 symptoms of PTSD, and the total score ranges from 0-80. Scoring: sum all 20 items (each rated 0-4: Not at all, A little bit, Moderately, Quite a bit, Extremely). Interpretation: Recommendations vary, but a cutoff of 31-33 and higher indicate a provisional diagnosis of PTSD; scores at or above this threshold suggest the person's symptoms are consistent with probable PTSD and warrant a full diagnostic evaluation, while scores below it fall below the diagnostic threshold. This cutoff is a screening flag, not a diagnosis."
                                                 }
                                             ],
-                                            "text": "The PCL-5 is a 20-item self-report measure of the DSM-5 symptoms of PTSD, and the total score ranges from 0-80. Scoring: sum all 20 items (each rated 0-4: Not at all, A little bit, Moderately, Quite a bit, Extremely). Interpretation: the National Center for PTSD recommends a cutoff score of 33 as indicating a provisional diagnosis of PTSD; scores at or above this threshold suggest the person's symptoms are consistent with probable PTSD and warrant a full diagnostic evaluation, while scores below it fall below the diagnostic threshold. This cutoff is a screening flag, not a diagnosis."
+                                            "text": "The PCL-5 is a 20-item self-report measure of the DSM-5 symptoms of PTSD, and the total score ranges from 0-80. Scoring: sum all 20 items (each rated 0-4: Not at all, A little bit, Moderately, Quite a bit, Extremely). Interpretation: Recommendations vary, but a cutoff of 31-33 and higher indicate a provisional diagnosis of PTSD; scores at or above this threshold suggest the person's symptoms are consistent with probable PTSD and warrant a full diagnostic evaluation, while scores below it fall below the diagnostic threshold. This cutoff is a screening flag, not a diagnosis."
                                         }
                                     },
                                     {
@@ -8031,7 +8031,7 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
                                                         "value": 0
                                                     },
                                                     "high": {
-                                                        "value": 32
+                                                        "value": 31
                                                     }
                                                 }
                                             },
@@ -8048,7 +8048,7 @@ export const questionnaireMetadata: QuestionnaireMetadata[] = [
                                                 "url": "range",
                                                 "valueRange": {
                                                     "low": {
-                                                        "value": 33
+                                                        "value": 32
                                                     },
                                                     "high": {
                                                         "value": 80
