@@ -7,23 +7,26 @@ import { EcpAssessmentSummary } from '../../types/mcc-types';
 import {getObservationsByCategory} from '../observation/observation';
 import { fhirOptions, resourcesFrom, getSupplementalDataClient, stripTrailingSlash} from '../../utils/fhir';
 import {
-    filterQuestionnaireResponsesByConfigured, getQuestionnaireResponsesFromObservations, groupQuestionnaireResponsesById, transformToAssessmentSummary
+    filterQuestionnaireResponsesByConfigured, getQuestionnaireResponsesFromObservations, groupQuestionnaireResponsesById,
+  transformToAssessmentSummary
 } from './questionnaire-response.util';
 
 const getSupplementalSurveyObservations = async (launchURL: string, sdsClient: Client): Promise<Observation[]> => {
-  let allThirdPartyMappedObservations: Observation[] = [];
+  const allThirdPartyMappedObservations: Observation[] = [];
 
   if (sdsClient) {
     try {
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(stripTrailingSlash(launchURL))
+      urlSet.add(stripTrailingSlash(launchURL));
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+            stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+            null;
+          if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
             urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
@@ -48,26 +51,28 @@ const getSupplementalSurveyObservations = async (launchURL: string, sdsClient: C
         }
       }
     } catch (error) {
-      console.error("patientId An error occurred: " + error.message);
+      console.error('patientId An error occurred: ' + error.message);
     }
   }
   return allThirdPartyMappedObservations;
 };
 
 const getSupplementalQuestionnaireResponses = async (launchURL: string, sdsClient: Client): Promise<QuestionnaireResponse[]> => {
-  let allThirdParty: QuestionnaireResponse[] = [];
+  const allThirdParty: QuestionnaireResponse[] = [];
 
   if (sdsClient) {
     try {
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(stripTrailingSlash(launchURL))
+      urlSet.add(stripTrailingSlash(launchURL));
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+            stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+            null;
+          if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
             urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
@@ -93,15 +98,15 @@ const getSupplementalQuestionnaireResponses = async (launchURL: string, sdsClien
         }
       }
     } catch (error) {
-      console.error("patientId An error occurred: " + error.message);
+      console.error('patientId An error occurred: ' + error.message);
     }
   }
   return allThirdParty;
 };
 
-export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: string, configuredQuestionnairesString: string): Promise<EcpAssessmentSummary[]> => {
-
-  let assessments: EcpAssessmentSummary[] = []
+export const getAssessments = async (sdsURL: string, authURL: string,
+                                     sdsScope: string, configuredQuestionnairesString: string): Promise<EcpAssessmentSummary[]> => {
+  const assessments: EcpAssessmentSummary[] = [];
 
   // Parse the configured questionnaires from a comma-separated string to an array
   const configuredQuestionnaires = configuredQuestionnairesString.split(',').map(q => q.trim());
@@ -114,7 +119,7 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
     const request: fhirclient.JsonArray = await client.patient.request(
       queryPath, fhirOptions
     );
-  
+
     // QuestionnaireResponse resources from the main FHIR server
     const questionnaireResponses: QuestionnaireResponse[] = resourcesFrom(
       request
@@ -124,16 +129,16 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
     const surveyObservations = await getObservationsByCategory('survey');
     const observationalSurveyResponses = getQuestionnaireResponsesFromObservations(surveyObservations, configuredQuestionnaires);
 
-    let allResponses = [...questionnaireResponses, ...observationalSurveyResponses];
+    const allResponses = [...questionnaireResponses, ...observationalSurveyResponses];
     allResponses.forEach(resource => {
         resource.meta = {
-            source: "Primary"
+            source: 'Primary'
         };
     });
 
-    let sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope);
+    const sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope);
 
-    let sdsQuestionnaireResponses: QuestionnaireResponse[] = [];
+    const sdsQuestionnaireResponses: QuestionnaireResponse[] = [];
     if (sdsClient) {
 
         // Look for QuestionnaireResponses in the default SDS partition (written by MyCarePlanner)
@@ -143,16 +148,18 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
         ) as QuestionnaireResponse[];
         sdsQuestionnaireResponseArray.forEach(resource => {
             resource.meta = {
-                source: "MyCarePlanner"
+                source: 'MyCarePlanner'
             };
         });
 
         // Look for 3rd party survey observations in the SDS
         const thirdPartySurveyObservations = await getSupplementalSurveyObservations(client.state.serverUrl, sdsClient);
-        const thirdPartyObservationalSurveyResponses = getQuestionnaireResponsesFromObservations(thirdPartySurveyObservations, configuredQuestionnaires);
+        const thirdPartyObservationalSurveyResponses = getQuestionnaireResponsesFromObservations(
+          thirdPartySurveyObservations, configuredQuestionnaires
+        );
         thirdPartyObservationalSurveyResponses.forEach(resource => {
             resource.meta = {
-                source: "External"
+                source: 'External'
             };
         });
 
@@ -160,14 +167,15 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
         const thirdPartyQuestionnaireResponses = await getSupplementalQuestionnaireResponses(client.state.serverUrl, sdsClient);
         thirdPartyQuestionnaireResponses.forEach(resource => {
             resource.meta = {
-                source: "External"
+                source: 'External'
             };
         });
 
         allResponses.push(...thirdPartyObservationalSurveyResponses, ...sdsQuestionnaireResponses, ...thirdPartyQuestionnaireResponses);
     }
 
-    // Look for the identifiers that indicates this is a Qualifacts survey and set the questionnaire field to the correct URL for the questionnaire.
+    // Look for the identifiers that indicates this is a Qualifacts survey and set the questionnaire field to the
+    // correct URL for the questionnaire.
     allResponses.forEach(response => {
       if (response.identifier?.value?.includes('PHQ9')) {
         response.questionnaire = 'http://ohsu.edu/fhir/Questionnaire/PHQ-9-qualifacts';
@@ -175,7 +183,7 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
         response.questionnaire = 'http://ohsu.edu/fhir/Questionnaire/GAD-7-qualifacts';
       }
     });
-    const configuredResponses = filterQuestionnaireResponsesByConfigured(allResponses, configuredQuestionnaires);  
+    const configuredResponses = filterQuestionnaireResponsesByConfigured(allResponses, configuredQuestionnaires);
 
     const groupedById = groupQuestionnaireResponsesById(configuredResponses);
 
@@ -192,8 +200,8 @@ export const getAssessments = async (sdsURL: string, authURL: string, sdsScope: 
   } catch (error) {
     console.error(`getAssessments Error: ${error.message}`);
   } finally {
-    console.log("Operation complete.");
-    return assessments;
+    console.log('Operation complete.');
   }
-}
+  return assessments;
+};
 
