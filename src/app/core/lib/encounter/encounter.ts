@@ -16,7 +16,7 @@ async function transformDocumentReferences(
   docResource: DocumentReference[],
   client: Client
 ): Promise<MccDocumentReference[]> {
-  
+
   const transformPromises = docResource.map(doc => transformSingleDocument(doc, client));
   return Promise.all(transformPromises);
 }
@@ -27,15 +27,15 @@ async function transformSingleDocument(
 ): Promise<MccDocumentReference> {
 
   const { content, contentType, mimeType } = await extractContent(doc, client);
-  
+
   return {
     encounterId: extractEncounterId(doc),
     date: extractDate(doc),
     type: extractType(doc),
     author: extractAuthor(doc),
-    content: content,
-    contentType: contentType,
-    mimeType: mimeType
+    content,
+    contentType,
+    mimeType
   };
 }
 
@@ -50,16 +50,16 @@ function extractEncounterId(doc: DocumentReference): string {
 
 function extractDate(doc: DocumentReference): string {
   // Try date in this order: date, context.period.start
-  return doc.date || 
-         doc.context?.period?.start || 
+  return doc.date ||
+         doc.context?.period?.start ||
          '';
 }
 
 function extractType(doc: DocumentReference): string {
   // Get the display text from type coding
   if (doc.type?.coding?.[0]) {
-    return doc.type.coding[0].display || 
-           doc.type.coding[0].code || 
+    return doc.type.coding[0].display ||
+           doc.type.coding[0].code ||
            'Unknown Type';
   }
   return doc.type?.text || 'Unknown Type';
@@ -69,48 +69,50 @@ function extractAuthor(doc: DocumentReference): string {
   if (!doc.author || doc.author.length === 0) {
     return 'Unknown Author';
   }
-  
+
   // Get the first author
   const author = doc.author[0];
-  
+
   if (author.display) {
     return author.display;
   }
-  
+
   if (author.reference) {
     // Extract readable part from reference like "Practitioner/123"
     const parts = author.reference.split('/');
     return parts.length > 1 ? `${parts[0]} ${parts[1]}` : author.reference;
   }
-  
+
   return 'Unknown Author';
 }
 
 async function extractContent(
   doc: DocumentReference,
   client: Client
-): Promise<{ 
-  content: string; 
+): Promise<{
+  content: string;
   contentType: 'html' | 'text' | 'binary' | 'unavailable';
   mimeType?: string;
 }> {
-  
+
   // TODO: I think we want to process in priority order of content type (html > text > binary) rather than just taking the first one.
 
   if (!doc.content || doc.content.length === 0) {
-    return { 
-      content: 'No content available', 
-      contentType: 'unavailable' 
+    return {
+      content: 'No content available',
+      contentType: 'unavailable'
     };
   }
-  
+
   // Try each content attachment
   for (const content of doc.content) {
     const attachment = content.attachment;
-    if (!attachment || !attachment.contentType) continue;
-    
+    if (!attachment || !attachment.contentType) {
+      continue;
+    }
+
     const mimeType = attachment.contentType.toLowerCase();
-    
+
     // Determine content type category
     let contentType: 'html' | 'text' | 'binary';
     if (mimeType === 'text/html' || mimeType === 'application/xhtml+xml') {
@@ -121,10 +123,10 @@ async function extractContent(
       // Everything else is binary (PDF, images, RTF, etc.)
       contentType = 'binary';
     }
-    
+
     // Get the content
     let base64Data: string | null = null;
-    
+
     // Try inline data first
     if (attachment.data) {
       base64Data = attachment.data;
@@ -138,15 +140,17 @@ async function extractContent(
         continue; // Try next content attachment
       }
     }
-    
-    if (!base64Data) continue;
-    
+
+    if (!base64Data) {
+      continue;
+    }
+
     // For HTML and text, decode the base64
     if (contentType === 'html' || contentType === 'text') {
       try {
         return {
           content: atob(base64Data),
-          contentType: contentType,
+          contentType,
           mimeType: attachment.contentType
         };
       } catch (e) {
@@ -154,7 +158,7 @@ async function extractContent(
         continue;
       }
     }
-    
+
     // For binary, keep as base64
     return {
       content: base64Data,
@@ -162,13 +166,13 @@ async function extractContent(
       mimeType: attachment.contentType
     };
   }
-  
+
   // No supported content found
   const availableTypes = doc.content
     .map(c => c.attachment?.contentType)
     .filter(Boolean)
     .join(', ');
-  
+
   return {
     content: `Unable to parse content type${availableTypes ? ': ' + availableTypes : ''}`,
     contentType: 'unavailable'
@@ -179,15 +183,15 @@ async function fetchBinaryAsBase64(
   url: string,
   client: Client
 ): Promise<string> {
-  
+
   try {
     const binary = await client.request(url);
-    
+
     // If it's a FHIR Binary resource with data field
     if (binary.data) {
       return binary.data; // Already base64
     }
-    
+
     // If the server returned raw binary data as a string
     if (typeof binary === 'string') {
       // Try to determine if it's already base64 or needs encoding
@@ -199,9 +203,9 @@ async function fetchBinaryAsBase64(
         return btoa(binary);
       }
     }
-    
+
     throw new Error('Unable to extract base64 data from Binary resource');
-    
+
   } catch (error) {
     console.error('Error fetching Binary resource:', error);
     throw error;
@@ -209,19 +213,21 @@ async function fetchBinaryAsBase64(
 }
 
 const getSupplementalEncounters = async (launchURL: string, sdsClient: Client): Promise<Encounter[]> => {
-  let allThirdParty: Encounter[] = [];
+  const allThirdParty: Encounter[] = [];
 
   if (sdsClient) {
     try {
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(stripTrailingSlash(launchURL))
+      urlSet.add(stripTrailingSlash(launchURL));
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+            stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+            null;
+          if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
             urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
@@ -241,26 +247,28 @@ const getSupplementalEncounters = async (launchURL: string, sdsClient: Client): 
         }
       }
     } catch (error) {
-      console.error("patientId An error occurred: " + error.message);
+      console.error('patientId An error occurred: ' + error.message);
     }
   }
   return allThirdParty;
 };
 
 export const getSupplementalDocumentReferences = async (launchURL: string, sdsClient: Client): Promise<DocumentReference[]> => {
-  let allThirdParty: DocumentReference[] = [];
+  const allThirdParty: DocumentReference[] = [];
 
   if (sdsClient) {
     try {
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(stripTrailingSlash(launchURL))
+      urlSet.add(stripTrailingSlash(launchURL));
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+            stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+            null;
+          if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
             urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
@@ -280,7 +288,7 @@ export const getSupplementalDocumentReferences = async (launchURL: string, sdsCl
         }
       }
     } catch (error) {
-      console.error("patientId An error occurred: " + error.message);
+      console.error('patientId An error occurred: ' + error.message);
     }
   }
   return allThirdParty;
@@ -288,7 +296,7 @@ export const getSupplementalDocumentReferences = async (launchURL: string, sdsCl
 
 export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsScope: string): Promise<MccEncounter[]> => {
   const client = await FHIR.oauth2.ready();
-  let sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope)
+  const sdsClient = await getSupplementalDataClient(client, sdsURL, authURL, sdsScope);
 
   const queryPath = `Encounter?date=ge${buildRelativeDate(2)}`;
   const request: fhirclient.JsonArray = await client.patient.request(
@@ -307,7 +315,7 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
   log.info(
     `getEncounters - successful`
   );
-  const summaryEncounter = [...encounterResource, ...thirdPartyStuff]
+  const summaryEncounter = [...encounterResource, ...thirdPartyStuff];
 
   const docQueryPath = `DocumentReference?category=clinical-note&date=ge${buildRelativeDate(2)}`;
   const docRequest: fhirclient.JsonArray = await client.patient.request(
@@ -327,7 +335,7 @@ export const getSummaryEncounters = async (sdsURL: string, authURL: string, sdsS
   log.info(
     `getDocs - successful`
   );
-  const summaryDocs = [...docResource, ...thirdPartyDocumentReferences]
+  const summaryDocs = [...docResource, ...thirdPartyDocumentReferences];
 
   const docReferences = await transformDocumentReferences(summaryDocs, client);
   const mappedEncounter = summaryEncounter.map(encounter => {

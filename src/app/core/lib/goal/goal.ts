@@ -33,21 +33,23 @@ const ACTIVE_KEYS = {
   rejected: ACTIVE_STATUS.ACTIVE,
   active: ACTIVE_STATUS.ACTIVE,
   'entered-in-error': ACTIVE_STATUS.IGNORE,
-}
+};
 
 
 export const getSupplementalData = async (launchURL: string, sdsClient: Client): Promise<MccGoalSummary[]> => {
-  let allThirdPartyMappedGoals: MccGoalSummary[] = [];
-  try {
+  const allThirdPartyMappedGoals: MccGoalSummary[] = [];
 
+  try {
     const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
     const urlSet = new Set();
-    urlSet.add(stripTrailingSlash(launchURL))
+    urlSet.add(stripTrailingSlash(launchURL));
     // Loop through second set of linkages
     for (const entry2 of linkages.entry) {
       for (const item2 of entry2.resource.item) {
-        const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-        if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+        const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+          stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+          null;
+        if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
           urlSet.add(alternateUrl);
 
           // Prepare FHIR request headers
@@ -68,7 +70,7 @@ export const getSupplementalData = async (launchURL: string, sdsClient: Client):
           thirdPartyMappedGoals.forEach(goal => {
             goal.expressedBy = (goal.expressedBy ? goal.expressedBy : '');
 
-            goal.source = item2.resource.extension[0].valueUrl
+            goal.source = item2.resource.extension[0].valueUrl;
             allThirdPartyMappedGoals.push(goal);
           });
         }
@@ -76,7 +78,7 @@ export const getSupplementalData = async (launchURL: string, sdsClient: Client):
     }
   } catch (error) {
     // Code to handle the error
-    console.error("An error occurred: " + error.message);
+    console.error('An error occurred: ' + error.message);
   }
 
   return allThirdPartyMappedGoals;
@@ -93,11 +95,11 @@ export const getSummaryGoals = async (sdsURL: string, authURL: string, sdsScope:
   const inactiveClinicalGoals: MccGoalSummary[] = [];
   const sdsPatientGoals: MccGoalSummary[] = [];
   const theCurrentClient: Client = await FHIR.oauth2.ready();
-  let sdsClient = await getSupplementalDataClient(theCurrentClient, sdsURL, authURL, sdsScope)
+  const sdsClient = await getSupplementalDataClient(theCurrentClient, sdsURL, authURL, sdsScope);
 
   const queryPath = `Goal`;
 
-  let sdsMappedGoals: MccGoalSummary[] = []
+  const sdsMappedGoals: MccGoalSummary[] = [];
   if (sdsClient) {
     const sdsGoalRequest: fhirclient.JsonArray = await sdsClient.patient.request(
       queryPath, fhirOptions
@@ -119,51 +121,51 @@ export const getSummaryGoals = async (sdsURL: string, authURL: string, sdsScope:
   const mappedGoals: MccGoalSummary[] = filteredGoals.map(transformToMccGoalSummary);
 
   sdsMappedGoals.forEach(goal => {
-    mappedGoals.push(goal)
-  })
+    mappedGoals.push(goal);
+  });
 
   if (sdsClient) {
     const thirdPartyStuff = await getSupplementalData(theCurrentClient.state.serverUrl, sdsClient);
 
     if (thirdPartyStuff) {
       thirdPartyStuff.forEach(goal => {
-        mappedGoals.push(goal)
-      })
+        mappedGoals.push(goal);
+      });
     }
   }
 
   mappedGoals.forEach(goal => {
 
-    let activeStatus = ACTIVE_KEYS[goal.lifecycleStatus]
+    let activeStatus = ACTIVE_KEYS[goal.lifecycleStatus];
 
     if (isNaN(activeStatus) && !activeStatus) {
       activeStatus = ACTIVE_STATUS.IGNORE;
-      allGoals.push(goal)
+      allGoals.push(goal);
     }
 
     switch (activeStatus) {
       case ACTIVE_STATUS.ACTIVE:
-        allGoals.push(goal)
+        allGoals.push(goal);
         if (goal.expressedByType === 'Patient') {
-          activePatientGoals.push(goal)
+          activePatientGoals.push(goal);
         } else {
-          activeClinicalGoals.push(goal)
+          activeClinicalGoals.push(goal);
         }
-        activeTargets.push(...(goal.targets ? goal.targets : []))
+        activeTargets.push(...(goal.targets ? goal.targets : []));
         break;
       case ACTIVE_STATUS.INACTIVE:
-        allGoals.push(goal)
+        allGoals.push(goal);
         if (goal.expressedByType === 'Patient') {
-          inactivePatientGoals.push(goal)
+          inactivePatientGoals.push(goal);
         } else {
-          inactiveClinicalGoals.push(goal)
+          inactiveClinicalGoals.push(goal);
         }
         break;
       case ACTIVE_STATUS.IGNORE:
       default:
         break;
     }
-  })
+  });
 
 
   const mccGoalList: MccGoalList = {
@@ -218,15 +220,15 @@ export const createGoal = async (goal: MccGoal): Promise<Resource> => {
   }
   const client = await FHIR.oauth2.ready();
   try {
-    const createResult = await client.create({ resourceType: 'Goal', body: goal })
+    const createResult = await client.create({ resourceType: 'Goal', body: goal });
 
     return createResult as Resource;
   } catch (error) {
-    log.error(error)
+    log.error(error);
     return {
       resourceType: 'Error',
       id: 'Error while creating goal'
-    }
+    };
   }
 
-}
+};
