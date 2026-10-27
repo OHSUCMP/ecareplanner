@@ -13,18 +13,20 @@ import {
 
 
 const getSupplementalData = async (launchURL: string, sdsClient: Client): Promise<ServiceRequest[]> => {
-  let allThirdPartyServiceRequests: ServiceRequest[] = [];
+  const allThirdPartyServiceRequests: ServiceRequest[] = [];
   try {
 
     const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
 
     const urlSet = new Set();
-    urlSet.add(stripTrailingSlash(launchURL))
+    urlSet.add(stripTrailingSlash(launchURL));
     // Loop through second set of linkages
     for (const entry2 of linkages.entry) {
       for (const item2 of entry2.resource.item) {
-        const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-        if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+        const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+          stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+          null;
+        if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
           urlSet.add(alternateUrl);
 
           // Prepare FHIR request headers
@@ -48,7 +50,7 @@ const getSupplementalData = async (launchURL: string, sdsClient: Client): Promis
     }
   } catch (error) {
     // Code to handle the error
-    console.error("An error occurred: " + error.message);
+    console.error('An error occurred: ' + error.message);
   }
 
   return allThirdPartyServiceRequests;
@@ -61,7 +63,7 @@ async function updateServiceRequestsReferences(serviceRequestResults: ServiceReq
 
   const promiseArray = serviceRequestResults.map(async serviceRequestResult => {
     if (serviceRequestResult.reasonReference) {
-      const perhaps = await getCondition(serviceRequestResult.reasonReference[0].reference.split("/")[1]);
+      const perhaps = await getCondition(serviceRequestResult.reasonReference[0].reference.split('/')[1]);
       if (perhaps.code) {
         updates.set(serviceRequestResult.reasonReference[0].reference, displayConcept(perhaps.code));
       } else {

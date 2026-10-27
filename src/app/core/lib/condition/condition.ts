@@ -18,71 +18,73 @@ enum ACTIVE_STATUS {
 }
 
 const ACTIVE_KEYS = {
-  "active:confirmed": ACTIVE_STATUS.ACTIVE,
-  "active:provisional": ACTIVE_STATUS.ACTIVE,
-  "active:missing": ACTIVE_STATUS.ACTIVE,
-  "active:undefined": ACTIVE_STATUS.ACTIVE,
-  "active:differential": ACTIVE_STATUS.ACTIVE,
-  "active:unconfirmed": ACTIVE_STATUS.ACTIVE,
-  "active:refuted": ACTIVE_STATUS.INACTIVE,
-  "active:entered-in-error": ACTIVE_STATUS.IGNORE,
-  "recurrence:confirmed": ACTIVE_STATUS.ACTIVE,
-  "recurrence:provisional": ACTIVE_STATUS.ACTIVE,
-  "recurrence:missing": ACTIVE_STATUS.ACTIVE,
-  "recurrence:undefined": ACTIVE_STATUS.ACTIVE,
-  "recurrence:differential": ACTIVE_STATUS.ACTIVE,
-  "recurrence:unconfirmed": ACTIVE_STATUS.ACTIVE,
-  "recurrence:refuted": ACTIVE_STATUS.INACTIVE,
-  "recurrence:entered-in-error": ACTIVE_STATUS.IGNORE,
-  "relapse:confirmed": ACTIVE_STATUS.ACTIVE,
-  "relapse:provisional": ACTIVE_STATUS.ACTIVE,
-  "relapse:missing": ACTIVE_STATUS.ACTIVE,
-  "relapse:undefined": ACTIVE_STATUS.ACTIVE,
-  "relapse:differential": ACTIVE_STATUS.ACTIVE,
-  "relapse:unconfirmed": ACTIVE_STATUS.ACTIVE,
-  "relapse:refuted": ACTIVE_STATUS.INACTIVE,
-  "relapse:entered-in-error": ACTIVE_STATUS.IGNORE,
-  "inactive:confirmed": ACTIVE_STATUS.INACTIVE,
-  "inactive:provisional": ACTIVE_STATUS.INACTIVE,
-  "inactive:missing": ACTIVE_STATUS.INACTIVE,
-  "inactive:undefined": ACTIVE_STATUS.INACTIVE,
-  "inactive:differential": ACTIVE_STATUS.INACTIVE,
-  "inactive:unconfirmed": ACTIVE_STATUS.INACTIVE,
-  "inactive:refuted": ACTIVE_STATUS.INACTIVE,
-  "inactive:entered-in-error": ACTIVE_STATUS.IGNORE,
-  "remission:confirmed": ACTIVE_STATUS.INACTIVE,
-  "remission:provisional": ACTIVE_STATUS.INACTIVE,
-  "remission:missing": ACTIVE_STATUS.INACTIVE,
-  "remission:undefined": ACTIVE_STATUS.INACTIVE,
-  "remission:differential": ACTIVE_STATUS.INACTIVE,
-  "remission:unconfirmed": ACTIVE_STATUS.INACTIVE,
-  "remission:refuted": ACTIVE_STATUS.INACTIVE,
-  "remission:entered-in-error": ACTIVE_STATUS.IGNORE,
-  "resolved:confirmed": ACTIVE_STATUS.INACTIVE,
-  "resolved:provisional": ACTIVE_STATUS.INACTIVE,
-  "resolved:missing": ACTIVE_STATUS.INACTIVE,
-  "resolved:undefined": ACTIVE_STATUS.INACTIVE,
-  "resolved:differential": ACTIVE_STATUS.INACTIVE,
-  "resolved:unconfirmed": ACTIVE_STATUS.INACTIVE,
-  "resolved:refuted": ACTIVE_STATUS.INACTIVE,
-  "resolved:entered-in-error": ACTIVE_STATUS.IGNORE,
-}
+  'active:confirmed': ACTIVE_STATUS.ACTIVE,
+  'active:provisional': ACTIVE_STATUS.ACTIVE,
+  'active:missing': ACTIVE_STATUS.ACTIVE,
+  'active:undefined': ACTIVE_STATUS.ACTIVE,
+  'active:differential': ACTIVE_STATUS.ACTIVE,
+  'active:unconfirmed': ACTIVE_STATUS.ACTIVE,
+  'active:refuted': ACTIVE_STATUS.INACTIVE,
+  'active:entered-in-error': ACTIVE_STATUS.IGNORE,
+  'recurrence:confirmed': ACTIVE_STATUS.ACTIVE,
+  'recurrence:provisional': ACTIVE_STATUS.ACTIVE,
+  'recurrence:missing': ACTIVE_STATUS.ACTIVE,
+  'recurrence:undefined': ACTIVE_STATUS.ACTIVE,
+  'recurrence:differential': ACTIVE_STATUS.ACTIVE,
+  'recurrence:unconfirmed': ACTIVE_STATUS.ACTIVE,
+  'recurrence:refuted': ACTIVE_STATUS.INACTIVE,
+  'recurrence:entered-in-error': ACTIVE_STATUS.IGNORE,
+  'relapse:confirmed': ACTIVE_STATUS.ACTIVE,
+  'relapse:provisional': ACTIVE_STATUS.ACTIVE,
+  'relapse:missing': ACTIVE_STATUS.ACTIVE,
+  'relapse:undefined': ACTIVE_STATUS.ACTIVE,
+  'relapse:differential': ACTIVE_STATUS.ACTIVE,
+  'relapse:unconfirmed': ACTIVE_STATUS.ACTIVE,
+  'relapse:refuted': ACTIVE_STATUS.INACTIVE,
+  'relapse:entered-in-error': ACTIVE_STATUS.IGNORE,
+  'inactive:confirmed': ACTIVE_STATUS.INACTIVE,
+  'inactive:provisional': ACTIVE_STATUS.INACTIVE,
+  'inactive:missing': ACTIVE_STATUS.INACTIVE,
+  'inactive:undefined': ACTIVE_STATUS.INACTIVE,
+  'inactive:differential': ACTIVE_STATUS.INACTIVE,
+  'inactive:unconfirmed': ACTIVE_STATUS.INACTIVE,
+  'inactive:refuted': ACTIVE_STATUS.INACTIVE,
+  'inactive:entered-in-error': ACTIVE_STATUS.IGNORE,
+  'remission:confirmed': ACTIVE_STATUS.INACTIVE,
+  'remission:provisional': ACTIVE_STATUS.INACTIVE,
+  'remission:missing': ACTIVE_STATUS.INACTIVE,
+  'remission:undefined': ACTIVE_STATUS.INACTIVE,
+  'remission:differential': ACTIVE_STATUS.INACTIVE,
+  'remission:unconfirmed': ACTIVE_STATUS.INACTIVE,
+  'remission:refuted': ACTIVE_STATUS.INACTIVE,
+  'remission:entered-in-error': ACTIVE_STATUS.IGNORE,
+  'resolved:confirmed': ACTIVE_STATUS.INACTIVE,
+  'resolved:provisional': ACTIVE_STATUS.INACTIVE,
+  'resolved:missing': ACTIVE_STATUS.INACTIVE,
+  'resolved:undefined': ACTIVE_STATUS.INACTIVE,
+  'resolved:differential': ACTIVE_STATUS.INACTIVE,
+  'resolved:unconfirmed': ACTIVE_STATUS.INACTIVE,
+  'resolved:refuted': ACTIVE_STATUS.INACTIVE,
+  'resolved:entered-in-error': ACTIVE_STATUS.IGNORE,
+};
 
 
 export const getSupplementalConditions = async (launchURL: string, sdsClient: Client): Promise<Condition[]> => {
-  let allThirdPartyMappedConditions: Condition[] = [];
+  const allThirdPartyMappedConditions: Condition[] = [];
 
   if (sdsClient) {
     try {
       const linkages = await sdsClient.request('Linkage?item=Patient/' + sdsClient.patient.id);
       const urlSet = new Set();
 
-      urlSet.add(stripTrailingSlash(launchURL))
+      urlSet.add(stripTrailingSlash(launchURL));
       // Loop through second set of linkages
       for (const entry2 of linkages.entry) {
         for (const item2 of entry2.resource.item) {
-          const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-          if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+          const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+            stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+            null;
+          if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
             urlSet.add(alternateUrl);
             // Prepare FHIR request headers
             const fhirHeaderRequestOption = {} as fhirclient.RequestOptions;
@@ -107,24 +109,24 @@ export const getSupplementalConditions = async (launchURL: string, sdsClient: Cl
         }
       }
     } catch (error) {
-      console.error("patientId An error occurred: " + error.message);
+      console.error('patientId An error occurred: ' + error.message);
     }
   }
   return allThirdPartyMappedConditions;
 };
 
 export function displayTransmitter(prov: Provenance | undefined): string | undefined {
-  var display: string | undefined
+  let display: string | undefined;
 
   prov?.agent?.forEach(agent => {
     agent.type?.coding?.forEach(coding => {
       if (coding.code === 'transmitter') {
-        display = agent.who?.display
+        display = agent.who?.display;
       }
-    })
-  })
+    });
+  });
 
-  return display
+  return display;
 }
 
 export const getSummaryConditions = async (sdsURL: string, authURL: string, sdsScope: string): Promise<MccConditionList> => {
@@ -142,7 +144,7 @@ export const getSummaryConditions = async (sdsURL: string, authURL: string, sdsS
 
   const conditionRequest1: fhirclient.JsonArray = await client.patient.request(queryPath1, fhirOptions);
   const conditionRequest2: fhirclient.JsonArray = await client.patient.request(queryPath2, fhirOptions);
-  
+
   let sdsfilteredConditions2: MccCondition[] = [];
   if (sdsClient) {
     const sdsconditionRequest2: fhirclient.JsonArray = await sdsClient.patient.request(queryPath2, fhirOptions);
@@ -191,7 +193,7 @@ export const getSummaryConditions = async (sdsURL: string, authURL: string, sdsS
       transformedCondition.provenance = displayTransmitter(provenance);
 
       if (!transformedCondition.provenance && condition.recorder) {
-        transformedCondition.provenance = condition.recorder.display
+        transformedCondition.provenance = condition.recorder.display;
       }
 
 
@@ -257,7 +259,7 @@ export const getConditions = async (): Promise<MccCondition[]> => {
     queryPath, fhirOptions
   );
 
-  log.debug({ condRequest: conditionRequest })
+  log.debug({ condRequest: conditionRequest });
 
   const filteredConditions: MccCondition[] = resourcesFrom(
     conditionRequest

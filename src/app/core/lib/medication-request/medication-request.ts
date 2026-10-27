@@ -42,8 +42,10 @@ const getSupplementalData = async (launchURL: string, sdsClient: Client): Promis
     // Loop through second set of linkages
     for (const entry2 of linkages.entry) {
       for (const item2 of entry2.resource.item) {
-        const alternateUrl = stripTrailingSlash(item2.resource.extension[0].valueUrl);
-        if (item2.type === 'alternate' && !urlSet.has(alternateUrl)) {
+        const alternateUrl = item2.resource.extension && item2.resource.extension.length >= 1 && item2.resource.extension[0].valueUrl ?
+          stripTrailingSlash(item2.resource.extension[0].valueUrl) :
+          null;
+        if (item2.type === 'alternate' && alternateUrl && !urlSet.has(alternateUrl)) {
           urlSet.add(alternateUrl);
 
           // Prepare FHIR request headers
